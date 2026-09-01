@@ -1448,6 +1448,29 @@ profileForm.addEventListener(
                 data.user;
 
 
+            const profileData = {
+                id: currentUser.id,
+                first_name: firstName,
+                province: province || null,
+                city: city || null,
+                updated_at: new Date().toISOString()
+            };
+
+            await supabaseClient
+                .from("profiles")
+                .upsert(profileData);
+
+            await supabaseClient
+                .from("public_profiles")
+                .upsert({
+                    id: currentUser.id,
+                    first_name: firstName,
+                    province: province || null,
+                    city: city || null,
+                    updated_at: new Date().toISOString()
+                });
+
+
             await loadProfile();
 
 
