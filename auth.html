@@ -514,6 +514,13 @@ supabase.createClient(
     SUPABASE_PUBLISHABLE_KEY
 );
 
+const redirectTarget =
+    new URLSearchParams(
+        window.location.search
+    )
+    .get("redirect") ||
+    "index.html";
+
 
 /* =====================================================
    ELEMENTS
@@ -723,7 +730,7 @@ async function redirectIfConnected() {
     if (user) {
 
         window.location.href =
-            "index.html";
+            redirectTarget;
 
     }
 
@@ -869,7 +876,7 @@ loginForm.addEventListener(
             if (data?.user) {
 
                 window.location.href =
-                    "index.html";
+                    redirectTarget;
 
             } else {
 
@@ -1148,7 +1155,7 @@ signupForm.addEventListener(
             if (data.session) {
 
                 window.location.href =
-                    "index.html";
+                    redirectTarget;
 
                 return;
 

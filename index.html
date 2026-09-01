@@ -16,794 +16,794 @@ content="width=device-width, initial-scale=1.0">
 <style>
 
 /* =====================================================
-   BASE
+   BASE
 ===================================================== */
 
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background: #f7f5f2;
-    color: #222;
+    font-family: Arial, sans-serif;
+    background: #f7f5f2;
+    color: #222;
 }
 
 button,
 input,
 select,
 textarea {
-    font-family: inherit;
+    font-family: inherit;
 }
 
 /* =====================================================
-   HEADER
+   HEADER
 ===================================================== */
 
 header {
-    background: white;
-    padding: 22px 7%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #ddd;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+    background: white;
+    padding: 22px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 .logo {
-    font-size: 30px;
-    font-weight: bold;
-    letter-spacing: 2px;
+    font-size: 30px;
+    font-weight: bold;
+    letter-spacing: 2px;
 }
 
 .logo a {
-    text-decoration: none;
-    color: #222;
+    text-decoration: none;
+    color: #222;
 }
 
 nav {
-    display: flex;
-    align-items: center;
-    gap: 22px;
+    display: flex;
+    align-items: center;
+    gap: 22px;
 }
 
 nav a {
-    text-decoration: none;
-    color: #222;
-    font-size: 15px;
+    text-decoration: none;
+    color: #222;
+    font-size: 15px;
 }
 
 nav a:hover {
-    text-decoration: underline;
+    text-decoration: underline;
 }
 
 .message-nav {
-    position: relative;
-    font-weight: bold;
+    position: relative;
+    font-weight: bold;
 }
 
 .profile-nav {
-    font-weight: bold;
+    font-weight: bold;
 }
 
 .unread-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 18px;
-    height: 18px;
-    padding: 0 5px;
-    margin-left: 4px;
-    border-radius: 20px;
-    background: #c62828;
-    color: white;
-    font-size: 10px;
-    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    margin-left: 4px;
+    border-radius: 20px;
+    background: #c62828;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
 }
 
 /* =====================================================
-   HERO
+   HERO
 ===================================================== */
 
 .hero {
-    padding: 70px 7%;
-    text-align: center;
-    background: #eee8df;
+    padding: 70px 7%;
+    text-align: center;
+    background: #eee8df;
 }
 
 .hero h1 {
-    font-size: 48px;
-    margin-bottom: 15px;
+    font-size: 48px;
+    margin-bottom: 15px;
 }
 
 .hero p {
-    font-size: 18px;
-    margin-bottom: 30px;
+    font-size: 18px;
+    margin-bottom: 30px;
 }
 
 .search {
-    max-width: 650px;
-    margin: auto;
-    display: flex;
+    max-width: 650px;
+    margin: auto;
+    display: flex;
 }
 
 .search input {
-    flex: 1;
-    padding: 17px;
-    border: none;
-    border-radius: 8px 0 0 8px;
-    font-size: 16px;
-    outline: none;
+    flex: 1;
+    padding: 17px;
+    border: none;
+    border-radius: 8px 0 0 8px;
+    font-size: 16px;
+    outline: none;
 }
 
 .search button {
-    padding: 17px 25px;
-    border: none;
-    background: #222;
-    color: white;
-    border-radius: 0 8px 8px 0;
-    cursor: pointer;
+    padding: 17px 25px;
+    border: none;
+    background: #222;
+    color: white;
+    border-radius: 0 8px 8px 0;
+    cursor: pointer;
 }
 
 /* =====================================================
-   SECTIONS
+   SECTIONS
 ===================================================== */
 
 .section {
-    padding: 45px 7%;
+    padding: 45px 7%;
 }
 
 .section h2 {
-    margin-bottom: 25px;
+    margin-bottom: 25px;
 }
 
 /* =====================================================
-   CATEGORIES
+   CATEGORIES
 ===================================================== */
 
 .categories {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
 }
 
 .category {
-    background: white;
-    padding: 30px 15px;
-    border-radius: 12px;
-    text-align: center;
-    font-weight: bold;
-    cursor: pointer;
-    border: 1px solid #ddd;
-    transition: 0.2s;
+    background: white;
+    padding: 30px 15px;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    transition: 0.2s;
 }
 
 .category:hover {
-    transform: translateY(-3px);
+    transform: translateY(-3px);
 }
 
 /* =====================================================
-   FILTERS
+   FILTERS
 ===================================================== */
 
 .filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 30px;
 }
 
 .filters select {
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background: white;
-    min-width: 140px;
-    cursor: pointer;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: white;
+    min-width: 140px;
+    cursor: pointer;
 }
 
 /* =====================================================
-   PRODUCTS
+   PRODUCTS
 ===================================================== */
 
 .products {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
 }
 
 .product {
-    background: white;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid #ddd;
-    transition: 0.2s;
-    cursor: pointer;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    transition: 0.2s;
+    cursor: pointer;
 }
 
 .product:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
 }
 
 .product-image {
-    height: 260px;
-    background: #eee;
-    position: relative;
-    overflow: hidden;
+    height: 260px;
+    background: #eee;
+    position: relative;
+    overflow: hidden;
 }
 
 .product-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 .no-photo {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #888;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
 }
 
 .photo-count {
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-    background: rgba(0,0,0,0.65);
-    color: white;
-    padding: 6px 9px;
-    border-radius: 20px;
-    font-size: 12px;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    background: rgba(0,0,0,0.65);
+    color: white;
+    padding: 6px 9px;
+    border-radius: 20px;
+    font-size: 12px;
 }
 
 .product-info {
-    padding: 15px;
+    padding: 15px;
 }
 
 .product-info h3 {
-    margin-bottom: 8px;
-    font-size: 18px;
+    margin-bottom: 8px;
+    font-size: 18px;
 }
 
 .price {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 8px;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 8px;
 }
 
 .condition {
-    font-size: 14px;
-    margin-bottom: 8px;
+    font-size: 14px;
+    margin-bottom: 8px;
 }
 
 .location {
-    color: #777;
-    font-size: 13px;
+    color: #777;
+    font-size: 13px;
 }
 
 /* =====================================================
-   PROFIL
+   PROFIL
 ===================================================== */
 
 .profile-section {
-    background: #eee8df;
+    background: #eee8df;
 }
 
 .profile-container {
-    max-width: 900px;
-    margin: auto;
+    max-width: 900px;
+    margin: auto;
 }
 
 .profile-card {
-    background: white;
-    border-radius: 18px;
-    padding: 35px;
-    border: 1px solid #ddd;
+    background: white;
+    border-radius: 18px;
+    padding: 35px;
+    border: 1px solid #ddd;
 }
 
 .profile-header {
-    text-align: center;
-    margin-bottom: 30px;
+    text-align: center;
+    margin-bottom: 30px;
 }
 
 .profile-header h2 {
-    font-size: 32px;
-    margin-bottom: 8px;
+    font-size: 32px;
+    margin-bottom: 8px;
 }
 
 .profile-header p {
-    color: #777;
+    color: #777;
 }
 
 .profile-avatar-container {
-    text-align: center;
-    margin-bottom: 30px;
+    text-align: center;
+    margin-bottom: 30px;
 }
 
 .profile-avatar {
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
-    background: #eee;
-    margin: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    border: 3px solid #eee8df;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: #eee;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 3px solid #eee8df;
 }
 
 .profile-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .profile-avatar-placeholder {
-    font-size: 55px;
-    color: #999;
+    font-size: 55px;
+    color: #999;
 }
 
 .profile-fields {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
 }
 
 .profile-field {
-    display: flex;
-    flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .profile-field.full {
-    grid-column: 1 / -1;
+    grid-column: 1 / -1;
 }
 
 .profile-field label {
-    font-weight: bold;
-    margin-bottom: 8px;
-    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 14px;
 }
 
 .profile-field input,
 .profile-field select {
-    padding: 14px;
-    border: 1px solid #ccc;
-    border-radius: 9px;
-    font-size: 15px;
-    background: white;
+    padding: 14px;
+    border: 1px solid #ccc;
+    border-radius: 9px;
+    font-size: 15px;
+    background: white;
 }
 
 .profile-actions {
-    margin-top: 25px;
-    display: flex;
-    gap: 12px;
+    margin-top: 25px;
+    display: flex;
+    gap: 12px;
 }
 
 .profile-save-button {
-    flex: 1;
-    padding: 16px;
-    border: none;
-    border-radius: 10px;
-    background: #222;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
+    flex: 1;
+    padding: 16px;
+    border: none;
+    border-radius: 10px;
+    background: #222;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 .profile-save-button:hover {
-    background: #444;
+    background: #444;
 }
 
 .profile-save-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .profile-logout-button {
-    padding: 16px 25px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background: white;
-    color: #222;
-    font-weight: bold;
-    cursor: pointer;
+    padding: 16px 25px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background: white;
+    color: #222;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 .profile-message {
-    margin-top: 15px;
-    text-align: center;
-    padding: 12px;
-    border-radius: 8px;
-    display: none;
+    margin-top: 15px;
+    text-align: center;
+    padding: 12px;
+    border-radius: 8px;
+    display: none;
 }
 
 .profile-message.success {
-    display: block;
-    background: #e8f5e9;
-    color: #2e7d32;
+    display: block;
+    background: #e8f5e9;
+    color: #2e7d32;
 }
 
 .profile-message.error {
-    display: block;
-    background: #ffebee;
-    color: #c62828;
+    display: block;
+    background: #ffebee;
+    color: #c62828;
 }
 
 .profile-not-connected {
-    text-align: center;
-    padding: 30px;
+    text-align: center;
+    padding: 30px;
 }
 
 .profile-not-connected p {
-    color: #777;
-    margin-bottom: 20px;
+    color: #777;
+    margin-bottom: 20px;
 }
 
 .profile-login-button {
-    display: inline-block;
-    padding: 14px 25px;
-    background: #222;
-    color: white;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: bold;
+    display: inline-block;
+    padding: 14px 25px;
+    background: #222;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
 }
 
 /* =====================================================
-   MODAL ARTICLE
+   MODAL ARTICLE
 ===================================================== */
 
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 9999;
-    inset: 0;
-    background: rgba(0,0,0,0.65);
-    padding: 30px;
-    overflow-y: auto;
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    padding: 30px;
+    overflow-y: auto;
 }
 
 .modal.active {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .modal-content {
-    background: white;
-    width: 100%;
-    max-width: 1000px;
-    max-height: 92vh;
-    overflow-y: auto;
-    border-radius: 18px;
-    position: relative;
-    padding: 25px;
+    background: white;
+    width: 100%;
+    max-width: 1000px;
+    max-height: 92vh;
+    overflow-y: auto;
+    border-radius: 18px;
+    position: relative;
+    padding: 25px;
 }
 
 .close-modal {
-    position: absolute;
-    top: 15px;
-    right: 18px;
-    width: 40px;
-    height: 40px;
-    border: none;
-    border-radius: 50%;
-    background: #222;
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-    z-index: 10;
+    position: absolute;
+    top: 15px;
+    right: 18px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: #222;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 10;
 }
 
 /* =====================================================
-   GALERIE
+   GALERIE
 ===================================================== */
 
 .modal-gallery {
-    position: relative;
-    background: #f3f3f3;
-    border-radius: 14px;
-    overflow: hidden;
-    margin-bottom: 25px;
+    position: relative;
+    background: #f3f3f3;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 25px;
 }
 
 .modal-main-image {
-    width: 100%;
-    height: 500px;
-    object-fit: contain;
-    display: block;
-    background: #f3f3f3;
+    width: 100%;
+    height: 500px;
+    object-fit: contain;
+    display: block;
+    background: #f3f3f3;
 }
 
 .gallery-button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 45px;
-    height: 45px;
-    border: none;
-    border-radius: 50%;
-    background: rgba(0,0,0,0.65);
-    color: white;
-    font-size: 25px;
-    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 45px;
+    height: 45px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.65);
+    color: white;
+    font-size: 25px;
+    cursor: pointer;
 }
 
 .gallery-prev {
-    left: 15px;
+    left: 15px;
 }
 
 .gallery-next {
-    right: 15px;
+    right: 15px;
 }
 
 .gallery-counter {
-    position: absolute;
-    bottom: 15px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0,0,0,0.65);
-    color: white;
-    padding: 7px 12px;
-    border-radius: 20px;
-    font-size: 13px;
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.65);
+    color: white;
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 13px;
 }
 
 .thumbnails {
-    display: flex;
-    gap: 10px;
-    overflow-x: auto;
-    padding-top: 12px;
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-top: 12px;
 }
 
 .thumbnail {
-    width: 75px;
-    height: 75px;
-    object-fit: cover;
-    border-radius: 8px;
-    cursor: pointer;
-    border: 2px solid transparent;
-    flex-shrink: 0;
+    width: 75px;
+    height: 75px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    flex-shrink: 0;
 }
 
 .thumbnail.active {
-    border-color: #222;
+    border-color: #222;
 }
 
 /* =====================================================
-   DETAILS
+   DETAILS
 ===================================================== */
 
 .modal-details h2 {
-    font-size: 30px;
-    margin-bottom: 10px;
+    font-size: 30px;
+    margin-bottom: 10px;
 }
 
 .modal-price {
-    font-size: 27px;
-    font-weight: bold;
-    margin-bottom: 20px;
+    font-size: 27px;
+    font-weight: bold;
+    margin-bottom: 20px;
 }
 
 .details-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-bottom: 25px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 25px;
 }
 
 .detail-box {
-    background: #f7f5f2;
-    padding: 14px;
-    border-radius: 10px;
+    background: #f7f5f2;
+    padding: 14px;
+    border-radius: 10px;
 }
 
 .detail-box strong {
-    display: block;
-    margin-bottom: 5px;
-    font-size: 13px;
-    color: #777;
+    display: block;
+    margin-bottom: 5px;
+    font-size: 13px;
+    color: #777;
 }
 
 .detail-box span {
-    font-size: 15px;
+    font-size: 15px;
 }
 
 .description-box {
-    margin-top: 20px;
+    margin-top: 20px;
 }
 
 .description-box h3 {
-    margin-bottom: 8px;
+    margin-bottom: 8px;
 }
 
 .description-box p {
-    line-height: 1.6;
-    color: #555;
-    white-space: pre-wrap;
+    line-height: 1.6;
+    color: #555;
+    white-space: pre-wrap;
 }
 
 /* =====================================================
-   BOUTON CONTACT
+   BOUTON CONTACT
 ===================================================== */
 
 .contact-seller-button {
-    width: 100%;
-    padding: 17px;
-    border: none;
-    border-radius: 10px;
-    background: #222;
-    color: white;
-    font-size: 17px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 25px;
+    width: 100%;
+    padding: 17px;
+    border: none;
+    border-radius: 10px;
+    background: #222;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 25px;
 }
 
 .contact-seller-button:hover {
-    background: #444;
+    background: #444;
 }
 
 .contact-seller-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .seller-message {
-    text-align: center;
-    margin-top: 15px;
-    color: #777;
-    font-size: 13px;
+    text-align: center;
+    margin-top: 15px;
+    color: #777;
+    font-size: 13px;
 }
 
 /* =====================================================
-   LOADING
+   LOADING
 ===================================================== */
 
 .loading {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 50px;
-    color: #777;
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 50px;
+    color: #777;
 }
 
 /* =====================================================
-   FOOTER
+   FOOTER
 ===================================================== */
 
 footer {
-    margin-top: 50px;
-    padding: 30px;
-    text-align: center;
-    background: #222;
-    color: white;
+    margin-top: 50px;
+    padding: 30px;
+    text-align: center;
+    background: #222;
+    color: white;
 }
 
 /* =====================================================
-   MOBILE
+   MOBILE
 ===================================================== */
 
 @media (max-width: 800px) {
 
-    header {
-        padding: 18px 5%;
-    }
+    header {
+        padding: 18px 5%;
+    }
 
-    nav {
-        gap: 12px;
-    }
+    nav {
+        gap: 12px;
+    }
 
-    nav a:not(.message-nav):not(.profile-nav) {
-        display: none;
-    }
+    nav a:not(.message-nav):not(.profile-nav) {
+        display: none;
+    }
 
-    .message-nav,
-    .profile-nav {
-        display: block !important;
-    }
+    .message-nav,
+    .profile-nav {
+        display: block !important;
+    }
 
-    .hero {
-        padding: 50px 5%;
-    }
+    .hero {
+        padding: 50px 5%;
+    }
 
-    .hero h1 {
-        font-size: 36px;
-    }
+    .hero h1 {
+        font-size: 36px;
+    }
 
-    .hero p {
-        font-size: 16px;
-    }
+    .hero p {
+        font-size: 16px;
+    }
 
-    .categories {
-        grid-template-columns: repeat(2, 1fr);
-    }
+    .categories {
+        grid-template-columns: repeat(2, 1fr);
+    }
 
-    .products {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-    }
+    .products {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
 
-    .product-image {
-        height: 190px;
-    }
+    .product-image {
+        height: 190px;
+    }
 
-    .filters select {
-        width: 100%;
-    }
+    .filters select {
+        width: 100%;
+    }
 
-    .modal {
-        padding: 10px;
-    }
+    .modal {
+        padding: 10px;
+    }
 
-    .modal-content {
-        padding: 18px;
-    }
+    .modal-content {
+        padding: 18px;
+    }
 
-    .modal-main-image {
-        height: 350px;
-    }
+    .modal-main-image {
+        height: 350px;
+    }
 
-    .details-grid {
-        grid-template-columns: 1fr;
-    }
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
 
-    .modal-details h2 {
-        font-size: 24px;
-    }
+    .modal-details h2 {
+        font-size: 24px;
+    }
 
-    .profile-card {
-        padding: 22px;
-    }
+    .profile-card {
+        padding: 22px;
+    }
 
-    .profile-fields {
-        grid-template-columns: 1fr;
-    }
+    .profile-fields {
+        grid-template-columns: 1fr;
+    }
 
-    .profile-field.full {
-        grid-column: auto;
-    }
+    .profile-field.full {
+        grid-column: auto;
+    }
 
-    .profile-actions {
-        flex-direction: column;
-    }
+    .profile-actions {
+        flex-direction: column;
+    }
 
 }
 
 /* =====================================================
-   TRES PETIT MOBILE
+   TRES PETIT MOBILE
 ===================================================== */
 
 @media (max-width: 430px) {
 
-    .logo {
-        font-size: 24px;
-    }
+    .logo {
+        font-size: 24px;
+    }
 
-    .products {
-        gap: 8px;
-    }
+    .products {
+        gap: 8px;
+    }
 
-    .product-info {
-        padding: 11px;
-    }
+    .product-info {
+        padding: 11px;
+    }
 
-    .product-info h3 {
-        font-size: 15px;
-    }
+    .product-info h3 {
+        font-size: 15px;
+    }
 
-    .price {
-        font-size: 17px;
-    }
+    .price {
+        font-size: 17px;
+    }
 
 }
 
@@ -814,7 +814,7 @@ footer {
 <body>
 
 <!-- =====================================================
-     HEADER
+     HEADER
 ===================================================== -->
 
 <header>
@@ -885,7 +885,7 @@ style="display:none;">
 </header>
 
 <!-- =====================================================
-     HERO
+     HERO
 ===================================================== -->
 
 <section
@@ -906,8 +906,12 @@ Achetez et vendez vos vêtements de seconde main partout au Canada.
 type="text"
 id="search-input"
 placeholder="Rechercher une robe, des chaussures, une marque..."
+>
 
-<button ...>
+<button
+type="button"
+id="search-button"
+>
 Rechercher
 </button>
 
@@ -916,7 +920,7 @@ Rechercher
 </section>
 
 <!-- =====================================================
-     CATEGORIES
+     CATEGORIES
 ===================================================== -->
 
 <section class="section">
@@ -964,7 +968,7 @@ data-category="Accessoires">
 </section>
 
 <!-- =====================================================
-     ARTICLES
+     ARTICLES
 ===================================================== -->
 
 <section
@@ -1152,13 +1156,13 @@ Chargement des articles...
 </section>
 
 <!-- =====================================================
-     PROFIL
+     PROFIL
 ===================================================== -->
 
-<section 
-id="profil" class="
-section profile-section" 
-style="display:none;"></section>
+<section
+id="profil"
+class="section profile-section"
+style="display:none;">
 
 <div class="profile-container">
 
@@ -1217,7 +1221,7 @@ Gérez vos informations personnelles.
 id="profile-avatar-image"
 src=""
 alt="Photo de profil"
-style="display;"
+style="display:none;">
 
 
 
@@ -1245,8 +1249,7 @@ Prénom
 type="text"
 id="profile-first-name"
 placeholder="Votre prénom"
-
-
+>
 
 </div>
 
@@ -1260,8 +1263,7 @@ Ville
 type="text"
 id="profile-city"
 placeholder="Votre ville"
-
-
+>
 
 </div>
 
@@ -1343,8 +1345,7 @@ Adresse e-mail
 type="email"
 id="profile-email"
 disabled
-
-
+>
 
 </div>
 
@@ -1384,7 +1385,7 @@ class="profile-message">
 </section>
 
 <!-- =====================================================
-     MODAL ARTICLE
+     MODAL ARTICLE
 ===================================================== -->
 
 <div
@@ -1407,7 +1408,7 @@ id="close-modal">
 id="modal-main-image"
 class="modal-main-image"
 src=""
-alt="Photo de l'article"
+alt="Photo de l'article">
 
 
 
@@ -1573,7 +1574,7 @@ class="seller-message">
 </div>
 
 <!-- =====================================================
-     FOOTER
+     FOOTER
 ===================================================== -->
 
 <footer>
@@ -1589,7 +1590,7 @@ La mode de seconde main au Canada.
 <script>
 
 /* =====================================================
-   SUPABASE
+   SUPABASE
 ===================================================== */
 
 const SUPABASE_URL =
@@ -1600,12 +1601,12 @@ const SUPABASE_PUBLISHABLE_KEY =
 
 const supabaseClient =
 supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
 );
 
 /* =====================================================
-   VARIABLES
+   VARIABLES
 ===================================================== */
 
 let currentUser = null;
@@ -1619,2571 +1620,2560 @@ let currentPhotoIndex = 0;
 let currentArticle = null;
 
 /* =====================================================
-   CHARGER UTILISATEUR
+   CHARGER UTILISATEUR
 ===================================================== */
 
 async function loadCurrentUser() {
 
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .auth
-            .getUser();
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .auth
+            .getUser();
 
-    if (error) {
+    if (error) {
 
-        console.error(
-            "Erreur utilisateur :",
-            error
-        );
+        console.error(
+            "Erreur utilisateur :",
+            error
+        );
 
-        return null;
+        return null;
 
-    }
+    }
 
-    return data.user;
+    return data.user;
 
 }
 
 /* =====================================================
-   AUTH AREA
+   AUTH AREA
 ===================================================== */
 
 async function updateAuthArea() {
 
-    currentUser =
-        await loadCurrentUser();
+    currentUser =
+        await loadCurrentUser();
 
-    const authArea =
-        document.getElementById(
-            "auth-area"
-        );
+    const authArea =
+        document.getElementById(
+            "auth-area"
+        );
 
-    const profileNav =
-        document.getElementById(
-            "profile-nav"
-        );
+    const profileNav =
+        document.getElementById(
+            "profile-nav"
+        );
 
-    if (!currentUser) {
+    if (!currentUser) {
 
-        authArea.innerHTML =
-            "<a href='auth.html'>Connexion</a>";
+        authArea.innerHTML =
+            "<a href='auth.html'>Connexion</a>";
 
-        profileNav.style.display =
-            "none";
+        profileNav.style.display =
+            "none";
 
-        showProfileNotConnected();
+        showProfileNotConnected();
 
-        return;
+        return;
 
-    }
+    }
 
-    const firstName =
-        currentUser.user_metadata?.first_name ||
-        "Mon compte";
+    const firstName =
+        currentUser.user_metadata?.first_name ||
+        "Mon compte";
 
-    authArea.innerHTML =
+    authArea.innerHTML =
 
-        "<span style='color:#666;font-size:14px'>" +
+        "<span style='color:#666;font-size:14px'>" +
 
-        "Bonjour, " +
+        "Bonjour, " +
 
-        firstName +
+        firstName +
 
-        "</span>";
+        "</span>";
 
-    profileNav.style.display =
-        "block";
+    profileNav.style.display =
+        "block";
 
-    await loadProfile();
+    await loadProfile();
 
-    await updateUnreadBadge();
+    await updateUnreadBadge();
 
 }
 
 /* =====================================================
-   BADGE MESSAGES
+   BADGE MESSAGES
 ===================================================== */
 
 async function updateUnreadBadge() {
 
-    if (!currentUser) {
-        return;
-    }
+    if (!currentUser) {
+        return;
+    }
 
-    const badge =
-        document.getElementById(
-            "unread-badge"
-        );
+    const badge =
+        document.getElementById(
+            "unread-badge"
+        );
 
-    const {
-        data: conversations,
-        error
-    } =
-        await supabaseClient
-            .from("conversations")
-            .select("id")
-            .or(
-                "buyer_id.eq." +
-                currentUser.id +
-                ",seller_id.eq." +
-                currentUser.id
-            );
+    const {
+        data: conversations,
+        error
+    } =
+        await supabaseClient
+            .from("conversations")
+            .select("id")
+            .or(
+                "buyer_id.eq." +
+                currentUser.id +
+                ",seller_id.eq." +
+                currentUser.id
+            );
 
-    if (error) {
+    if (error) {
 
-        console.warn(
-            "Badge messages :",
-            error.message
-        );
+        console.warn(
+            "Badge messages :",
+            error.message
+        );
 
-        return;
+        return;
 
-    }
+    }
 
-    if (!conversations?.length) {
+    if (!conversations?.length) {
 
-        badge.style.display =
-            "none";
+        badge.style.display =
+            "none";
 
-        return;
+        return;
 
-    }
+    }
 
-    const conversationIds =
-        conversations.map(
-            function(conversation) {
+    const conversationIds =
+        conversations.map(
+            function(conversation) {
 
-                return conversation.id;
+                return conversation.id;
 
-            }
-        );
+            }
+        );
 
-    const {
-        data: unreadMessages,
-        error: unreadError
-    } =
-        await supabaseClient
-            .from("messages")
-            .select("id")
-            .in(
-                "conversation_id",
-                conversationIds
-            )
-            .neq(
-                "sender_id",
-                currentUser.id
-            )
-            .eq(
-                "is_read",
-                false
-            );
+    const {
+        data: unreadMessages,
+        error: unreadError
+    } =
+        await supabaseClient
+            .from("messages")
+            .select("id")
+            .in(
+                "conversation_id",
+                conversationIds
+            )
+            .neq(
+                "sender_id",
+                currentUser.id
+            )
+            .eq(
+                "is_read",
+                false
+            );
 
-    if (unreadError) {
+    if (unreadError) {
 
-        console.warn(
-            "Messages non lus :",
-            unreadError.message
-        );
+        console.warn(
+            "Messages non lus :",
+            unreadError.message
+        );
 
-        return;
+        return;
 
-    }
+    }
 
-    const count =
-        unreadMessages?.length || 0;
+    const count =
+        unreadMessages?.length || 0;
 
-    if (count > 0) {
+    if (count > 0) {
 
-        badge.textContent =
-            count > 99
-                ? "99+"
-                : count;
+        badge.textContent =
+            count > 99
+                ? "99+"
+                : count;
 
-        badge.style.display =
-            "inline-flex";
+        badge.style.display =
+            "inline-flex";
 
-    } else {
+    } else {
 
-        badge.style.display =
-            "none";
+        badge.style.display =
+            "none";
 
-    }
+    }
 
 }
 
 /* =====================================================
-   PROFIL
+   PROFIL
 ===================================================== */
 
 function showProfileNotConnected() {
 
-    document
-        .getElementById(
-            "profile-not-connected"
-        )
-        .style.display =
-            "block";
+    document
+        .getElementById(
+            "profile-not-connected"
+        )
+        .style.display =
+            "block";
 
-    document
-        .getElementById(
-            "profile-connected"
-        )
-        .style.display =
-            "none";
+    document
+        .getElementById(
+            "profile-connected"
+        )
+        .style.display =
+            "none";
 
 }
 
 function showProfileConnected() {
 
-    document
-        .getElementById(
-            "profile-not-connected"
-        )
-        .style.display =
-            "none";
+    document
+        .getElementById(
+            "profile-not-connected"
+        )
+        .style.display =
+            "none";
 
-    document
-        .getElementById(
-            "profile-connected"
-        )
-        .style.display =
-            "block";
+    document
+        .getElementById(
+            "profile-connected"
+        )
+        .style.display =
+            "block";
 
 }
 
 /* =====================================================
-   CHARGER PROFIL SUPABASE
+   CHARGER PROFIL SUPABASE
 ===================================================== */
 
 async function loadProfile() {
 
-    if (!currentUser) {
+    if (!currentUser) {
 
-        showProfileNotConnected();
+        showProfileNotConnected();
 
-        return;
+        return;
 
-    }
+    }
 
-    showProfileConnected();
+    showProfileConnected();
 
-    const firstNameInput =
-        document.getElementById(
-            "profile-first-name"
-        );
+    const firstNameInput =
+        document.getElementById(
+            "profile-first-name"
+        );
 
-    const cityInput =
-        document.getElementById(
-            "profile-city"
-        );
+    const cityInput =
+        document.getElementById(
+            "profile-city"
+        );
 
-    const provinceInput =
-        document.getElementById(
-            "profile-province"
-        );
+    const provinceInput =
+        document.getElementById(
+            "profile-province"
+        );
 
-    const emailInput =
-        document.getElementById(
-            "profile-email"
-        );
+    const emailInput =
+        document.getElementById(
+            "profile-email"
+        );
 
-    emailInput.value =
-        currentUser.email || "";
+    emailInput.value =
+        currentUser.email || "";
 
-    /*
-     * Valeurs venant de Auth
-     */
+    /*
+     * Valeurs venant de Auth
+     */
 
-   firstNameInput.value = currentUser.user_metadata?.first_name || "";
+   firstNameInput.value = currentUser.user_metadata?.first_name || "";
 cityInput.value = currentUser.user_metadata?.city || "";
 provinceInput.value = currentUser.user_metadata?.province || "";
 
-    /*
-     * On essaie ensuite de récupérer
-     * les informations dans public_profiles.
-     */
+    /*
+     * On essaie ensuite de récupérer
+     * les informations dans public_profiles.
+     */
 
-    const {
-        data: profile,
-        error
-    } =
-        await supabaseClient
-            .from("public_profiles")
-            .select("*")
-            .eq(
-                "id",
-                currentUser.id
-            )
-            .maybeSingle();
+    const {
+        data: profile,
+        error
+    } =
+        await supabaseClient
+            .from("public_profiles")
+            .select("*")
+            .eq(
+                "id",
+                currentUser.id
+            )
+            .maybeSingle();
 
-    if (error) {
+    if (error) {
 
-        console.warn(
-            "Profil public :",
-            error.message
-        );
+        console.warn(
+            "Profil public :",
+            error.message
+        );
 
-    }
+    }
 
-    if (profile) {
+    if (profile) {
 
-        if (
-            profile.first_name !== null &&
-            profile.first_name !== undefined
-        ) {
+        if (
+            profile.first_name !== null &&
+            profile.first_name !== undefined
+        ) {
 
-            firstNameInput.value =
-                profile.first_name;
+            firstNameInput.value =
+                profile.first_name;
 
-        }
+        }
 
-        if (
-            profile.city !== null &&
-            profile.city !== undefined
-        ) {
+        if (
+            profile.city !== null &&
+            profile.city !== undefined
+        ) {
 
-            cityInput.value =
-                profile.city;
+            cityInput.value =
+                profile.city;
 
-        }
+        }
 
-        if (
-            profile.province !== null &&
-            profile.province !== undefined
-        ) {
+        if (
+            profile.province !== null &&
+            profile.province !== undefined
+        ) {
 
-            provinceInput.value =
-                profile.province;
+            provinceInput.value =
+                profile.province;
 
-        }
+        }
 
-        if (profile.avatar_url) {
+        if (profile.avatar_url) {
 
-            showProfileAvatar(
-                profile.avatar_url
-            );
+            showProfileAvatar(
+                profile.avatar_url
+            );
 
-        }
+        }
 
-    }
+    }
 
 }
 
 /* =====================================================
-   AVATAR
+   AVATAR
 ===================================================== */
 
 function showProfileAvatar(url) {
 
-    const image =
-        document.getElementById(
-            "profile-avatar-image"
-        );
+    const image =
+        document.getElementById(
+            "profile-avatar-image"
+        );
 
-    const placeholder =
-        document.getElementById(
-            "profile-avatar-placeholder"
-        );
+    const placeholder =
+        document.getElementById(
+            "profile-avatar-placeholder"
+        );
 
-    if (!url) {
+    if (!url) {
 
-        image.style.display =
-            "none";
+        image.style.display =
+            "none";
 
-        placeholder.style.display =
-            "block";
+        placeholder.style.display =
+            "block";
 
-        return;
+        return;
 
-    }
+    }
 
-    image.src =
-        url;
+    image.src =
+        url;
 
-    image.style.display =
-        "block";
+    image.style.display =
+        "block";
 
-    placeholder.style.display =
-        "none";
+    placeholder.style.display =
+        "none";
 
 }
 
 /* =====================================================
-   MESSAGE PROFIL
+   MESSAGE PROFIL
 ===================================================== */
 
 function showProfileMessage(
-    message,
-    type
+    message,
+    type
 ) {
 
-    const box =
-        document.getElementById(
-            "profile-message"
-        );
+    const box =
+        document.getElementById(
+            "profile-message"
+        );
 
-    box.textContent =
-        message;
+    box.textContent =
+        message;
 
-    box.className =
-        "profile-message " +
-        type;
+    box.className =
+        "profile-message " +
+        type;
 
-    setTimeout(
-        function() {
+    setTimeout(
+        function() {
 
-            box.className =
-                "profile-message";
+            box.className =
+                "profile-message";
 
-        },
-        4000
-    );
+        },
+        4000
+    );
 
 }
 
 /* =====================================================
-   SAUVEGARDER PROFIL
+   SAUVEGARDER PROFIL
 ===================================================== */
 
 async function saveProfile() {
 
-    if (!currentUser) {
+    if (!currentUser) {
 
-        window.location.href =
-            "auth.html";
+        window.location.href =
+            "auth.html";
 
-        return;
+        return;
 
-    }
+    }
 
-    const button =
-        document.getElementById(
-            "profile-save-button"
-        );
+    const button =
+        document.getElementById(
+            "profile-save-button"
+        );
 
-    const firstName =
-        document
-            .getElementById(
-                "profile-first-name"
-            )
-            .value
-            .trim();
+    const firstName =
+        document
+            .getElementById(
+                "profile-first-name"
+            )
+            .value
+            .trim();
 
-    const city =
-        document
-            .getElementById(
-                "profile-city"
-            )
-            .value
-            .trim();
+    const city =
+        document
+            .getElementById(
+                "profile-city"
+            )
+            .value
+            .trim();
 
-    const province =
-        document
-            .getElementById(
-                "profile-province"
-            )
-            .value;
+    const province =
+        document
+            .getElementById(
+                "profile-province"
+            )
+            .value;
 
-    if (!firstName) {
+    if (!firstName) {
 
-        showProfileMessage(
-            "Veuillez entrer votre prénom.",
-            "error"
-        );
+        showProfileMessage(
+            "Veuillez entrer votre prénom.",
+            "error"
+        );
 
-        return;
+        return;
 
-    }
+    }
 
-    button.disabled =
-        true;
+    button.disabled =
+        true;
 
-    button.textContent =
-        "Enregistrement...";
+    button.textContent =
+        "Enregistrement...";
 
-    try {
+    try {
 
-        /*
-         * Mise à jour des métadonnées
-         * du compte Supabase Auth.
-         */
+        /*
+         * Mise à jour des métadonnées
+         * du compte Supabase Auth.
+         */
 
-        const {
-            error: authError
-        } =
-            await supabaseClient
-                .auth
-                .updateUser({
+        const {
+            error: authError
+        } =
+            await supabaseClient
+                .auth
+                .updateUser({
 
-                    data: {
+                    data: {
 
-                        first_name:
-                            firstName,
+                        first_name:
+                            firstName,
 
-                        city:
-                            city,
+                        city:
+                            city,
 
-                        province:
-                            province
+                        province:
+                            province
 
-                    }
+                    }
 
-                });
+                });
 
-        if (authError) {
+        if (authError) {
 
-            throw authError;
+            throw authError;
 
-        }
+        }
 
-        /*
-         * Mise à jour / création
-         * du profil public.
-         */
+        /*
+         * Mise à jour / création
+         * du profil public.
+         */
 
-        const {
-            error: profileError
-        } =
-            await supabaseClient
-                .from("public_profiles")
-                .upsert({
+        const {
+            error: profileError
+        } =
+            await supabaseClient
+                .from("public_profiles")
+                .upsert({
 
-                    id:
-                        currentUser.id,
+                    id:
+                        currentUser.id,
 
-                    first_name:
-                        firstName,
+                    first_name:
+                        firstName,
 
-                    city:
-                        city,
+                    city:
+                        city,
 
-                    province:
-                        province
+                    province:
+                        province
 
-                });
+                });
 
-        if (profileError) {
+        if (profileError) {
 
-            /*
-             * Si la table public_profiles
-             * n'est pas configurée correctement,
-             * on garde quand même les informations
-             * dans Auth.
-             */
+            /*
+             * Si la table public_profiles
+             * n'est pas configurée correctement,
+             * on garde quand même les informations
+             * dans Auth.
+             */
 
-            console.warn(
-                "Impossible de mettre à jour public_profiles :",
-                profileError.message
-            );
+            console.warn(
+                "Impossible de mettre à jour public_profiles :",
+                profileError.message
+            );
 
-        }
+        }
 
-        /*
-         * Actualiser l'utilisateur local.
-         */
+        /*
+         * Actualiser l'utilisateur local.
+         */
 
-        currentUser =
-            await loadCurrentUser();
+        currentUser =
+            await loadCurrentUser();
 
-        const authArea =
-            document.getElementById(
-                "auth-area"
-            );
+        const authArea =
+            document.getElementById(
+                "auth-area"
+            );
 
-        authArea.innerHTML =
+        authArea.innerHTML =
 
-            "<span style='color:#666;font-size:14px'>" +
+            "<span style='color:#666;font-size:14px'>" +
 
-            "Bonjour, " +
+            "Bonjour, " +
 
-            firstName +
+            firstName +
 
-            "</span>";
+            "</span>";
 
-        showProfileMessage(
-            "Votre profil a été mis à jour avec succès.",
-            "success"
-        );
+        showProfileMessage(
+            "Votre profil a été mis à jour avec succès.",
+            "success"
+        );
 
-    } catch(error) {
+    } catch(error) {
 
-        console.error(
-            "Erreur sauvegarde profil :",
-            error
-        );
+        console.error(
+            "Erreur sauvegarde profil :",
+            error
+        );
 
-        showProfileMessage(
-            "Impossible de mettre à jour le profil : " +
-            error.message,
-            "error"
-        );
+        showProfileMessage(
+            "Impossible de mettre à jour le profil : " +
+            error.message,
+            "error"
+        );
 
-    } finally {
+    } finally {
 
-        button.disabled =
-            false;
+        button.disabled =
+            false;
 
-        button.textContent =
-            "Enregistrer les modifications";
+        button.textContent =
+            "Enregistrer les modifications";
 
-    }
+    }
 
 }
 
 /* =====================================================
-   DÉCONNEXION
+   DÉCONNEXION
 ===================================================== */
 
 async function logout() {
 
-    await supabaseClient
-        .auth
-        .signOut();
+    await supabaseClient
+        .auth
+        .signOut();
 
-    currentUser =
-        null;
+    currentUser =
+        null;
 
-    window.location.href =
-        "index.html";
+    window.location.href =
+        "index.html";
 
 }
 
 /* =====================================================
-   VILLES
+   VILLES
 ===================================================== */
 
 const cities = {
 
-    AB: [
-        "Calgary",
-        "Edmonton",
-        "Red Deer",
-        "Lethbridge",
-        "Fort McMurray"
-    ],
+    AB: [
+        "Calgary",
+        "Edmonton",
+        "Red Deer",
+        "Lethbridge",
+        "Fort McMurray"
+    ],
 
-    BC: [
-        "Vancouver",
-        "Victoria",
-        "Surrey",
-        "Burnaby",
-        "Kelowna",
-        "Richmond"
-    ],
+    BC: [
+        "Vancouver",
+        "Victoria",
+        "Surrey",
+        "Burnaby",
+        "Kelowna",
+        "Richmond"
+    ],
 
-    PE: [
-        "Charlottetown",
-        "Summerside",
-        "Stratford"
-    ],
+    PE: [
+        "Charlottetown",
+        "Summerside",
+        "Stratford"
+    ],
 
-    MB: [
-        "Winnipeg",
-        "Brandon",
-        "Steinbach"
-    ],
+    MB: [
+        "Winnipeg",
+        "Brandon",
+        "Steinbach"
+    ],
 
-    NB: [
-        "Campbellton",
-        "Bathurst",
-        "Moncton",
-        "Dieppe",
-        "Fredericton",
-        "Saint John",
-        "Edmundston",
-        "Miramichi"
-    ],
+    NB: [
+        "Campbellton",
+        "Bathurst",
+        "Moncton",
+        "Dieppe",
+        "Fredericton",
+        "Saint John",
+        "Edmundston",
+        "Miramichi"
+    ],
 
-    NS: [
-        "Halifax",
-        "Sydney",
-        "Dartmouth",
-        "Truro",
-        "New Glasgow"
-    ],
+    NS: [
+        "Halifax",
+        "Sydney",
+        "Dartmouth",
+        "Truro",
+        "New Glasgow"
+    ],
 
-    ON: [
-        "Toronto",
-        "Ottawa",
-        "Mississauga",
-        "Brampton",
-        "Hamilton",
-        "London",
-        "Windsor",
-        "Kitchener",
-        "Waterloo",
-        "Kingston"
-    ],
+    ON: [
+        "Toronto",
+        "Ottawa",
+        "Mississauga",
+        "Brampton",
+        "Hamilton",
+        "London",
+        "Windsor",
+        "Kitchener",
+        "Waterloo",
+        "Kingston"
+    ],
 
-    QC: [
-        "Montréal",
-        "Québec",
-        "Laval",
-        "Gatineau",
-        "Longueuil",
-        "Sherbrooke",
-        "Trois-Rivières",
-        "Saguenay",
-        "Drummondville"
-    ],
+    QC: [
+        "Montréal",
+        "Québec",
+        "Laval",
+        "Gatineau",
+        "Longueuil",
+        "Sherbrooke",
+        "Trois-Rivières",
+        "Saguenay",
+        "Drummondville"
+    ],
 
-    SK: [
-        "Saskatoon",
-        "Regina",
-        "Prince Albert",
-        "Moose Jaw"
-    ],
+    SK: [
+        "Saskatoon",
+        "Regina",
+        "Prince Albert",
+        "Moose Jaw"
+    ],
 
-    NL: [
-        "St. John's",
-        "Mount Pearl",
-        "Corner Brook",
-        "Conception Bay South"
-    ],
+    NL: [
+        "St. John's",
+        "Mount Pearl",
+        "Corner Brook",
+        "Conception Bay South"
+    ],
 
-    NT: [
-        "Yellowknife",
-        "Hay River",
-        "Inuvik"
-    ],
+    NT: [
+        "Yellowknife",
+        "Hay River",
+        "Inuvik"
+    ],
 
-    NU: [
-        "Iqaluit",
-        "Rankin Inlet",
-        "Arviat"
-    ],
+    NU: [
+        "Iqaluit",
+        "Rankin Inlet",
+        "Arviat"
+    ],
 
-    YT: [
-        "Whitehorse",
-        "Dawson City",
-        "Watson Lake"
-    ]
+    YT: [
+        "Whitehorse",
+        "Dawson City",
+        "Watson Lake"
+    ]
 
 };
 
 /* =====================================================
-   SELECTEURS
+   SELECTEURS
 ===================================================== */
 
 const filterCategory =
 document.getElementById(
-    "filter-category"
+    "filter-category"
 );
 
 const filterSize =
 document.getElementById(
-    "filter-size"
+    "filter-size"
 );
 
 const filterCondition =
 document.getElementById(
-    "filter-condition"
+    "filter-condition"
 );
 
 const filterPrice =
 document.getElementById(
-    "filter-price"
+    "filter-price"
 );
 
 const filterProvince =
 document.getElementById(
-    "province"
+    "province"
 );
 
 const filterCity =
 document.getElementById(
-    "city"
+    "city"
 );
 
 const searchInput =
 document.getElementById(
-    "search-input"
+    "search-input"
 );
 
 /* =====================================================
-   VILLES FILTRES
+   VILLES FILTRES
 ===================================================== */
 
 function updateCities() {
 
-    const province =
-        filterProvince.value;
+    const province =
+        filterProvince.value;
 
-    filterCity.innerHTML =
-        "";
+    filterCity.innerHTML =
+        "";
 
-    if (!province) {
+    if (!province) {
 
-        filterCity.innerHTML =
-            "<option value=''>" +
-            "Sélectionnez d'abord une province" +
-            "</option>";
+        filterCity.innerHTML =
+            "<option value=''>" +
+            "Sélectionnez d'abord une province" +
+            "</option>";
 
-        renderArticles();
+        renderArticles();
 
-        return;
+        return;
 
-    }
+    }
 
-    const defaultOption =
-        document.createElement(
-            "option"
-        );
+    const defaultOption =
+        document.createElement(
+            "option"
+        );
 
-    defaultOption.value =
-        "";
+    defaultOption.value =
+        "";
 
-    defaultOption.textContent =
-        "Toutes les villes";
+    defaultOption.textContent =
+        "Toutes les villes";
 
-    filterCity.appendChild(
-        defaultOption
-    );
+    filterCity.appendChild(
+        defaultOption
+    );
 
-    (cities[province] || [])
-        .forEach(
-            function(city) {
+    (cities[province] || [])
+        .forEach(
+            function(city) {
 
-                const option =
-                    document.createElement(
-                        "option"
-                    );
+                const option =
+                    document.createElement(
+                        "option"
+                    );
 
-                option.value =
-                    city;
+                option.value =
+                    city;
 
-                option.textContent =
-                    city;
+                option.textContent =
+                    city;
 
-                filterCity.appendChild(
-                    option
-                );
+                filterCity.appendChild(
+                    option
+                );
 
-            }
-        );
+            }
+        );
 
-    renderArticles();
+    renderArticles();
 
 }
 
 filterProvince.addEventListener(
-    "change",
-    updateCities
+    "change",
+    updateCities
 );
 
 /* =====================================================
-   TAILLES
+   TAILLES
 ===================================================== */
 
 function updateSizeFilter() {
 
-    const category =
-        filterCategory.value;
+    const category =
+        filterCategory.value;
 
-    filterSize.innerHTML =
-        "";
+    filterSize.innerHTML =
+        "";
 
-    const first =
-        document.createElement(
-            "option"
-        );
+    const first =
+        document.createElement(
+            "option"
+        );
 
-    first.value =
-        "";
+    first.value =
+        "";
 
-    first.textContent =
-        category === "Chaussures"
-            ? "Pointure"
-            : "Taille (vêtements)";
+    first.textContent =
+        category === "Chaussures"
+            ? "Pointure"
+            : "Taille (vêtements)";
 
-    filterSize.appendChild(
-        first
-    );
+    filterSize.appendChild(
+        first
+    );
 
-    if (
-        category === "Chaussures"
-    ) {
+    if (
+        category === "Chaussures"
+    ) {
 
-        [
-            "5",
-            "5.5",
-            "6",
-            "6.5",
-            "7",
-            "7.5",
-            "8",
-            "8.5",
-            "9",
-            "9.5",
-            "10",
-            "10.5",
-            "11",
-            "11.5",
-            "12",
-            "13",
-            "Autre"
-        ].forEach(
-            function(value) {
+        [
+            "5",
+            "5.5",
+            "6",
+            "6.5",
+            "7",
+            "7.5",
+            "8",
+            "8.5",
+            "9",
+            "9.5",
+            "10",
+            "10.5",
+            "11",
+            "11.5",
+            "12",
+            "13",
+            "Autre"
+        ].forEach(
+            function(value) {
 
-                const option =
-                    document.createElement(
-                        "option"
-                    );
+                const option =
+                    document.createElement(
+                        "option"
+                    );
 
-                option.value =
-                    value;
+                option.value =
+                    value;
 
-                option.textContent =
-                    value;
+                option.textContent =
+                    value;
 
-                filterSize.appendChild(
-                    option
-                );
+                filterSize.appendChild(
+                    option
+                );
 
-            }
-        );
+            }
+        );
 
-    } else {
+    } else {
 
-        [
-            "XXS",
-            "XS",
-            "S",
-            "M",
-            "L",
-            "XL",
-            "XXL",
-            "Autre"
-        ].forEach(
-            function(value) {
+        [
+            "XXS",
+            "XS",
+            "S",
+            "M",
+            "L",
+            "XL",
+            "XXL",
+            "Autre"
+        ].forEach(
+            function(value) {
 
-                const option =
-                    document.createElement(
-                        "option"
-                    );
+                const option =
+                    document.createElement(
+                        "option"
+                    );
 
-                option.value =
-                    value;
+                option.value =
+                    value;
 
-                option.textContent =
-                    value;
+                option.textContent =
+                    value;
 
-                filterSize.appendChild(
-                    option
-                );
+                filterSize.appendChild(
+                    option
+                );
 
-            }
-        );
+            }
+        );
 
-    }
+    }
 
 }
 
 updateSizeFilter();
 
 filterCategory.addEventListener(
-    "change",
-    function() {
+    "change",
+    function() {
 
-        updateSizeFilter();
+        updateSizeFilter();
 
-        renderArticles();
+        renderArticles();
 
-    }
+    }
 );
 
 /* =====================================================
-   PHOTOS
+   PHOTOS
 ===================================================== */
 
 function getPhotoUrls(item) {
 
-    let photos =
-        item?.photo_urls;
+    let photos =
+        item?.photo_urls;
 
-    if (!photos) {
-        return [];
-    }
+    if (!photos) {
+        return [];
+    }
 
-    if (Array.isArray(photos)) {
+    if (Array.isArray(photos)) {
 
-        return photos
-            .map(
-                function(url) {
+        return photos
+            .map(
+                function(url) {
 
-                    return typeof url === "string"
-                        ? url.trim()
-                        : "";
+                    return typeof url === "string"
+                        ? url.trim()
+                        : "";
 
-                }
-            )
-            .filter(Boolean);
+                }
+            )
+            .filter(Boolean);
 
-    }
+    }
 
-    if (
-        typeof photos === "object" &&
-        photos !== null
-    ) {
+    if (
+        typeof photos === "object" &&
+        photos !== null
+    ) {
 
-        if (
-            Array.isArray(
-                photos.urls
-            )
-        ) {
+        if (
+            Array.isArray(
+                photos.urls
+            )
+        ) {
 
-            return photos.urls
-                .filter(Boolean);
+            return photos.urls
+                .filter(Boolean);
 
-        }
+        }
 
-    }
+    }
 
-    if (
-        typeof photos === "string"
-    ) {
+    if (
+        typeof photos === "string"
+    ) {
 
-        const clean =
-            photos.trim();
+        const clean =
+            photos.trim();
 
-        if (!clean) {
-            return [];
-        }
+        if (!clean) {
+            return [];
+        }
 
-        try {
+        try {
 
-            const parsed =
-                JSON.parse(clean);
+            const parsed =
+                JSON.parse(clean);
 
-            if (
-                Array.isArray(parsed)
-            ) {
+            if (
+                Array.isArray(parsed)
+            ) {
 
-                return parsed
-                    .map(
-                        function(url) {
+                return parsed
+                    .map(
+                        function(url) {
 
-                            return String(url)
-                                .trim();
+                            return String(url)
+                                .trim();
 
-                        }
-                    )
-                    .filter(Boolean);
+                        }
+                    )
+                    .filter(Boolean);
 
-            }
+            }
 
-            if (
-                typeof parsed === "string"
-            ) {
+            if (
+                typeof parsed === "string"
+            ) {
 
-                return [
-                    parsed.trim()
-                ];
+                return [
+                    parsed.trim()
+                ];
 
-            }
+            }
 
-        } catch(error) {
+        } catch(error) {
 
-            /* Texte normal */
+            /* Texte normal */
 
-        }
+        }
 
-        if (
-            clean.includes(",")
-        ) {
+        if (
+            clean.includes(",")
+        ) {
 
-            return clean
-                .split(",")
-                .map(
-                    function(url) {
+            return clean
+                .split(",")
+                .map(
+                    function(url) {
 
-                        return url.trim();
+                        return url.trim();
 
-                    }
-                )
-                .filter(Boolean);
+                    }
+                )
+                .filter(Boolean);
 
-        }
+        }
 
-        return [
-            clean
-        ];
+        return [
+            clean
+        ];
 
-    }
+    }
 
-    return [];
+    return [];
 
 }
 
 /* =====================================================
-   FILTRES
+   FILTRES
 ===================================================== */
 
 function matchesFilters(item) {
 
-    const category =
-        filterCategory.value;
+    const category =
+        filterCategory.value;
 
-    const size =
-        filterSize.value;
+    const size =
+        filterSize.value;
 
-    const condition =
-        filterCondition.value;
+    const condition =
+        filterCondition.value;
 
-    const price =
-        Number(
-            item.price || 0
-        );
+    const price =
+        Number(
+            item.price || 0
+        );
 
-    const city =
-        filterCity.value;
+    const city =
+        filterCity.value;
 
-    const province =
-        filterProvince.value;
+    const province =
+        filterProvince.value;
 
-    const search =
-        searchInput.value
-            .trim()
-            .toLowerCase();
+    const search =
+        searchInput.value
+            .trim()
+            .toLowerCase();
 
-    if (
-        category &&
-        item.category !== category
-    ) {
+    if (
+        category &&
+        item.category !== category
+    ) {
 
-        return false;
+        return false;
 
-    }
+    }
 
-    if (size) {
+    if (size) {
 
-        const itemSize =
-            item.category === "Chaussures"
+        const itemSize =
+            item.category === "Chaussures"
 
-                ? String(
-                    item.shoe_size || ""
-                )
+                ? String(
+                    item.shoe_size || ""
+                )
 
-                : String(
-                    item.size || ""
-                );
+                : String(
+                    item.size || ""
+                );
 
-        if (
-            itemSize !== size
-        ) {
+        if (
+            itemSize !== size
+        ) {
 
-            return false;
+            return false;
 
-        }
+        }
 
-    }
+    }
 
-    if (condition) {
+    if (condition) {
 
-        if (
-            String(
-                item.condition || ""
-            ) !== condition
-        ) {
+        if (
+            String(
+                item.condition || ""
+            ) !== condition
+        ) {
 
-            return false;
+            return false;
 
-        }
+        }
 
-    }
+    }
 
-    if (
-        city &&
-        item.city !== city
-    ) {
+    if (
+        city &&
+        item.city !== city
+    ) {
 
-        return false;
+        return false;
 
-    }
+    }
 
-    if (
-        province &&
-        item.province !== province
-    ) {
+    if (
+        province &&
+        item.province !== province
+    ) {
 
-        return false;
+        return false;
 
-    }
+    }
 
-    if (
-        filterPrice.value === "lt20" &&
-        price >= 20
-    ) {
+    if (
+        filterPrice.value === "lt20" &&
+        price >= 20
+    ) {
 
-        return false;
+        return false;
 
-    }
+    }
 
-    if (
-        filterPrice.value === "20-50" &&
-        (
-            price < 20 ||
-            price > 50
-        )
-    ) {
+    if (
+        filterPrice.value === "20-50" &&
+        (
+            price < 20 ||
+            price > 50
+        )
+    ) {
 
-        return false;
+        return false;
 
-    }
+    }
 
-    if (
-        filterPrice.value === "50-100" &&
-        (
-            price < 50 ||
-            price > 100
-        )
-    ) {
+    if (
+        filterPrice.value === "50-100" &&
+        (
+            price < 50 ||
+            price > 100
+        )
+    ) {
 
-        return false;
+        return false;
 
-    }
+    }
 
-    if (
-        filterPrice.value === "100plus" &&
-        price < 100
-    ) {
+    if (
+        filterPrice.value === "100plus" &&
+        price < 100
+    ) {
 
-        return false;
+        return false;
 
-    }
+    }
 
-    if (search) {
+    if (search) {
 
-        const text = [
+        const text = [
 
-            item.name,
-            item.brand,
-            item.category,
-            item.description,
-            item.city,
-            item.province
+            item.name,
+            item.brand,
+            item.category,
+            item.description,
+            item.city,
+            item.province
 
-        ]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
+        ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
 
-        if (
-            !text.includes(search)
-        ) {
+        if (
+            !text.includes(search)
+        ) {
 
-            return false;
+            return false;
 
-        }
+        }
 
-    }
+    }
 
-    return true;
+    return true;
 
 }
 
 /* =====================================================
-   AFFICHER ARTICLES
+   AFFICHER ARTICLES
 ===================================================== */
 
 function renderArticles() {
 
-    const container =
-        document.getElementById(
-            "products"
-        );
+    const container =
+        document.getElementById(
+            "products"
+        );
 
-    const data =
-        allArticles.filter(
-            matchesFilters
-        );
+    const data =
+        allArticles.filter(
+            matchesFilters
+        );
 
-    if (!data.length) {
+    if (!data.length) {
 
-        container.innerHTML =
-            "<p style='grid-column:1/-1;" +
-            "color:#777;text-align:center;" +
-            "padding:30px'>" +
+        container.innerHTML =
+            "<p style='grid-column:1/-1;" +
+            "color:#777;text-align:center;" +
+            "padding:30px'>" +
 
-            "Aucun article ne correspond " +
-            "à vos critères." +
+            "Aucun article ne correspond " +
+            "à vos critères." +
 
-            "</p>";
+            "</p>";
 
-        return;
+        return;
 
-    }
+    }
 
-    container.innerHTML =
-        "";
+    container.innerHTML =
+        "";
 
-    data.forEach(
-        function(item) {
+    data.forEach(
+        function(item) {
 
-            const product =
-                document.createElement(
-                    "div"
-                );
+            const product =
+                document.createElement(
+                    "div"
+                );
 
-            product.className =
-                "product";
+            product.className =
+                "product";
 
-            const imageContainer =
-                document.createElement(
-                    "div"
-                );
+            const imageContainer =
+                document.createElement(
+                    "div"
+                );
 
-            imageContainer.className =
-                "product-image";
+            imageContainer.className =
+                "product-image";
 
-            const photos =
-                getPhotoUrls(item);
+            const photos =
+                getPhotoUrls(item);
 
-            if (
-                photos.length > 0
-            ) {
+            if (
+                photos.length > 0
+            ) {
 
-                const img =
-                    document.createElement(
-                        "img"
-                    );
+                const img =
+                    document.createElement(
+                        "img"
+                    );
 
-                img.alt =
-                    item.name ||
-                    "Article WEARERA";
+                img.alt =
+                    item.name ||
+                    "Article WEARERA";
 
-                let currentImageIndex =
-                    0;
+                let currentImageIndex =
+                    0;
 
-                function showNextValidImage() {
+                function showNextValidImage() {
 
-                    if (
-                        currentImageIndex >=
-                        photos.length
-                    ) {
+                    if (
+                        currentImageIndex >=
+                        photos.length
+                    ) {
 
-                        img.style.display =
-                            "none";
+                        img.style.display =
+                            "none";
 
-                        const noPhoto =
-                            document.createElement(
-                                "div"
-                            );
+                        const noPhoto =
+                            document.createElement(
+                                "div"
+                            );
 
-                        noPhoto.className =
-                            "no-photo";
+                        noPhoto.className =
+                            "no-photo";
 
-                        noPhoto.textContent =
-                            "Photo indisponible";
+                        noPhoto.textContent =
+                            "Photo indisponible";
 
-                        imageContainer.appendChild(
-                            noPhoto
-                        );
+                        imageContainer.appendChild(
+                            noPhoto
+                        );
 
-                        return;
+                        return;
 
-                    }
+                    }
 
-                    img.src =
-                        photos[
-                            currentImageIndex
-                        ];
+                    img.src =
+                        photos[
+                            currentImageIndex
+                        ];
 
-                    currentImageIndex++;
+                    currentImageIndex++;
 
-                }
+                }
 
-                img.onerror =
-                    function() {
+                img.onerror =
+                    function() {
 
-                        showNextValidImage();
+                        showNextValidImage();
 
-                    };
+                    };
 
-                imageContainer.appendChild(
-                    img
-                );
+                imageContainer.appendChild(
+                    img
+                );
 
-                showNextValidImage();
+                showNextValidImage();
 
-                if (
-                    photos.length > 1
-                ) {
+                if (
+                    photos.length > 1
+                ) {
 
-                    const counter =
-                        document.createElement(
-                            "div"
-                        );
+                    const counter =
+                        document.createElement(
+                            "div"
+                        );
 
-                    counter.className =
-                        "photo-count";
+                    counter.className =
+                        "photo-count";
 
-                    counter.textContent =
-                        " " +
-                        photos.length;
+                    counter.textContent =
+                        " " +
+                        photos.length;
 
-                    imageContainer.appendChild(
-                        counter
-                    );
+                    imageContainer.appendChild(
+                        counter
+                    );
 
-                }
+                }
 
-            } else {
+            } else {
 
-                const noPhoto =
-                    document.createElement(
-                        "div"
-                    );
+                const noPhoto =
+                    document.createElement(
+                        "div"
+                    );
 
-                noPhoto.className =
-                    "no-photo";
+                noPhoto.className =
+                    "no-photo";
 
-                noPhoto.textContent =
-                    "Photo";
+                noPhoto.textContent =
+                    "Photo";
 
-                imageContainer.appendChild(
-                    noPhoto
-                );
+                imageContainer.appendChild(
+                    noPhoto
+                );
 
-            }
+            }
 
-            const info =
-                document.createElement(
-                    "div"
-                );
+            const info =
+                document.createElement(
+                    "div"
+                );
 
-            info.className =
-                "product-info";
+            info.className =
+                "product-info";
 
-            const title =
-                document.createElement(
-                    "h3"
-                );
+            const title =
+                document.createElement(
+                    "h3"
+                );
 
-            title.textContent =
-                item.name ||
-                "Article";
+            title.textContent =
+                item.name ||
+                "Article";
 
-            const price =
-                document.createElement(
-                    "div"
-                );
+            const price =
+                document.createElement(
+                    "div"
+                );
 
-            price.className =
-                "price";
+            price.className =
+                "price";
 
-            price.textContent =
-                Number(
-                    item.price || 0
-                )
-                .toFixed(2)
-                .replace(
-                    ".00",
-                    ""
-                ) +
-                " $";
+            price.textContent =
+                Number(
+                    item.price || 0
+                )
+                .toFixed(2)
+                .replace(
+                    ".00",
+                    ""
+                ) +
+                " $";
 
-            const condition =
-                document.createElement(
-                    "div"
-                );
+            const condition =
+                document.createElement(
+                    "div"
+                );
 
-            condition.className =
-                "condition";
+            condition.className =
+                "condition";
 
-            if (
-                item.condition ===
-                "Neuf"
-            ) {
+            if (
+                item.condition ===
+                "Neuf"
+            ) {
 
-                condition.textContent =
-                    " Neuf";
+                condition.textContent =
+                    " Neuf";
 
-            } else {
+            } else {
 
-                condition.textContent =
-                    " " +
-                    (
-                        item.condition ||
-                        "—"
-                    ) +
-                    "/5";
+                condition.textContent =
+                    " " +
+                    (
+                        item.condition ||
+                        "—"
+                    ) +
+                    "/5";
 
-            }
+            }
 
-            const location =
-                document.createElement(
-                    "div"
-                );
+            const location =
+                document.createElement(
+                    "div"
+                );
 
-            location.className =
-                "location";
+            location.className =
+                "location";
 
-            let locationText =
-                " " +
-                (
-                    item.city ||
-                    "Canada"
-                );
+            let locationText =
+                " " +
+                (
+                    item.city ||
+                    "Canada"
+                );
 
-            if (
-                item.province
-            ) {
+            if (
+                item.province
+            ) {
 
-                locationText +=
-                    ", " +
-                    item.province;
+                locationText +=
+                    ", " +
+                    item.province;
 
-            }
+            }
 
-            if (
-                item.category ===
-                    "Chaussures" &&
-                item.shoe_size
-            ) {
+            if (
+                item.category ===
+                    "Chaussures" &&
+                item.shoe_size
+            ) {
 
-                locationText +=
-                    " · Pointure " +
-                    item.shoe_size;
+                locationText +=
+                    " · Pointure " +
+                    item.shoe_size;
 
-            }
+            }
 
-            if (
-                item.category ===
-                    "Vêtements" &&
-                item.size
-            ) {
+            if (
+                item.category ===
+                    "Vêtements" &&
+                item.size
+            ) {
 
-                locationText +=
-                    " · Taille " +
-                    item.size;
+                locationText +=
+                    " · Taille " +
+                    item.size;
 
-            }
+            }
 
-            location.textContent =
-                locationText;
+            location.textContent =
+                locationText;
 
-            info.append(
-                title,
-                price,
-                condition,
-                location
-            );
+            info.append(
+                title,
+                price,
+                condition,
+                location
+            );
 
-            product.append(
-                imageContainer,
-                info
-            );
+            product.append(
+                imageContainer,
+                info
+            );
 
-            product.addEventListener(
-                "click",
-                function() {
+            product.addEventListener(
+                "click",
+                function() {
 
-                    openArticle(
-                        item
-                    );
+                    openArticle(
+                        item
+                    );
 
-                }
-            );
+                }
+            );
 
-            container.appendChild(
-                product
-            );
+            container.appendChild(
+                product
+            );
 
-        }
-    );
+        }
+    );
 
 }
 
 /* =====================================================
-   CHARGER ARTICLES
+   CHARGER ARTICLES
 ===================================================== */
 
 async function loadArticles() {
 
-    const container =
-        document.getElementById(
-            "products"
-        );
+    const container =
+        document.getElementById(
+            "products"
+        );
 
-    container.innerHTML =
-        "<div class='loading'>" +
-        "Chargement des articles..." +
-        "</div>";
+    container.innerHTML =
+        "<div class='loading'>" +
+        "Chargement des articles..." +
+        "</div>";
 
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("Articles")
-            .select("*")
-            .order(
-                "created_at",
-                {
-                    ascending: false
-                }
-            )
-            .limit(100);
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("Articles")
+            .select("*")
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            )
+            .limit(100);
 
-    if (error) {
+    if (error) {
 
-        console.error(
-            "Erreur articles :",
-            error
-        );
+        console.error(
+            "Erreur articles :",
+            error
+        );
 
-        container.innerHTML =
-            "<p style='grid-column:1/-1;" +
-            "color:#b00020;" +
-            "text-align:center;" +
-            "padding:30px'>" +
+        container.innerHTML =
+            "<p style='grid-column:1/-1;" +
+            "color:#b00020;" +
+            "text-align:center;" +
+            "padding:30px'>" +
 
-            "Impossible de charger les articles." +
+            "Impossible de charger les articles." +
 
-            "<br><small>" +
+            "<br><small>" +
 
-            error.message +
+            error.message +
 
-            "</small></p>";
+            "</small></p>";
 
-        return;
+        return;
 
-    }
+    }
 
-    allArticles =
-        data || [];
+    allArticles =
+        data || [];
 
-    renderArticles();
+    renderArticles();
 
 }
 
 /* =====================================================
-   MODAL
+   MODAL
 ===================================================== */
 
 const modal =
-    document.getElementById(
-        "article-modal"
-    );
+    document.getElementById(
+        "article-modal"
+    );
 
 const closeModalButton =
-    document.getElementById(
-        "close-modal"
-    );
+    document.getElementById(
+        "close-modal"
+    );
 
 const modalMainImage =
-    document.getElementById(
-        "modal-main-image"
-    );
+    document.getElementById(
+        "modal-main-image"
+    );
 
 const modalNoPhoto =
-    document.getElementById(
-        "modal-no-photo"
-    );
+    document.getElementById(
+        "modal-no-photo"
+    );
 
 const galleryPrev =
-    document.getElementById(
-        "gallery-prev"
-    );
+    document.getElementById(
+        "gallery-prev"
+    );
 
 const galleryNext =
-    document.getElementById(
-        "gallery-next"
-    );
+    document.getElementById(
+        "gallery-next"
+    );
 
 const galleryCounter =
-    document.getElementById(
-        "gallery-counter"
-    );
+    document.getElementById(
+        "gallery-counter"
+    );
 
 const thumbnails =
-    document.getElementById(
-        "thumbnails"
-    );
+    document.getElementById(
+        "thumbnails"
+    );
 
 const contactSellerButton =
-    document.getElementById(
-        "contact-seller-button"
-    );
+    document.getElementById(
+        "contact-seller-button"
+    );
 
 const sellerMessage =
-    document.getElementById(
-        "seller-message"
-    );
+    document.getElementById(
+        "seller-message"
+    );
 
 /* =====================================================
-   OUVRIR ARTICLE
+   OUVRIR ARTICLE
 ===================================================== */
 
 function openArticle(item) {
 
-    currentArticle =
-        item;
+    currentArticle =
+        item;
 
-    currentPhotos =
-        getPhotoUrls(item);
+    currentPhotos =
+        getPhotoUrls(item);
 
-    currentPhotoIndex =
-        0;
+    currentPhotoIndex =
+        0;
 
-    document
-        .getElementById(
-            "modal-name"
-        )
-        .textContent =
-            item.name ||
-            "Article";
+    document
+        .getElementById(
+            "modal-name"
+        )
+        .textContent =
+            item.name ||
+            "Article";
 
-    document
-        .getElementById(
-            "modal-price"
-        )
-        .textContent =
-            Number(
-                item.price || 0
-            )
-            .toFixed(2)
-            .replace(
-                ".00",
-                ""
-            ) +
-            " $";
+    document
+        .getElementById(
+            "modal-price"
+        )
+        .textContent =
+            Number(
+                item.price || 0
+            )
+            .toFixed(2)
+            .replace(
+                ".00",
+                ""
+            ) +
+            " $";
 
-    document
-        .getElementById(
-            "modal-category"
-        )
-        .textContent =
-            item.category ||
-            "—";
+    document
+        .getElementById(
+            "modal-category"
+        )
+        .textContent =
+            item.category ||
+            "—";
 
-    document
-        .getElementById(
-            "modal-brand"
-        )
-        .textContent =
-            item.brand ||
-            "Non indiquée";
+    document
+        .getElementById(
+            "modal-brand"
+        )
+        .textContent =
+            item.brand ||
+            "Non indiquée";
 
-    let sizeText =
-        "Non indiquée";
+    let sizeText =
+        "Non indiquée";
 
-    if (
-        item.category ===
-        "Chaussures" &&
-        item.shoe_size
-    ) {
+    if (
+        item.category ===
+        "Chaussures" &&
+        item.shoe_size
+    ) {
 
-        sizeText =
-            "Pointure " +
-            item.shoe_size;
+        sizeText =
+            "Pointure " +
+            item.shoe_size;
 
-    } else if (
-        item.category ===
-        "Vêtements" &&
-        item.size
-    ) {
+    } else if (
+        item.category ===
+        "Vêtements" &&
+        item.size
+    ) {
 
-        sizeText =
-            "Taille " +
-            item.size;
+        sizeText =
+            "Taille " +
+            item.size;
 
-    }
+    }
 
-    document
-        .getElementById(
-            "modal-size"
-        )
-        .textContent =
-            sizeText;
+    document
+        .getElementById(
+            "modal-size"
+        )
+        .textContent =
+            sizeText;
 
-    document
-        .getElementById(
-            "modal-condition"
-        )
-        .textContent =
-            item.condition ===
-            "Neuf"
+    document
+        .getElementById(
+            "modal-condition"
+        )
+        .textContent =
+            item.condition ===
+            "Neuf"
 
-                ? " Neuf — Jamais porté"
+                ? " Neuf — Jamais porté"
 
-                : " " +
-                  (
-                      item.condition ||
-                      "—"
-                  ) +
-                  "/5";
+                : " " +
+                  (
+                      item.condition ||
+                      "—"
+                  ) +
+                  "/5";
 
-    let locationText =
-        item.city ||
-        "Canada";
+    let locationText =
+        item.city ||
+        "Canada";
 
-    if (
-        item.province
-    ) {
+    if (
+        item.province
+    ) {
 
-        locationText +=
-            ", " +
-            item.province;
+        locationText +=
+            ", " +
+            item.province;
 
-    }
+    }
 
-    document
-        .getElementById(
-            "modal-location"
-        )
-        .textContent =
-            " " +
-            locationText;
+    document
+        .getElementById(
+            "modal-location"
+        )
+        .textContent =
+            " " +
+            locationText;
 
-    document
-        .getElementById(
-            "modal-defects"
-        )
-        .textContent =
-            item.defects ||
-            "Aucun défaut indiqué.";
+    document
+        .getElementById(
+            "modal-defects"
+        )
+        .textContent =
+            item.defects ||
+            "Aucun défaut indiqué.";
 
-    document
-        .getElementById(
-            "modal-description"
-        )
-        .textContent =
-            item.description ||
-            "Aucune description.";
+    document
+        .getElementById(
+            "modal-description"
+        )
+        .textContent =
+            item.description ||
+            "Aucune description.";
 
-    sellerMessage.textContent =
-        "";
+    sellerMessage.textContent =
+        "";
 
-    contactSellerButton.disabled =
-        false;
+    contactSellerButton.disabled =
+        false;
 
-    contactSellerButton.textContent =
-        " Contacter le vendeur";
+    contactSellerButton.textContent =
+        " Contacter le vendeur";
 
-    if (
-        currentUser &&
-        item.seller_id ===
-            currentUser.id
-    ) {
+    if (
+        currentUser &&
+        item.seller_id ===
+            currentUser.id
+    ) {
 
-        contactSellerButton.disabled =
-            true;
+        contactSellerButton.disabled =
+            true;
 
-        contactSellerButton.textContent =
-            "C'est votre article";
+        contactSellerButton.textContent =
+            "C'est votre article";
 
-        sellerMessage.textContent =
-            "Vous êtes le vendeur de cet article.";
+        sellerMessage.textContent =
+            "Vous êtes le vendeur de cet article.";
 
-    }
+    }
 
-    updateGallery();
+    updateGallery();
 
-    modal.classList.add(
-        "active"
-    );
+    modal.classList.add(
+        "active"
+    );
 
-    document.body.style.overflow =
-        "hidden";
+    document.body.style.overflow =
+        "hidden";
 
 }
 
 /* =====================================================
-   GALERIE
+   GALERIE
 ===================================================== */
 
 function updateGallery() {
 
-    thumbnails.innerHTML =
-        "";
+    thumbnails.innerHTML =
+        "";
 
-    if (
-        !currentPhotos.length
-    ) {
+    if (
+        !currentPhotos.length
+    ) {
 
-        modalMainImage.style.display =
-            "none";
+        modalMainImage.style.display =
+            "none";
 
-        modalNoPhoto.style.display =
-            "flex";
+        modalNoPhoto.style.display =
+            "flex";
 
-        galleryPrev.style.display =
-            "none";
+        galleryPrev.style.display =
+            "none";
 
-        galleryNext.style.display =
-            "none";
+        galleryNext.style.display =
+            "none";
 
-        galleryCounter.style.display =
-            "none";
+        galleryCounter.style.display =
+            "none";
 
-        return;
+        return;
 
-    }
+    }
 
-    modalNoPhoto.style.display =
-        "none";
+    modalNoPhoto.style.display =
+        "none";
 
-    modalMainImage.style.display =
-        "block";
+    modalMainImage.style.display =
+        "block";
 
-    const photoUrl =
-        currentPhotos[
-            currentPhotoIndex
-        ];
+    const photoUrl =
+        currentPhotos[
+            currentPhotoIndex
+        ];
 
-    modalMainImage.src =
-        photoUrl;
+    modalMainImage.src =
+        photoUrl;
 
-    modalMainImage.onerror =
-        function() {
+    modalMainImage.onerror =
+        function() {
 
-            currentPhotos.splice(
-                currentPhotoIndex,
-                1
-            );
+            currentPhotos.splice(
+                currentPhotoIndex,
+                1
+            );
 
-            if (
-                currentPhotoIndex >=
-                currentPhotos.length
-            ) {
+            if (
+                currentPhotoIndex >=
+                currentPhotos.length
+            ) {
 
-                currentPhotoIndex =
-                    Math.max(
-                        0,
-                        currentPhotos.length - 1
-                    );
+                currentPhotoIndex =
+                    Math.max(
+                        0,
+                        currentPhotos.length - 1
+                    );
 
-            }
+            }
 
-            updateGallery();
+            updateGallery();
 
-        };
+        };
 
-    galleryCounter.style.display =
-        "block";
+    galleryCounter.style.display =
+        "block";
 
-    galleryCounter.textContent =
-        (
-            currentPhotoIndex + 1
-        ) +
-        " / " +
-        currentPhotos.length;
+    galleryCounter.textContent =
+        (
+            currentPhotoIndex + 1
+        ) +
+        " / " +
+        currentPhotos.length;
 
-    if (
-        currentPhotos.length <= 1
-    ) {
+    if (
+        currentPhotos.length <= 1
+    ) {
 
-        galleryPrev.style.display =
-            "none";
+        galleryPrev.style.display =
+            "none";
 
-        galleryNext.style.display =
-            "none";
+        galleryNext.style.display =
+            "none";
 
-    } else {
+    } else {
 
-        galleryPrev.style.display =
-            "block";
+        galleryPrev.style.display =
+            "block";
 
-        galleryNext.style.display =
-            "block";
+        galleryNext.style.display =
+            "block";
 
-    }
+    }
 
-    currentPhotos.forEach(
-        function(url, index) {
+    currentPhotos.forEach(
+        function(url, index) {
 
-            const thumb =
-                document.createElement(
-                    "img"
-                );
+            const thumb =
+                document.createElement(
+                    "img"
+                );
 
-            thumb.className =
-                "thumbnail";
+            thumb.className =
+                "thumbnail";
 
-            if (
-                index ===
-                currentPhotoIndex
-            ) {
+            if (
+                index ===
+                currentPhotoIndex
+            ) {
 
-                thumb.classList.add(
-                    "active"
-                );
+                thumb.classList.add(
+                    "active"
+                );
 
-            }
+            }
 
-            thumb.src =
-                url;
+            thumb.src =
+                url;
 
-            thumb.alt =
-                "Miniature " +
-                (
-                    index + 1
-                );
+            thumb.alt =
+                "Miniature " +
+                (
+                    index + 1
+                );
 
-            thumb.addEventListener(
-                "click",
-                function(event) {
+            thumb.addEventListener(
+                "click",
+                function(event) {
 
-                    event.stopPropagation();
+                    event.stopPropagation();
 
-                    currentPhotoIndex =
-                        index;
+                    currentPhotoIndex =
+                        index;
 
-                    updateGallery();
+                    updateGallery();
 
-                }
-            );
+                }
+            );
 
-            thumbnails.appendChild(
-                thumb
-            );
+            thumbnails.appendChild(
+                thumb
+            );
 
-        }
-    );
+        }
+    );
 
 }
 
 /* =====================================================
-   NAVIGATION GALERIE
+   NAVIGATION GALERIE
 ===================================================== */
 
 galleryPrev.addEventListener(
-    "click",
-    function(event) {
+    "click",
+    function(event) {
 
-        event.stopPropagation();
+        event.stopPropagation();
 
-        if (
-            currentPhotos.length <= 1
-        ) {
+        if (
+            currentPhotos.length <= 1
+        ) {
 
-            return;
+            return;
 
-        }
+        }
 
-        currentPhotoIndex--;
+        currentPhotoIndex--;
 
-        if (
-            currentPhotoIndex < 0
-        ) {
+        if (
+            currentPhotoIndex < 0
+        ) {
 
-            currentPhotoIndex =
-                currentPhotos.length - 1;
+            currentPhotoIndex =
+                currentPhotos.length - 1;
 
-        }
+        }
 
-        updateGallery();
+        updateGallery();
 
-    }
+    }
 );
 
 galleryNext.addEventListener(
-    "click",
-    function(event) {
+    "click",
+    function(event) {
 
-        event.stopPropagation();
+        event.stopPropagation();
 
-        if (
-            currentPhotos.length <= 1
-        ) {
+        if (
+            currentPhotos.length <= 1
+        ) {
 
-            return;
+            return;
 
-        }
+        }
 
-        currentPhotoIndex++;
+        currentPhotoIndex++;
 
-        if (
-            currentPhotoIndex >=
-            currentPhotos.length
-        ) {
+        if (
+            currentPhotoIndex >=
+            currentPhotos.length
+        ) {
 
-            currentPhotoIndex =
-                0;
+            currentPhotoIndex =
+                0;
 
-        }
+        }
 
-        updateGallery();
+        updateGallery();
 
-    }
+    }
 );
 
 /* =====================================================
-   CONTACTER VENDEUR
+   CONTACTER VENDEUR
 ===================================================== */
 
 contactSellerButton.addEventListener(
-    "click",
-    async function() {
+    "click",
+    async function() {
 
-        if (
-            !currentArticle
-        ) {
+        if (
+            !currentArticle
+        ) {
 
-            return;
+            return;
 
-        }
+        }
 
-        if (!currentUser) {
+        if (!currentUser) {
 
-            window.location.href =
-                "auth.html?redirect=" +
-                encodeURIComponent(
-                    "index.html"
-                );
+            window.location.href =
+                "auth.html?redirect=" +
+                encodeURIComponent(
+                    "index.html"
+                );
 
-            return;
+            return;
 
-        }
+        }
 
-        if (
-            currentArticle.seller_id ===
-            currentUser.id
-        ) {
+        if (
+            currentArticle.seller_id ===
+            currentUser.id
+        ) {
 
-            return;
+            return;
 
-        }
+        }
 
-        contactSellerButton.disabled =
-            true;
+        contactSellerButton.disabled =
+            true;
 
-        contactSellerButton.textContent =
-            "Ouverture de la messagerie...";
+        contactSellerButton.textContent =
+            "Ouverture de la messagerie...";
 
-        sellerMessage.textContent =
-            "";
+        sellerMessage.textContent =
+            "";
 
-        try {
+        try {
 
-            const {
-                data: existingConversation,
-                error: findError
-            } =
-                await supabaseClient
-                    .from("conversations")
-                    .select("*")
-                    .eq(
-                        "article_id",
-                        currentArticle.id
-                    )
-                    .eq(
-                        "buyer_id",
-                        currentUser.id
-                    )
-                    .eq(
-                        "seller_id",
-                        currentArticle.seller_id
-                    )
-                    .maybeSingle();
+            const {
+                data: existingConversation,
+                error: findError
+            } =
+                await supabaseClient
+                    .from("conversations")
+                    .select("*")
+                    .eq(
+                        "article_id",
+                        currentArticle.id
+                    )
+                    .eq(
+                        "buyer_id",
+                        currentUser.id
+                    )
+                    .eq(
+                        "seller_id",
+                        currentArticle.seller_id
+                    )
+                    .maybeSingle();
 
-            if (findError) {
+            if (findError) {
 
-                throw findError;
+                throw findError;
 
-            }
+            }
 
-            let conversation =
-                existingConversation;
+            let conversation =
+                existingConversation;
 
-            if (!conversation) {
+            if (!conversation) {
 
-                const {
-                    data: newConversation,
-                    error: createError
-                } =
-                    await supabaseClient
-                        .from("conversations")
-                        .insert([
+                const {
+                    data: newConversation,
+                    error: createError
+                } =
+                    await supabaseClient
+                        .from("conversations")
+                        .insert([
 
-                            {
-                                article_id:
-                                    currentArticle.id,
+                            {
+                                article_id:
+                                    currentArticle.id,
 
-                                buyer_id:
-                                    currentUser.id,
+                                buyer_id:
+                                    currentUser.id,
 
-                                seller_id:
-                                    currentArticle.seller_id
+                                seller_id:
+                                    currentArticle.seller_id
 
-                            }
+                            }
 
-                        ])
-                        .select()
-                        .single();
+                        ])
+                        .select()
+                        .single();
 
-                if (createError) {
+                if (createError) {
 
-                    const {
-                        data: retryConversation
-                    } =
-                        await supabaseClient
-                            .from("conversations")
-                            .select("*")
-                            .eq(
-                                "article_id",
-                                currentArticle.id
-                            )
-                            .eq(
-                                "buyer_id",
-                                currentUser.id
-                            )
-                            .eq(
-                                "seller_id",
-                                currentArticle.seller_id
-                            )
-                            .maybeSingle();
+                    const {
+                        data: retryConversation
+                    } =
+                        await supabaseClient
+                            .from("conversations")
+                            .select("*")
+                            .eq(
+                                "article_id",
+                                currentArticle.id
+                            )
+                            .eq(
+                                "buyer_id",
+                                currentUser.id
+                            )
+                            .eq(
+                                "seller_id",
+                                currentArticle.seller_id
+                            )
+                            .maybeSingle();
 
-                    if (
-                        !retryConversation
-                    ) {
+                    if (
+                        !retryConversation
+                    ) {
 
-                        throw createError;
+                        throw createError;
 
-                    }
+                    }
 
-                    conversation =
-                        retryConversation;
+                    conversation =
+                        retryConversation;
 
-                } else {
+                } else {
 
-                    conversation =
-                        newConversation;
+                    conversation =
+                        newConversation;
 
-                }
+                }
 
-            }
+            }
 
-            closeModal();
+            closeModal();
 
-            window.location.href =
-                "messagerie.html?conversation=" +
-                encodeURIComponent(
-                    conversation.id
-                );
+            window.location.href =
+                "messagerie.html?conversation=" +
+                encodeURIComponent(
+                    conversation.id
+                );
 
-        } catch(error) {
+        } catch(error) {
 
-            console.error(
-                "Erreur conversation :",
-                error
-            );
+            console.error(
+                "Erreur conversation :",
+                error
+            );
 
-            contactSellerButton.disabled =
-                false;
+            contactSellerButton.disabled =
+                false;
 
-            contactSellerButton.textContent =
-                " Contacter le vendeur";
+            contactSellerButton.textContent =
+                " Contacter le vendeur";
 
-            sellerMessage.textContent =
-                "Impossible d'ouvrir la conversation : " +
-                error.message;
+            sellerMessage.textContent =
+                "Impossible d'ouvrir la conversation : " +
+                error.message;
 
-        }
+        }
 
-    }
+    }
 );
 
 /* =====================================================
-   FERMER MODAL
+   FERMER MODAL
 ===================================================== */
 
 function closeModal() {
 
-    modal.classList.remove(
-        "active"
-    );
+    modal.classList.remove(
+        "active"
+    );
 
-    document.body.style.overflow =
-        "";
+    document.body.style.overflow =
+        "";
 
 }
 
 closeModalButton.addEventListener(
-    "click",
-    closeModal
+    "click",
+    closeModal
 );
 
 modal.addEventListener(
-    "click",
-    function(event) {
+    "click",
+    function(event) {
 
-        if (
-            event.target ===
-            modal
-        ) {
+        if (
+            event.target ===
+            modal
+        ) {
 
-            closeModal();
+            closeModal();
 
-        }
+        }
 
-    }
+    }
 );
 
 /* =====================================================
-   ESC + CLAVIER
+   ESC + CLAVIER
 ===================================================== */
 
 document.addEventListener(
-    "keydown",
-    function(event) {
+    "keydown",
+    function(event) {
 
-        if (
-            !modal.classList.contains(
-                "active"
-            )
-        ) {
+        if (
+            !modal.classList.contains(
+                "active"
+            )
+        ) {
 
-            return;
+            return;
 
-        }
+        }
 
-        if (
-            event.key === "Escape"
-        ) {
+        if (
+            event.key === "Escape"
+        ) {
 
-            closeModal();
+            closeModal();
 
-        }
+        }
 
-        if (
-            event.key === "ArrowLeft"
-        ) {
+        if (
+            event.key === "ArrowLeft"
+        ) {
 
-            galleryPrev.click();
+            galleryPrev.click();
 
-        }
+        }
 
-        if (
-            event.key === "ArrowRight"
-        ) {
+        if (
+            event.key === "ArrowRight"
+        ) {
 
-            galleryNext.click();
+            galleryNext.click();
 
-        }
+        }
 
-    }
+    }
 );
 
 /* =====================================================
-   FILTRES
+   FILTRES
 ===================================================== */
 
 [
-    filterSize,
-    filterCondition,
-    filterPrice,
-    filterCity
+    filterSize,
+    filterCondition,
+    filterPrice,
+    filterCity
 ].forEach(
-    function(element) {
+    function(element) {
 
-        element.addEventListener(
-            "change",
-            renderArticles
-        );
+        element.addEventListener(
+            "change",
+            renderArticles
+        );
 
-    }
+    }
 );
 
 /* =====================================================
-   RECHERCHE
+   RECHERCHE
 ===================================================== */
 
 document
-    .getElementById(
-        "search-button"
-    )
-    .addEventListener(
-        "click",
-        renderArticles
-    );
+    .getElementById(
+        "search-button"
+    )
+    .addEventListener(
+        "click",
+        renderArticles
+    );
 
 searchInput.addEventListener(
-    "input",
-    renderArticles
+    "input",
+    renderArticles
 );
 
 searchInput.addEventListener(
-    "keydown",
-    function(event) {
+    "keydown",
+    function(event) {
 
-        if (
-            event.key === "Enter"
-        ) {
+        if (
+            event.key === "Enter"
+        ) {
 
-            renderArticles();
+            renderArticles();
 
-        }
+        }
 
-    }
+    }
 );
 
 /* =====================================================
-   CATEGORIES
+   CATEGORIES
 ===================================================== */
 
 document
-    .querySelectorAll(
-        ".category"
-    )
-    .forEach(
-        function(category) {
+    .querySelectorAll(
+        ".category"
+    )
+    .forEach(
+        function(category) {
 
-            category.addEventListener(
-                "click",
-                function() {
+            category.addEventListener(
+                "click",
+                function() {
 
-                    const selected =
-                        this.dataset.category;
+                    const selected =
+                        this.dataset.category;
 
-                    filterCategory.value =
-                        selected;
+                    filterCategory.value =
+                        selected;
 
-                    updateSizeFilter();
+                    updateSizeFilter();
 
-                    document
-                        .getElementById(
-                            "articles"
-                        )
-                        .scrollIntoView({
-                            behavior:
-                                "smooth"
-                        });
+                    document
+                        .getElementById(
+                            "articles"
+                        )
+                        .scrollIntoView({
+                            behavior:
+                                "smooth"
+                        });
 
-                    renderArticles();
+                    renderArticles();
 
-                }
-            );
+                }
+            );
 
-        }
-    );
+        }
+    );
 
 /* =====================================================
-   PROFIL — BOUTONS
+   PROFIL — BOUTONS
 ===================================================== */
 
 document
-    .getElementById(
-        "profile-save-button"
-    )
-    .addEventListener(
-        "click",
-        saveProfile
-    );
+    .getElementById(
+        "profile-save-button"
+    )
+    .addEventListener(
+        "click",
+        saveProfile
+    );
 
 document
-    .getElementById(
-        "profile-logout-button"
-    )
-    .addEventListener(
-        "click",
-        logout
-    );
+    .getElementById(
+        "profile-logout-button"
+    )
+    .addEventListener(
+        "click",
+        logout
+    );
 
 /* =====================================================
-   INITIALISATION
+   INITIALISATION
 ===================================================== */
 
 async function initialize() {
 
-    await updateAuthArea();
+    await updateAuthArea();
 
-    await loadArticles();
+    await loadArticles();
 
 }
 
 initialize();
 
 /* =====================================================
-   SESSION TEMPS RÉEL
+   SESSION TEMPS RÉEL
 ===================================================== */
 
 supabaseClient.auth.onAuthStateChange(
-    async function(
-        event,
-        session
-    ) {
+    function(
+        event,
+        session
+    ) {
 
-        if (
-            event === "SIGNED_IN"
-        ) {
+        (async function() {
 
-            currentUser =
-                session?.user ||
-                null;
+            if (
+                event === "SIGNED_IN"
+            ) {
 
-            await updateAuthArea();
+                currentUser =
+                    session?.user ||
+                    null;
 
-        }
+                await updateAuthArea();
 
-        if (
-            event === "SIGNED_OUT"
-        ) {
+            }
 
-            currentUser =
-                null;
+            if (
+                event === "SIGNED_OUT"
+            ) {
 
-            const profileNav =
-                document.getElementById(
-                    "profile-nav"
-                );
+                currentUser =
+                    null;
 
-            profileNav.style.display =
-                "none";
+                const profileNav =
+                    document.getElementById(
+                        "profile-nav"
+                    );
 
-            showProfileNotConnected();
+                profileNav.style.display =
+                    "none";
 
-            const authArea =
-                document.getElementById(
-                    "auth-area"
-                );
+                showProfileNotConnected();
 
-            authArea.innerHTML =
-                "<a href='auth.html'>Connexion</a>";
+                const authArea =
+                    document.getElementById(
+                        "auth-area"
+                    );
 
-        }
+                authArea.innerHTML =
+                    "<a href='auth.html'>Connexion</a>";
 
-    }
+            }
+
+        })();
+
+    }
 );
 
 /* =====================================================
-   ACTUALISER BADGE
+   ACTUALISER BADGE
 ===================================================== */
 
 setInterval(
-    async function() {
+    async function() {
 
-        if (currentUser) {
+        if (currentUser) {
 
-            await updateUnreadBadge();
+            await updateUnreadBadge();
 
-        }
+        }
 
-    },
-    10000
+    },
+    10000
 );
 </script>
 
 </body>
 
-</html><div class="search">
-
-<input
-    type="text"
-    id="search-input"
-    placeholder="Rechercher une robe, des chaussures, une marque..."
->
-
-<button
-    id="search-button"
-    type="button"
->
-    Rechercher
-</button>
-
-</div>
+</html>

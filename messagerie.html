@@ -2260,33 +2260,37 @@ init();
 ===================================================== */
 
 supabaseClient.auth.onAuthStateChange(
-    async function(
+    function(
         event,
         session
     ) {
 
-        if (
-            event === "SIGNED_OUT"
-        ) {
+        (async function() {
 
-            currentUser =
-                null;
+            if (
+                event === "SIGNED_OUT"
+            ) {
+
+                currentUser =
+                    null;
 
 
-            if (realtimeChannel) {
+                if (realtimeChannel) {
 
-                await supabaseClient
-                    .removeChannel(
-                        realtimeChannel
-                    );
+                    await supabaseClient
+                        .removeChannel(
+                            realtimeChannel
+                        );
+
+                }
+
+
+                window.location.href =
+                    "auth.html";
 
             }
 
-
-            window.location.href =
-                "auth.html";
-
-        }
+        })();
 
     }
 );
