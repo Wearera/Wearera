@@ -1,0 +1,4189 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>WEARERA — Mode de seconde main au Canada</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+/* =====================================================
+   BASE
+===================================================== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f7f5f2;
+    color: #222;
+}
+
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+header {
+    background: white;
+    padding: 22px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 30px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.logo a {
+    text-decoration: none;
+    color: #222;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #222;
+    font-size: 15px;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+.message-nav {
+    position: relative;
+    font-weight: bold;
+}
+
+.profile-nav {
+    font-weight: bold;
+}
+
+.unread-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    margin-left: 4px;
+    border-radius: 20px;
+    background: #c62828;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.hero {
+    padding: 70px 7%;
+    text-align: center;
+    background: #eee8df;
+}
+
+.hero h1 {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.search {
+    max-width: 650px;
+    margin: auto;
+    display: flex;
+}
+
+.search input {
+    flex: 1;
+    padding: 17px;
+    border: none;
+    border-radius: 8px 0 0 8px;
+    font-size: 16px;
+    outline: none;
+}
+
+.search button {
+    padding: 17px 25px;
+    border: none;
+    background: #222;
+    color: white;
+    border-radius: 0 8px 8px 0;
+    cursor: pointer;
+}
+
+/* =====================================================
+   SECTIONS
+===================================================== */
+
+.section {
+    padding: 45px 7%;
+}
+
+.section h2 {
+    margin-bottom: 25px;
+}
+
+/* =====================================================
+   CATEGORIES
+===================================================== */
+
+.categories {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.category {
+    background: white;
+    padding: 30px 15px;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    transition: 0.2s;
+}
+
+.category:hover {
+    transform: translateY(-3px);
+}
+
+/* =====================================================
+   FILTERS
+===================================================== */
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.filters select {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: white;
+    min-width: 140px;
+    cursor: pointer;
+}
+
+/* =====================================================
+   PRODUCTS
+===================================================== */
+
+.products {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.product {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.product:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+.product-image {
+    height: 260px;
+    background: #eee;
+    position: relative;
+    overflow: hidden;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.no-photo {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+}
+
+.photo-count {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    background: rgba(0,0,0,0.65);
+    color: white;
+    padding: 6px 9px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.product-info {
+    padding: 15px;
+}
+
+.product-info h3 {
+    margin-bottom: 8px;
+    font-size: 18px;
+}
+
+.price {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.condition {
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.location {
+    color: #777;
+    font-size: 13px;
+}
+
+/* =====================================================
+   PROFIL
+===================================================== */
+
+.profile-section {
+    background: #eee8df;
+}
+
+.profile-container {
+    max-width: 900px;
+    margin: auto;
+}
+
+.profile-card {
+    background: white;
+    border-radius: 18px;
+    padding: 35px;
+    border: 1px solid #ddd;
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.profile-header h2 {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.profile-header p {
+    color: #777;
+}
+
+.profile-avatar-container {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.profile-avatar {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: #eee;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 3px solid #eee8df;
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-avatar-placeholder {
+    font-size: 55px;
+    color: #999;
+}
+
+.profile-fields {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.profile-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-field.full {
+    grid-column: 1 / -1;
+}
+
+.profile-field label {
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.profile-field input,
+.profile-field select {
+    padding: 14px;
+    border: 1px solid #ccc;
+    border-radius: 9px;
+    font-size: 15px;
+    background: white;
+}
+
+.profile-actions {
+    margin-top: 25px;
+    display: flex;
+    gap: 12px;
+}
+
+.profile-save-button {
+    flex: 1;
+    padding: 16px;
+    border: none;
+    border-radius: 10px;
+    background: #222;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.profile-save-button:hover {
+    background: #444;
+}
+
+.profile-save-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.profile-logout-button {
+    padding: 16px 25px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background: white;
+    color: #222;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.profile-message {
+    margin-top: 15px;
+    text-align: center;
+    padding: 12px;
+    border-radius: 8px;
+    display: none;
+}
+
+.profile-message.success {
+    display: block;
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.profile-message.error {
+    display: block;
+    background: #ffebee;
+    color: #c62828;
+}
+
+.profile-not-connected {
+    text-align: center;
+    padding: 30px;
+}
+
+.profile-not-connected p {
+    color: #777;
+    margin-bottom: 20px;
+}
+
+.profile-login-button {
+    display: inline-block;
+    padding: 14px 25px;
+    background: #222;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* =====================================================
+   MODAL ARTICLE
+===================================================== */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    padding: 30px;
+    overflow-y: auto;
+}
+
+.modal.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    width: 100%;
+    max-width: 1000px;
+    max-height: 92vh;
+    overflow-y: auto;
+    border-radius: 18px;
+    position: relative;
+    padding: 25px;
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 18px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: #222;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+/* =====================================================
+   GALERIE
+===================================================== */
+
+.modal-gallery {
+    position: relative;
+    background: #f3f3f3;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 25px;
+}
+
+.modal-main-image {
+    width: 100%;
+    height: 500px;
+    object-fit: contain;
+    display: block;
+    background: #f3f3f3;
+}
+
+.gallery-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 45px;
+    height: 45px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.65);
+    color: white;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.gallery-prev {
+    left: 15px;
+}
+
+.gallery-next {
+    right: 15px;
+}
+
+.gallery-counter {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.65);
+    color: white;
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+}
+
+.thumbnails {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-top: 12px;
+}
+
+.thumbnail {
+    width: 75px;
+    height: 75px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    flex-shrink: 0;
+}
+
+.thumbnail.active {
+    border-color: #222;
+}
+
+/* =====================================================
+   DETAILS
+===================================================== */
+
+.modal-details h2 {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.modal-price {
+    font-size: 27px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.detail-box {
+    background: #f7f5f2;
+    padding: 14px;
+    border-radius: 10px;
+}
+
+.detail-box strong {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 13px;
+    color: #777;
+}
+
+.detail-box span {
+    font-size: 15px;
+}
+
+.description-box {
+    margin-top: 20px;
+}
+
+.description-box h3 {
+    margin-bottom: 8px;
+}
+
+.description-box p {
+    line-height: 1.6;
+    color: #555;
+    white-space: pre-wrap;
+}
+
+/* =====================================================
+   BOUTON CONTACT
+===================================================== */
+
+.contact-seller-button {
+    width: 100%;
+    padding: 17px;
+    border: none;
+    border-radius: 10px;
+    background: #222;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 25px;
+}
+
+.contact-seller-button:hover {
+    background: #444;
+}
+
+.contact-seller-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.seller-message {
+    text-align: center;
+    margin-top: 15px;
+    color: #777;
+    font-size: 13px;
+}
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+.loading {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 50px;
+    color: #777;
+}
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+footer {
+    margin-top: 50px;
+    padding: 30px;
+    text-align: center;
+    background: #222;
+    color: white;
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 800px) {
+
+    header {
+        padding: 18px 5%;
+    }
+
+    nav {
+        gap: 12px;
+    }
+
+    nav a:not(.message-nav):not(.profile-nav) {
+        display: none;
+    }
+
+    .message-nav,
+    .profile-nav {
+        display: block !important;
+    }
+
+    .hero {
+        padding: 50px 5%;
+    }
+
+    .hero h1 {
+        font-size: 36px;
+    }
+
+    .hero p {
+        font-size: 16px;
+    }
+
+    .categories {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .products {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .product-image {
+        height: 190px;
+    }
+
+    .filters select {
+        width: 100%;
+    }
+
+    .modal {
+        padding: 10px;
+    }
+
+    .modal-content {
+        padding: 18px;
+    }
+
+    .modal-main-image {
+        height: 350px;
+    }
+
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-details h2 {
+        font-size: 24px;
+    }
+
+    .profile-card {
+        padding: 22px;
+    }
+
+    .profile-fields {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-field.full {
+        grid-column: auto;
+    }
+
+    .profile-actions {
+        flex-direction: column;
+    }
+
+}
+
+/* =====================================================
+   TRES PETIT MOBILE
+===================================================== */
+
+@media (max-width: 430px) {
+
+    .logo {
+        font-size: 24px;
+    }
+
+    .products {
+        gap: 8px;
+    }
+
+    .product-info {
+        padding: 11px;
+    }
+
+    .product-info h3 {
+        font-size: 15px;
+    }
+
+    .price {
+        font-size: 17px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header>
+
+<div class="logo">
+
+<a href="index.html">
+WEARERA
+</a>
+
+</div>
+
+<nav>
+
+<a href="#accueil">
+Accueil
+</a>
+
+<a href="#articles">
+Acheter
+</a>
+
+<a href="vendre.html">
+Vendre
+</a>
+
+<a href="mes-articles.html">
+Mes articles
+</a>
+
+<span id="auth-area">
+
+<a href="auth.html">
+Connexion
+</a>
+
+</span>
+
+<a
+href="messagerie.html"
+class="message-nav">
+
+ Messagerie
+
+<span
+id="unread-badge"
+class="unread-badge"
+style="display:none;">
+
+0
+
+</span>
+
+</a>
+
+<a
+href="profil.html"
+id="profile-nav"
+class="profile-nav"
+style="display:none;">
+
+👤 Mon profil
+
+</a>
+
+</nav>
+
+</header>
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section
+class="hero"
+id="accueil">
+
+<h1>
+Une nouvelle ère de la mode.
+</h1>
+
+<p>
+Achetez et vendez vos vêtements de seconde main partout au Canada.
+</p>
+
+<div class="search">
+
+<input
+type="text"
+id="search-input"
+placeholder="Rechercher une robe, des chaussures, une marque..."
+
+<button ...>
+Rechercher
+</button>
+
+</div>
+
+</section>
+
+<!-- =====================================================
+     CATEGORIES
+===================================================== -->
+
+<section class="section">
+
+<h2>
+Catégories
+</h2>
+
+<div class="categories">
+
+<div
+class="category"
+data-category="Vêtements">
+
+ Vêtements
+
+</div>
+
+<div
+class="category"
+data-category="Chaussures">
+
+ Chaussures
+
+</div>
+
+<div
+class="category"
+data-category="Sacs">
+
+ Sacs
+
+</div>
+
+<div
+class="category"
+data-category="Accessoires">
+
+ Accessoires
+
+</div>
+
+</div>
+
+</section>
+
+<!-- =====================================================
+     ARTICLES
+===================================================== -->
+
+<section
+class="section"
+id="articles">
+
+<h2>
+Filtrer les articles
+</h2>
+
+<div class="filters">
+
+<select id="filter-category">
+
+<option value="">
+Catégorie
+</option>
+
+<option value="Vêtements">
+Vêtements
+</option>
+
+<option value="Chaussures">
+Chaussures
+</option>
+
+<option value="Sacs">
+Sacs
+</option>
+
+<option value="Accessoires">
+Accessoires
+</option>
+
+</select>
+
+<select id="filter-size">
+
+<option value="">
+Taille
+</option>
+
+</select>
+
+<select id="filter-condition">
+
+<option value="">
+État
+</option>
+
+<option value="Neuf">
+Neuf
+</option>
+
+<option value="5">
+5/5 — Comme neuf
+</option>
+
+<option value="4">
+4/5 — Très bon état
+</option>
+
+<option value="3">
+3/5 — Bon état
+</option>
+
+<option value="2">
+2/5 — État correct
+</option>
+
+<option value="1">
+1/5 — Usé
+</option>
+
+</select>
+
+<select id="filter-price">
+
+<option value="">
+Prix
+</option>
+
+<option value="lt20">
+Moins de 20 $
+</option>
+
+<option value="20-50">
+20 $ - 50 $
+</option>
+
+<option value="50-100">
+50 $ - 100 $
+</option>
+
+<option value="100plus">
+100 $+
+</option>
+
+</select>
+
+<select id="province">
+
+<option value="">
+Province / territoire
+</option>
+
+<option value="AB">
+Alberta
+</option>
+
+<option value="BC">
+Colombie-Britannique
+</option>
+
+<option value="PE">
+Île-du-Prince-Édouard
+</option>
+
+<option value="MB">
+Manitoba
+</option>
+
+<option value="NB">
+Nouveau-Brunswick
+</option>
+
+<option value="NS">
+Nouvelle-Écosse
+</option>
+
+<option value="ON">
+Ontario
+</option>
+
+<option value="QC">
+Québec
+</option>
+
+<option value="SK">
+Saskatchewan
+</option>
+
+<option value="NL">
+Terre-Neuve-et-Labrador
+</option>
+
+<option value="NT">
+Territoires du Nord-Ouest
+</option>
+
+<option value="NU">
+Nunavut
+</option>
+
+<option value="YT">
+Yukon
+</option>
+
+</select>
+
+<select id="city">
+
+<option value="">
+Sélectionnez d'abord une province
+</option>
+
+</select>
+
+</div>
+
+<h2>
+Articles populaires
+</h2>
+
+<div
+class="products"
+id="products">
+
+<div class="loading">
+Chargement des articles...
+</div>
+
+</div>
+
+</section>
+
+<!-- =====================================================
+     PROFIL
+===================================================== -->
+
+<section 
+id="profil" class="
+section profile-section" 
+style="display:none;"></section>
+
+<div class="profile-container">
+
+<div
+class="profile-card"
+id="profile-card">
+
+<!-- UTILISATEUR NON CONNECTÉ -->
+
+<div
+id="profile-not-connected"
+class="profile-not-connected"
+style="display:none;">
+
+<h2>
+ Mon profil
+</h2>
+
+<p>
+Connectez-vous pour accéder à votre profil.
+</p>
+
+<a
+href="auth.html"
+class="profile-login-button">
+
+Se connecter
+
+</a>
+
+</div>
+
+<!-- UTILISATEUR CONNECTÉ -->
+
+<div
+id="profile-connected"
+style="display:none;">
+
+<div class="profile-header">
+
+<h2>
+ Mon profil
+</h2>
+
+<p>
+Gérez vos informations personnelles.
+</p>
+
+</div>
+
+<div class="profile-avatar-container">
+
+<div class="profile-avatar">
+
+<img
+id="profile-avatar-image"
+src=""
+alt="Photo de profil"
+style="display;"
+
+
+
+<div
+id="profile-avatar-placeholder"
+class="profile-avatar-placeholder">
+
+ 
+
+</div>
+
+</div>
+
+</div>
+
+<div class="profile-fields">
+
+<div class="profile-field">
+
+<label for="profile-first-name">
+Prénom
+</label>
+
+<input
+type="text"
+id="profile-first-name"
+placeholder="Votre prénom"
+
+
+
+</div>
+
+<div class="profile-field">
+
+<label for="profile-city">
+Ville
+</label>
+
+<input
+type="text"
+id="profile-city"
+placeholder="Votre ville"
+
+
+
+</div>
+
+<div class="profile-field">
+
+<label for="profile-province">
+Province
+</label>
+
+<select id="profile-province">
+
+<option value="">
+Sélectionnez votre province
+</option>
+
+<option value="AB">
+Alberta
+</option>
+
+<option value="BC">
+Colombie-Britannique
+</option>
+
+<option value="PE">
+Île-du-Prince-Édouard
+</option>
+
+<option value="MB">
+Manitoba
+</option>
+
+<option value="NB">
+Nouveau-Brunswick
+</option>
+
+<option value="NS">
+Nouvelle-Écosse
+</option>
+
+<option value="ON">
+Ontario
+</option>
+
+<option value="QC">
+Québec
+</option>
+
+<option value="SK">
+Saskatchewan
+</option>
+
+<option value="NL">
+Terre-Neuve-et-Labrador
+</option>
+
+<option value="NT">
+Territoires du Nord-Ouest
+</option>
+
+<option value="NU">
+Nunavut
+</option>
+
+<option value="YT">
+Yukon
+</option>
+
+</select>
+
+</div>
+
+<div class="profile-field">
+
+<label>
+Adresse e-mail
+</label>
+
+<input
+type="email"
+id="profile-email"
+disabled
+
+
+
+</div>
+
+</div>
+
+<div class="profile-actions">
+
+<button
+id="profile-save-button"
+class="profile-save-button">
+
+Enregistrer les modifications
+
+</button>
+
+<button
+id="profile-logout-button"
+class="profile-logout-button">
+
+Se déconnecter
+
+</button>
+
+</div>
+
+<div
+id="profile-message"
+class="profile-message">
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- =====================================================
+     MODAL ARTICLE
+===================================================== -->
+
+<div
+class="modal"
+id="article-modal">
+
+<div class="modal-content">
+
+<button
+class="close-modal"
+id="close-modal">
+
+×
+
+</button>
+
+<div class="modal-gallery">
+
+<img
+id="modal-main-image"
+class="modal-main-image"
+src=""
+alt="Photo de l'article"
+
+
+
+<div
+class="no-photo"
+id="modal-no-photo"
+style="display:none;position:absolute;inset:0;">
+
+Photo indisponible
+
+</div>
+
+<button
+class="gallery-button gallery-prev"
+id="gallery-prev">
+
+‹
+
+</button>
+
+<button
+class="gallery-button gallery-next"
+id="gallery-next">
+
+›
+
+</button>
+
+<div
+class="gallery-counter"
+id="gallery-counter">
+
+1 / 1
+
+</div>
+
+</div>
+
+<div
+class="thumbnails"
+id="thumbnails">
+</div>
+
+<div class="modal-details">
+
+<h2 id="modal-name">
+Article
+</h2>
+
+<div
+class="modal-price"
+id="modal-price">
+
+0 $
+
+</div>
+
+<div class="details-grid">
+
+<div class="detail-box">
+
+<strong>
+Catégorie
+</strong>
+
+<span id="modal-category">
+—
+</span>
+
+</div>
+
+<div class="detail-box">
+
+<strong>
+Marque
+</strong>
+
+<span id="modal-brand">
+—
+</span>
+
+</div>
+
+<div class="detail-box">
+
+<strong>
+Taille / Pointure
+</strong>
+
+<span id="modal-size">
+—
+</span>
+
+</div>
+
+<div class="detail-box">
+
+<strong>
+État
+</strong>
+
+<span id="modal-condition">
+—
+</span>
+
+</div>
+
+<div class="detail-box">
+
+<strong>
+Localisation
+</strong>
+
+<span id="modal-location">
+—
+</span>
+
+</div>
+
+</div>
+
+<div class="description-box">
+
+<h3>
+Défauts ou imperfections
+</h3>
+
+<p id="modal-defects">
+Aucun défaut indiqué.
+</p>
+
+</div>
+
+<div class="description-box">
+
+<h3>
+Description
+</h3>
+
+<p id="modal-description">
+Aucune description.
+</p>
+
+</div>
+
+<button
+id="contact-seller-button"
+class="contact-seller-button">
+
+ Contacter le vendeur
+
+</button>
+
+<div
+id="seller-message"
+class="seller-message">
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+WEARERA ©️ 2026
+
+<br>
+
+La mode de seconde main au Canada.
+
+</footer>
+
+<script>
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+"https://tpmdiwviyrnmergaqyit.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_HNghaWql020DW11APCBAcw_WOGu882V";
+
+const supabaseClient =
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+let currentUser = null;
+
+let allArticles = [];
+
+let currentPhotos = [];
+
+let currentPhotoIndex = 0;
+
+let currentArticle = null;
+
+/* =====================================================
+   CHARGER UTILISATEUR
+===================================================== */
+
+async function loadCurrentUser() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .auth
+            .getUser();
+
+    if (error) {
+
+        console.error(
+            "Erreur utilisateur :",
+            error
+        );
+
+        return null;
+
+    }
+
+    return data.user;
+
+}
+
+/* =====================================================
+   AUTH AREA
+===================================================== */
+
+async function updateAuthArea() {
+
+    currentUser =
+        await loadCurrentUser();
+
+    const authArea =
+        document.getElementById(
+            "auth-area"
+        );
+
+    const profileNav =
+        document.getElementById(
+            "profile-nav"
+        );
+
+    if (!currentUser) {
+
+        authArea.innerHTML =
+            "<a href='auth.html'>Connexion</a>";
+
+        profileNav.style.display =
+            "none";
+
+        showProfileNotConnected();
+
+        return;
+
+    }
+
+    const firstName =
+        currentUser.user_metadata?.first_name ||
+        "Mon compte";
+
+    authArea.innerHTML =
+
+        "<span style='color:#666;font-size:14px'>" +
+
+        "Bonjour, " +
+
+        firstName +
+
+        "</span>";
+
+    profileNav.style.display =
+        "block";
+
+    await loadProfile();
+
+    await updateUnreadBadge();
+
+}
+
+/* =====================================================
+   BADGE MESSAGES
+===================================================== */
+
+async function updateUnreadBadge() {
+
+    if (!currentUser) {
+        return;
+    }
+
+    const badge =
+        document.getElementById(
+            "unread-badge"
+        );
+
+    const {
+        data: conversations,
+        error
+    } =
+        await supabaseClient
+            .from("conversations")
+            .select("id")
+            .or(
+                "buyer_id.eq." +
+                currentUser.id +
+                ",seller_id.eq." +
+                currentUser.id
+            );
+
+    if (error) {
+
+        console.warn(
+            "Badge messages :",
+            error.message
+        );
+
+        return;
+
+    }
+
+    if (!conversations?.length) {
+
+        badge.style.display =
+            "none";
+
+        return;
+
+    }
+
+    const conversationIds =
+        conversations.map(
+            function(conversation) {
+
+                return conversation.id;
+
+            }
+        );
+
+    const {
+        data: unreadMessages,
+        error: unreadError
+    } =
+        await supabaseClient
+            .from("messages")
+            .select("id")
+            .in(
+                "conversation_id",
+                conversationIds
+            )
+            .neq(
+                "sender_id",
+                currentUser.id
+            )
+            .eq(
+                "is_read",
+                false
+            );
+
+    if (unreadError) {
+
+        console.warn(
+            "Messages non lus :",
+            unreadError.message
+        );
+
+        return;
+
+    }
+
+    const count =
+        unreadMessages?.length || 0;
+
+    if (count > 0) {
+
+        badge.textContent =
+            count > 99
+                ? "99+"
+                : count;
+
+        badge.style.display =
+            "inline-flex";
+
+    } else {
+
+        badge.style.display =
+            "none";
+
+    }
+
+}
+
+/* =====================================================
+   PROFIL
+===================================================== */
+
+function showProfileNotConnected() {
+
+    document
+        .getElementById(
+            "profile-not-connected"
+        )
+        .style.display =
+            "block";
+
+    document
+        .getElementById(
+            "profile-connected"
+        )
+        .style.display =
+            "none";
+
+}
+
+function showProfileConnected() {
+
+    document
+        .getElementById(
+            "profile-not-connected"
+        )
+        .style.display =
+            "none";
+
+    document
+        .getElementById(
+            "profile-connected"
+        )
+        .style.display =
+            "block";
+
+}
+
+/* =====================================================
+   CHARGER PROFIL SUPABASE
+===================================================== */
+
+async function loadProfile() {
+
+    if (!currentUser) {
+
+        showProfileNotConnected();
+
+        return;
+
+    }
+
+    showProfileConnected();
+
+    const firstNameInput =
+        document.getElementById(
+            "profile-first-name"
+        );
+
+    const cityInput =
+        document.getElementById(
+            "profile-city"
+        );
+
+    const provinceInput =
+        document.getElementById(
+            "profile-province"
+        );
+
+    const emailInput =
+        document.getElementById(
+            "profile-email"
+        );
+
+    emailInput.value =
+        currentUser.email || "";
+
+    /*
+     * Valeurs venant de Auth
+     */
+
+   firstNameInput.value = currentUser.user_metadata?.first_name || "";
+cityInput.value = currentUser.user_metadata?.city || "";
+provinceInput.value = currentUser.user_metadata?.province || "";
+
+    /*
+     * On essaie ensuite de récupérer
+     * les informations dans public_profiles.
+     */
+
+    const {
+        data: profile,
+        error
+    } =
+        await supabaseClient
+            .from("public_profiles")
+            .select("*")
+            .eq(
+                "id",
+                currentUser.id
+            )
+            .maybeSingle();
+
+    if (error) {
+
+        console.warn(
+            "Profil public :",
+            error.message
+        );
+
+    }
+
+    if (profile) {
+
+        if (
+            profile.first_name !== null &&
+            profile.first_name !== undefined
+        ) {
+
+            firstNameInput.value =
+                profile.first_name;
+
+        }
+
+        if (
+            profile.city !== null &&
+            profile.city !== undefined
+        ) {
+
+            cityInput.value =
+                profile.city;
+
+        }
+
+        if (
+            profile.province !== null &&
+            profile.province !== undefined
+        ) {
+
+            provinceInput.value =
+                profile.province;
+
+        }
+
+        if (profile.avatar_url) {
+
+            showProfileAvatar(
+                profile.avatar_url
+            );
+
+        }
+
+    }
+
+}
+
+/* =====================================================
+   AVATAR
+===================================================== */
+
+function showProfileAvatar(url) {
+
+    const image =
+        document.getElementById(
+            "profile-avatar-image"
+        );
+
+    const placeholder =
+        document.getElementById(
+            "profile-avatar-placeholder"
+        );
+
+    if (!url) {
+
+        image.style.display =
+            "none";
+
+        placeholder.style.display =
+            "block";
+
+        return;
+
+    }
+
+    image.src =
+        url;
+
+    image.style.display =
+        "block";
+
+    placeholder.style.display =
+        "none";
+
+}
+
+/* =====================================================
+   MESSAGE PROFIL
+===================================================== */
+
+function showProfileMessage(
+    message,
+    type
+) {
+
+    const box =
+        document.getElementById(
+            "profile-message"
+        );
+
+    box.textContent =
+        message;
+
+    box.className =
+        "profile-message " +
+        type;
+
+    setTimeout(
+        function() {
+
+            box.className =
+                "profile-message";
+
+        },
+        4000
+    );
+
+}
+
+/* =====================================================
+   SAUVEGARDER PROFIL
+===================================================== */
+
+async function saveProfile() {
+
+    if (!currentUser) {
+
+        window.location.href =
+            "auth.html";
+
+        return;
+
+    }
+
+    const button =
+        document.getElementById(
+            "profile-save-button"
+        );
+
+    const firstName =
+        document
+            .getElementById(
+                "profile-first-name"
+            )
+            .value
+            .trim();
+
+    const city =
+        document
+            .getElementById(
+                "profile-city"
+            )
+            .value
+            .trim();
+
+    const province =
+        document
+            .getElementById(
+                "profile-province"
+            )
+            .value;
+
+    if (!firstName) {
+
+        showProfileMessage(
+            "Veuillez entrer votre prénom.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    button.disabled =
+        true;
+
+    button.textContent =
+        "Enregistrement...";
+
+    try {
+
+        /*
+         * Mise à jour des métadonnées
+         * du compte Supabase Auth.
+         */
+
+        const {
+            error: authError
+        } =
+            await supabaseClient
+                .auth
+                .updateUser({
+
+                    data: {
+
+                        first_name:
+                            firstName,
+
+                        city:
+                            city,
+
+                        province:
+                            province
+
+                    }
+
+                });
+
+        if (authError) {
+
+            throw authError;
+
+        }
+
+        /*
+         * Mise à jour / création
+         * du profil public.
+         */
+
+        const {
+            error: profileError
+        } =
+            await supabaseClient
+                .from("public_profiles")
+                .upsert({
+
+                    id:
+                        currentUser.id,
+
+                    first_name:
+                        firstName,
+
+                    city:
+                        city,
+
+                    province:
+                        province
+
+                });
+
+        if (profileError) {
+
+            /*
+             * Si la table public_profiles
+             * n'est pas configurée correctement,
+             * on garde quand même les informations
+             * dans Auth.
+             */
+
+            console.warn(
+                "Impossible de mettre à jour public_profiles :",
+                profileError.message
+            );
+
+        }
+
+        /*
+         * Actualiser l'utilisateur local.
+         */
+
+        currentUser =
+            await loadCurrentUser();
+
+        const authArea =
+            document.getElementById(
+                "auth-area"
+            );
+
+        authArea.innerHTML =
+
+            "<span style='color:#666;font-size:14px'>" +
+
+            "Bonjour, " +
+
+            firstName +
+
+            "</span>";
+
+        showProfileMessage(
+            "Votre profil a été mis à jour avec succès.",
+            "success"
+        );
+
+    } catch(error) {
+
+        console.error(
+            "Erreur sauvegarde profil :",
+            error
+        );
+
+        showProfileMessage(
+            "Impossible de mettre à jour le profil : " +
+            error.message,
+            "error"
+        );
+
+    } finally {
+
+        button.disabled =
+            false;
+
+        button.textContent =
+            "Enregistrer les modifications";
+
+    }
+
+}
+
+/* =====================================================
+   DÉCONNEXION
+===================================================== */
+
+async function logout() {
+
+    await supabaseClient
+        .auth
+        .signOut();
+
+    currentUser =
+        null;
+
+    window.location.href =
+        "index.html";
+
+}
+
+/* =====================================================
+   VILLES
+===================================================== */
+
+const cities = {
+
+    AB: [
+        "Calgary",
+        "Edmonton",
+        "Red Deer",
+        "Lethbridge",
+        "Fort McMurray"
+    ],
+
+    BC: [
+        "Vancouver",
+        "Victoria",
+        "Surrey",
+        "Burnaby",
+        "Kelowna",
+        "Richmond"
+    ],
+
+    PE: [
+        "Charlottetown",
+        "Summerside",
+        "Stratford"
+    ],
+
+    MB: [
+        "Winnipeg",
+        "Brandon",
+        "Steinbach"
+    ],
+
+    NB: [
+        "Campbellton",
+        "Bathurst",
+        "Moncton",
+        "Dieppe",
+        "Fredericton",
+        "Saint John",
+        "Edmundston",
+        "Miramichi"
+    ],
+
+    NS: [
+        "Halifax",
+        "Sydney",
+        "Dartmouth",
+        "Truro",
+        "New Glasgow"
+    ],
+
+    ON: [
+        "Toronto",
+        "Ottawa",
+        "Mississauga",
+        "Brampton",
+        "Hamilton",
+        "London",
+        "Windsor",
+        "Kitchener",
+        "Waterloo",
+        "Kingston"
+    ],
+
+    QC: [
+        "Montréal",
+        "Québec",
+        "Laval",
+        "Gatineau",
+        "Longueuil",
+        "Sherbrooke",
+        "Trois-Rivières",
+        "Saguenay",
+        "Drummondville"
+    ],
+
+    SK: [
+        "Saskatoon",
+        "Regina",
+        "Prince Albert",
+        "Moose Jaw"
+    ],
+
+    NL: [
+        "St. John's",
+        "Mount Pearl",
+        "Corner Brook",
+        "Conception Bay South"
+    ],
+
+    NT: [
+        "Yellowknife",
+        "Hay River",
+        "Inuvik"
+    ],
+
+    NU: [
+        "Iqaluit",
+        "Rankin Inlet",
+        "Arviat"
+    ],
+
+    YT: [
+        "Whitehorse",
+        "Dawson City",
+        "Watson Lake"
+    ]
+
+};
+
+/* =====================================================
+   SELECTEURS
+===================================================== */
+
+const filterCategory =
+document.getElementById(
+    "filter-category"
+);
+
+const filterSize =
+document.getElementById(
+    "filter-size"
+);
+
+const filterCondition =
+document.getElementById(
+    "filter-condition"
+);
+
+const filterPrice =
+document.getElementById(
+    "filter-price"
+);
+
+const filterProvince =
+document.getElementById(
+    "province"
+);
+
+const filterCity =
+document.getElementById(
+    "city"
+);
+
+const searchInput =
+document.getElementById(
+    "search-input"
+);
+
+/* =====================================================
+   VILLES FILTRES
+===================================================== */
+
+function updateCities() {
+
+    const province =
+        filterProvince.value;
+
+    filterCity.innerHTML =
+        "";
+
+    if (!province) {
+
+        filterCity.innerHTML =
+            "<option value=''>" +
+            "Sélectionnez d'abord une province" +
+            "</option>";
+
+        renderArticles();
+
+        return;
+
+    }
+
+    const defaultOption =
+        document.createElement(
+            "option"
+        );
+
+    defaultOption.value =
+        "";
+
+    defaultOption.textContent =
+        "Toutes les villes";
+
+    filterCity.appendChild(
+        defaultOption
+    );
+
+    (cities[province] || [])
+        .forEach(
+            function(city) {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value =
+                    city;
+
+                option.textContent =
+                    city;
+
+                filterCity.appendChild(
+                    option
+                );
+
+            }
+        );
+
+    renderArticles();
+
+}
+
+filterProvince.addEventListener(
+    "change",
+    updateCities
+);
+
+/* =====================================================
+   TAILLES
+===================================================== */
+
+function updateSizeFilter() {
+
+    const category =
+        filterCategory.value;
+
+    filterSize.innerHTML =
+        "";
+
+    const first =
+        document.createElement(
+            "option"
+        );
+
+    first.value =
+        "";
+
+    first.textContent =
+        category === "Chaussures"
+            ? "Pointure"
+            : "Taille (vêtements)";
+
+    filterSize.appendChild(
+        first
+    );
+
+    if (
+        category === "Chaussures"
+    ) {
+
+        [
+            "5",
+            "5.5",
+            "6",
+            "6.5",
+            "7",
+            "7.5",
+            "8",
+            "8.5",
+            "9",
+            "9.5",
+            "10",
+            "10.5",
+            "11",
+            "11.5",
+            "12",
+            "13",
+            "Autre"
+        ].forEach(
+            function(value) {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value =
+                    value;
+
+                option.textContent =
+                    value;
+
+                filterSize.appendChild(
+                    option
+                );
+
+            }
+        );
+
+    } else {
+
+        [
+            "XXS",
+            "XS",
+            "S",
+            "M",
+            "L",
+            "XL",
+            "XXL",
+            "Autre"
+        ].forEach(
+            function(value) {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value =
+                    value;
+
+                option.textContent =
+                    value;
+
+                filterSize.appendChild(
+                    option
+                );
+
+            }
+        );
+
+    }
+
+}
+
+updateSizeFilter();
+
+filterCategory.addEventListener(
+    "change",
+    function() {
+
+        updateSizeFilter();
+
+        renderArticles();
+
+    }
+);
+
+/* =====================================================
+   PHOTOS
+===================================================== */
+
+function getPhotoUrls(item) {
+
+    let photos =
+        item?.photo_urls;
+
+    if (!photos) {
+        return [];
+    }
+
+    if (Array.isArray(photos)) {
+
+        return photos
+            .map(
+                function(url) {
+
+                    return typeof url === "string"
+                        ? url.trim()
+                        : "";
+
+                }
+            )
+            .filter(Boolean);
+
+    }
+
+    if (
+        typeof photos === "object" &&
+        photos !== null
+    ) {
+
+        if (
+            Array.isArray(
+                photos.urls
+            )
+        ) {
+
+            return photos.urls
+                .filter(Boolean);
+
+        }
+
+    }
+
+    if (
+        typeof photos === "string"
+    ) {
+
+        const clean =
+            photos.trim();
+
+        if (!clean) {
+            return [];
+        }
+
+        try {
+
+            const parsed =
+                JSON.parse(clean);
+
+            if (
+                Array.isArray(parsed)
+            ) {
+
+                return parsed
+                    .map(
+                        function(url) {
+
+                            return String(url)
+                                .trim();
+
+                        }
+                    )
+                    .filter(Boolean);
+
+            }
+
+            if (
+                typeof parsed === "string"
+            ) {
+
+                return [
+                    parsed.trim()
+                ];
+
+            }
+
+        } catch(error) {
+
+            /* Texte normal */
+
+        }
+
+        if (
+            clean.includes(",")
+        ) {
+
+            return clean
+                .split(",")
+                .map(
+                    function(url) {
+
+                        return url.trim();
+
+                    }
+                )
+                .filter(Boolean);
+
+        }
+
+        return [
+            clean
+        ];
+
+    }
+
+    return [];
+
+}
+
+/* =====================================================
+   FILTRES
+===================================================== */
+
+function matchesFilters(item) {
+
+    const category =
+        filterCategory.value;
+
+    const size =
+        filterSize.value;
+
+    const condition =
+        filterCondition.value;
+
+    const price =
+        Number(
+            item.price || 0
+        );
+
+    const city =
+        filterCity.value;
+
+    const province =
+        filterProvince.value;
+
+    const search =
+        searchInput.value
+            .trim()
+            .toLowerCase();
+
+    if (
+        category &&
+        item.category !== category
+    ) {
+
+        return false;
+
+    }
+
+    if (size) {
+
+        const itemSize =
+            item.category === "Chaussures"
+
+                ? String(
+                    item.shoe_size || ""
+                )
+
+                : String(
+                    item.size || ""
+                );
+
+        if (
+            itemSize !== size
+        ) {
+
+            return false;
+
+        }
+
+    }
+
+    if (condition) {
+
+        if (
+            String(
+                item.condition || ""
+            ) !== condition
+        ) {
+
+            return false;
+
+        }
+
+    }
+
+    if (
+        city &&
+        item.city !== city
+    ) {
+
+        return false;
+
+    }
+
+    if (
+        province &&
+        item.province !== province
+    ) {
+
+        return false;
+
+    }
+
+    if (
+        filterPrice.value === "lt20" &&
+        price >= 20
+    ) {
+
+        return false;
+
+    }
+
+    if (
+        filterPrice.value === "20-50" &&
+        (
+            price < 20 ||
+            price > 50
+        )
+    ) {
+
+        return false;
+
+    }
+
+    if (
+        filterPrice.value === "50-100" &&
+        (
+            price < 50 ||
+            price > 100
+        )
+    ) {
+
+        return false;
+
+    }
+
+    if (
+        filterPrice.value === "100plus" &&
+        price < 100
+    ) {
+
+        return false;
+
+    }
+
+    if (search) {
+
+        const text = [
+
+            item.name,
+            item.brand,
+            item.category,
+            item.description,
+            item.city,
+            item.province
+
+        ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+        if (
+            !text.includes(search)
+        ) {
+
+            return false;
+
+        }
+
+    }
+
+    return true;
+
+}
+
+/* =====================================================
+   AFFICHER ARTICLES
+===================================================== */
+
+function renderArticles() {
+
+    const container =
+        document.getElementById(
+            "products"
+        );
+
+    const data =
+        allArticles.filter(
+            matchesFilters
+        );
+
+    if (!data.length) {
+
+        container.innerHTML =
+            "<p style='grid-column:1/-1;" +
+            "color:#777;text-align:center;" +
+            "padding:30px'>" +
+
+            "Aucun article ne correspond " +
+            "à vos critères." +
+
+            "</p>";
+
+        return;
+
+    }
+
+    container.innerHTML =
+        "";
+
+    data.forEach(
+        function(item) {
+
+            const product =
+                document.createElement(
+                    "div"
+                );
+
+            product.className =
+                "product";
+
+            const imageContainer =
+                document.createElement(
+                    "div"
+                );
+
+            imageContainer.className =
+                "product-image";
+
+            const photos =
+                getPhotoUrls(item);
+
+            if (
+                photos.length > 0
+            ) {
+
+                const img =
+                    document.createElement(
+                        "img"
+                    );
+
+                img.alt =
+                    item.name ||
+                    "Article WEARERA";
+
+                let currentImageIndex =
+                    0;
+
+                function showNextValidImage() {
+
+                    if (
+                        currentImageIndex >=
+                        photos.length
+                    ) {
+
+                        img.style.display =
+                            "none";
+
+                        const noPhoto =
+                            document.createElement(
+                                "div"
+                            );
+
+                        noPhoto.className =
+                            "no-photo";
+
+                        noPhoto.textContent =
+                            "Photo indisponible";
+
+                        imageContainer.appendChild(
+                            noPhoto
+                        );
+
+                        return;
+
+                    }
+
+                    img.src =
+                        photos[
+                            currentImageIndex
+                        ];
+
+                    currentImageIndex++;
+
+                }
+
+                img.onerror =
+                    function() {
+
+                        showNextValidImage();
+
+                    };
+
+                imageContainer.appendChild(
+                    img
+                );
+
+                showNextValidImage();
+
+                if (
+                    photos.length > 1
+                ) {
+
+                    const counter =
+                        document.createElement(
+                            "div"
+                        );
+
+                    counter.className =
+                        "photo-count";
+
+                    counter.textContent =
+                        " " +
+                        photos.length;
+
+                    imageContainer.appendChild(
+                        counter
+                    );
+
+                }
+
+            } else {
+
+                const noPhoto =
+                    document.createElement(
+                        "div"
+                    );
+
+                noPhoto.className =
+                    "no-photo";
+
+                noPhoto.textContent =
+                    "Photo";
+
+                imageContainer.appendChild(
+                    noPhoto
+                );
+
+            }
+
+            const info =
+                document.createElement(
+                    "div"
+                );
+
+            info.className =
+                "product-info";
+
+            const title =
+                document.createElement(
+                    "h3"
+                );
+
+            title.textContent =
+                item.name ||
+                "Article";
+
+            const price =
+                document.createElement(
+                    "div"
+                );
+
+            price.className =
+                "price";
+
+            price.textContent =
+                Number(
+                    item.price || 0
+                )
+                .toFixed(2)
+                .replace(
+                    ".00",
+                    ""
+                ) +
+                " $";
+
+            const condition =
+                document.createElement(
+                    "div"
+                );
+
+            condition.className =
+                "condition";
+
+            if (
+                item.condition ===
+                "Neuf"
+            ) {
+
+                condition.textContent =
+                    " Neuf";
+
+            } else {
+
+                condition.textContent =
+                    " " +
+                    (
+                        item.condition ||
+                        "—"
+                    ) +
+                    "/5";
+
+            }
+
+            const location =
+                document.createElement(
+                    "div"
+                );
+
+            location.className =
+                "location";
+
+            let locationText =
+                " " +
+                (
+                    item.city ||
+                    "Canada"
+                );
+
+            if (
+                item.province
+            ) {
+
+                locationText +=
+                    ", " +
+                    item.province;
+
+            }
+
+            if (
+                item.category ===
+                    "Chaussures" &&
+                item.shoe_size
+            ) {
+
+                locationText +=
+                    " · Pointure " +
+                    item.shoe_size;
+
+            }
+
+            if (
+                item.category ===
+                    "Vêtements" &&
+                item.size
+            ) {
+
+                locationText +=
+                    " · Taille " +
+                    item.size;
+
+            }
+
+            location.textContent =
+                locationText;
+
+            info.append(
+                title,
+                price,
+                condition,
+                location
+            );
+
+            product.append(
+                imageContainer,
+                info
+            );
+
+            product.addEventListener(
+                "click",
+                function() {
+
+                    openArticle(
+                        item
+                    );
+
+                }
+            );
+
+            container.appendChild(
+                product
+            );
+
+        }
+    );
+
+}
+
+/* =====================================================
+   CHARGER ARTICLES
+===================================================== */
+
+async function loadArticles() {
+
+    const container =
+        document.getElementById(
+            "products"
+        );
+
+    container.innerHTML =
+        "<div class='loading'>" +
+        "Chargement des articles..." +
+        "</div>";
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("Articles")
+            .select("*")
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            )
+            .limit(100);
+
+    if (error) {
+
+        console.error(
+            "Erreur articles :",
+            error
+        );
+
+        container.innerHTML =
+            "<p style='grid-column:1/-1;" +
+            "color:#b00020;" +
+            "text-align:center;" +
+            "padding:30px'>" +
+
+            "Impossible de charger les articles." +
+
+            "<br><small>" +
+
+            error.message +
+
+            "</small></p>";
+
+        return;
+
+    }
+
+    allArticles =
+        data || [];
+
+    renderArticles();
+
+}
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+const modal =
+    document.getElementById(
+        "article-modal"
+    );
+
+const closeModalButton =
+    document.getElementById(
+        "close-modal"
+    );
+
+const modalMainImage =
+    document.getElementById(
+        "modal-main-image"
+    );
+
+const modalNoPhoto =
+    document.getElementById(
+        "modal-no-photo"
+    );
+
+const galleryPrev =
+    document.getElementById(
+        "gallery-prev"
+    );
+
+const galleryNext =
+    document.getElementById(
+        "gallery-next"
+    );
+
+const galleryCounter =
+    document.getElementById(
+        "gallery-counter"
+    );
+
+const thumbnails =
+    document.getElementById(
+        "thumbnails"
+    );
+
+const contactSellerButton =
+    document.getElementById(
+        "contact-seller-button"
+    );
+
+const sellerMessage =
+    document.getElementById(
+        "seller-message"
+    );
+
+/* =====================================================
+   OUVRIR ARTICLE
+===================================================== */
+
+function openArticle(item) {
+
+    currentArticle =
+        item;
+
+    currentPhotos =
+        getPhotoUrls(item);
+
+    currentPhotoIndex =
+        0;
+
+    document
+        .getElementById(
+            "modal-name"
+        )
+        .textContent =
+            item.name ||
+            "Article";
+
+    document
+        .getElementById(
+            "modal-price"
+        )
+        .textContent =
+            Number(
+                item.price || 0
+            )
+            .toFixed(2)
+            .replace(
+                ".00",
+                ""
+            ) +
+            " $";
+
+    document
+        .getElementById(
+            "modal-category"
+        )
+        .textContent =
+            item.category ||
+            "—";
+
+    document
+        .getElementById(
+            "modal-brand"
+        )
+        .textContent =
+            item.brand ||
+            "Non indiquée";
+
+    let sizeText =
+        "Non indiquée";
+
+    if (
+        item.category ===
+        "Chaussures" &&
+        item.shoe_size
+    ) {
+
+        sizeText =
+            "Pointure " +
+            item.shoe_size;
+
+    } else if (
+        item.category ===
+        "Vêtements" &&
+        item.size
+    ) {
+
+        sizeText =
+            "Taille " +
+            item.size;
+
+    }
+
+    document
+        .getElementById(
+            "modal-size"
+        )
+        .textContent =
+            sizeText;
+
+    document
+        .getElementById(
+            "modal-condition"
+        )
+        .textContent =
+            item.condition ===
+            "Neuf"
+
+                ? " Neuf — Jamais porté"
+
+                : " " +
+                  (
+                      item.condition ||
+                      "—"
+                  ) +
+                  "/5";
+
+    let locationText =
+        item.city ||
+        "Canada";
+
+    if (
+        item.province
+    ) {
+
+        locationText +=
+            ", " +
+            item.province;
+
+    }
+
+    document
+        .getElementById(
+            "modal-location"
+        )
+        .textContent =
+            " " +
+            locationText;
+
+    document
+        .getElementById(
+            "modal-defects"
+        )
+        .textContent =
+            item.defects ||
+            "Aucun défaut indiqué.";
+
+    document
+        .getElementById(
+            "modal-description"
+        )
+        .textContent =
+            item.description ||
+            "Aucune description.";
+
+    sellerMessage.textContent =
+        "";
+
+    contactSellerButton.disabled =
+        false;
+
+    contactSellerButton.textContent =
+        " Contacter le vendeur";
+
+    if (
+        currentUser &&
+        item.seller_id ===
+            currentUser.id
+    ) {
+
+        contactSellerButton.disabled =
+            true;
+
+        contactSellerButton.textContent =
+            "C'est votre article";
+
+        sellerMessage.textContent =
+            "Vous êtes le vendeur de cet article.";
+
+    }
+
+    updateGallery();
+
+    modal.classList.add(
+        "active"
+    );
+
+    document.body.style.overflow =
+        "hidden";
+
+}
+
+/* =====================================================
+   GALERIE
+===================================================== */
+
+function updateGallery() {
+
+    thumbnails.innerHTML =
+        "";
+
+    if (
+        !currentPhotos.length
+    ) {
+
+        modalMainImage.style.display =
+            "none";
+
+        modalNoPhoto.style.display =
+            "flex";
+
+        galleryPrev.style.display =
+            "none";
+
+        galleryNext.style.display =
+            "none";
+
+        galleryCounter.style.display =
+            "none";
+
+        return;
+
+    }
+
+    modalNoPhoto.style.display =
+        "none";
+
+    modalMainImage.style.display =
+        "block";
+
+    const photoUrl =
+        currentPhotos[
+            currentPhotoIndex
+        ];
+
+    modalMainImage.src =
+        photoUrl;
+
+    modalMainImage.onerror =
+        function() {
+
+            currentPhotos.splice(
+                currentPhotoIndex,
+                1
+            );
+
+            if (
+                currentPhotoIndex >=
+                currentPhotos.length
+            ) {
+
+                currentPhotoIndex =
+                    Math.max(
+                        0,
+                        currentPhotos.length - 1
+                    );
+
+            }
+
+            updateGallery();
+
+        };
+
+    galleryCounter.style.display =
+        "block";
+
+    galleryCounter.textContent =
+        (
+            currentPhotoIndex + 1
+        ) +
+        " / " +
+        currentPhotos.length;
+
+    if (
+        currentPhotos.length <= 1
+    ) {
+
+        galleryPrev.style.display =
+            "none";
+
+        galleryNext.style.display =
+            "none";
+
+    } else {
+
+        galleryPrev.style.display =
+            "block";
+
+        galleryNext.style.display =
+            "block";
+
+    }
+
+    currentPhotos.forEach(
+        function(url, index) {
+
+            const thumb =
+                document.createElement(
+                    "img"
+                );
+
+            thumb.className =
+                "thumbnail";
+
+            if (
+                index ===
+                currentPhotoIndex
+            ) {
+
+                thumb.classList.add(
+                    "active"
+                );
+
+            }
+
+            thumb.src =
+                url;
+
+            thumb.alt =
+                "Miniature " +
+                (
+                    index + 1
+                );
+
+            thumb.addEventListener(
+                "click",
+                function(event) {
+
+                    event.stopPropagation();
+
+                    currentPhotoIndex =
+                        index;
+
+                    updateGallery();
+
+                }
+            );
+
+            thumbnails.appendChild(
+                thumb
+            );
+
+        }
+    );
+
+}
+
+/* =====================================================
+   NAVIGATION GALERIE
+===================================================== */
+
+galleryPrev.addEventListener(
+    "click",
+    function(event) {
+
+        event.stopPropagation();
+
+        if (
+            currentPhotos.length <= 1
+        ) {
+
+            return;
+
+        }
+
+        currentPhotoIndex--;
+
+        if (
+            currentPhotoIndex < 0
+        ) {
+
+            currentPhotoIndex =
+                currentPhotos.length - 1;
+
+        }
+
+        updateGallery();
+
+    }
+);
+
+galleryNext.addEventListener(
+    "click",
+    function(event) {
+
+        event.stopPropagation();
+
+        if (
+            currentPhotos.length <= 1
+        ) {
+
+            return;
+
+        }
+
+        currentPhotoIndex++;
+
+        if (
+            currentPhotoIndex >=
+            currentPhotos.length
+        ) {
+
+            currentPhotoIndex =
+                0;
+
+        }
+
+        updateGallery();
+
+    }
+);
+
+/* =====================================================
+   CONTACTER VENDEUR
+===================================================== */
+
+contactSellerButton.addEventListener(
+    "click",
+    async function() {
+
+        if (
+            !currentArticle
+        ) {
+
+            return;
+
+        }
+
+        if (!currentUser) {
+
+            window.location.href =
+                "auth.html?redirect=" +
+                encodeURIComponent(
+                    "index.html"
+                );
+
+            return;
+
+        }
+
+        if (
+            currentArticle.seller_id ===
+            currentUser.id
+        ) {
+
+            return;
+
+        }
+
+        contactSellerButton.disabled =
+            true;
+
+        contactSellerButton.textContent =
+            "Ouverture de la messagerie...";
+
+        sellerMessage.textContent =
+            "";
+
+        try {
+
+            const {
+                data: existingConversation,
+                error: findError
+            } =
+                await supabaseClient
+                    .from("conversations")
+                    .select("*")
+                    .eq(
+                        "article_id",
+                        currentArticle.id
+                    )
+                    .eq(
+                        "buyer_id",
+                        currentUser.id
+                    )
+                    .eq(
+                        "seller_id",
+                        currentArticle.seller_id
+                    )
+                    .maybeSingle();
+
+            if (findError) {
+
+                throw findError;
+
+            }
+
+            let conversation =
+                existingConversation;
+
+            if (!conversation) {
+
+                const {
+                    data: newConversation,
+                    error: createError
+                } =
+                    await supabaseClient
+                        .from("conversations")
+                        .insert([
+
+                            {
+                                article_id:
+                                    currentArticle.id,
+
+                                buyer_id:
+                                    currentUser.id,
+
+                                seller_id:
+                                    currentArticle.seller_id
+
+                            }
+
+                        ])
+                        .select()
+                        .single();
+
+                if (createError) {
+
+                    const {
+                        data: retryConversation
+                    } =
+                        await supabaseClient
+                            .from("conversations")
+                            .select("*")
+                            .eq(
+                                "article_id",
+                                currentArticle.id
+                            )
+                            .eq(
+                                "buyer_id",
+                                currentUser.id
+                            )
+                            .eq(
+                                "seller_id",
+                                currentArticle.seller_id
+                            )
+                            .maybeSingle();
+
+                    if (
+                        !retryConversation
+                    ) {
+
+                        throw createError;
+
+                    }
+
+                    conversation =
+                        retryConversation;
+
+                } else {
+
+                    conversation =
+                        newConversation;
+
+                }
+
+            }
+
+            closeModal();
+
+            window.location.href =
+                "messagerie.html?conversation=" +
+                encodeURIComponent(
+                    conversation.id
+                );
+
+        } catch(error) {
+
+            console.error(
+                "Erreur conversation :",
+                error
+            );
+
+            contactSellerButton.disabled =
+                false;
+
+            contactSellerButton.textContent =
+                " Contacter le vendeur";
+
+            sellerMessage.textContent =
+                "Impossible d'ouvrir la conversation : " +
+                error.message;
+
+        }
+
+    }
+);
+
+/* =====================================================
+   FERMER MODAL
+===================================================== */
+
+function closeModal() {
+
+    modal.classList.remove(
+        "active"
+    );
+
+    document.body.style.overflow =
+        "";
+
+}
+
+closeModalButton.addEventListener(
+    "click",
+    closeModal
+);
+
+modal.addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            event.target ===
+            modal
+        ) {
+
+            closeModal();
+
+        }
+
+    }
+);
+
+/* =====================================================
+   ESC + CLAVIER
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            !modal.classList.contains(
+                "active"
+            )
+        ) {
+
+            return;
+
+        }
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            closeModal();
+
+        }
+
+        if (
+            event.key === "ArrowLeft"
+        ) {
+
+            galleryPrev.click();
+
+        }
+
+        if (
+            event.key === "ArrowRight"
+        ) {
+
+            galleryNext.click();
+
+        }
+
+    }
+);
+
+/* =====================================================
+   FILTRES
+===================================================== */
+
+[
+    filterSize,
+    filterCondition,
+    filterPrice,
+    filterCity
+].forEach(
+    function(element) {
+
+        element.addEventListener(
+            "change",
+            renderArticles
+        );
+
+    }
+);
+
+/* =====================================================
+   RECHERCHE
+===================================================== */
+
+document
+    .getElementById(
+        "search-button"
+    )
+    .addEventListener(
+        "click",
+        renderArticles
+    );
+
+searchInput.addEventListener(
+    "input",
+    renderArticles
+);
+
+searchInput.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Enter"
+        ) {
+
+            renderArticles();
+
+        }
+
+    }
+);
+
+/* =====================================================
+   CATEGORIES
+===================================================== */
+
+document
+    .querySelectorAll(
+        ".category"
+    )
+    .forEach(
+        function(category) {
+
+            category.addEventListener(
+                "click",
+                function() {
+
+                    const selected =
+                        this.dataset.category;
+
+                    filterCategory.value =
+                        selected;
+
+                    updateSizeFilter();
+
+                    document
+                        .getElementById(
+                            "articles"
+                        )
+                        .scrollIntoView({
+                            behavior:
+                                "smooth"
+                        });
+
+                    renderArticles();
+
+                }
+            );
+
+        }
+    );
+
+/* =====================================================
+   PROFIL — BOUTONS
+===================================================== */
+
+document
+    .getElementById(
+        "profile-save-button"
+    )
+    .addEventListener(
+        "click",
+        saveProfile
+    );
+
+document
+    .getElementById(
+        "profile-logout-button"
+    )
+    .addEventListener(
+        "click",
+        logout
+    );
+
+/* =====================================================
+   INITIALISATION
+===================================================== */
+
+async function initialize() {
+
+    await updateAuthArea();
+
+    await loadArticles();
+
+}
+
+initialize();
+
+/* =====================================================
+   SESSION TEMPS RÉEL
+===================================================== */
+
+supabaseClient.auth.onAuthStateChange(
+    async function(
+        event,
+        session
+    ) {
+
+        if (
+            event === "SIGNED_IN"
+        ) {
+
+            currentUser =
+                session?.user ||
+                null;
+
+            await updateAuthArea();
+
+        }
+
+        if (
+            event === "SIGNED_OUT"
+        ) {
+
+            currentUser =
+                null;
+
+            const profileNav =
+                document.getElementById(
+                    "profile-nav"
+                );
+
+            profileNav.style.display =
+                "none";
+
+            showProfileNotConnected();
+
+            const authArea =
+                document.getElementById(
+                    "auth-area"
+                );
+
+            authArea.innerHTML =
+                "<a href='auth.html'>Connexion</a>";
+
+        }
+
+    }
+);
+
+/* =====================================================
+   ACTUALISER BADGE
+===================================================== */
+
+setInterval(
+    async function() {
+
+        if (currentUser) {
+
+            await updateUnreadBadge();
+
+        }
+
+    },
+    10000
+);
+</script>
+
+</body>
+
+</html><div class="search">
+
+<input
+    type="text"
+    id="search-input"
+    placeholder="Rechercher une robe, des chaussures, une marque..."
+>
+
+<button
+    id="search-button"
+    type="button"
+>
+    Rechercher
+</button>
+
+</div>

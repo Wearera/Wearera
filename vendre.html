@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Vendre un article — WEARERA</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f7f5f2;
+    color: #222;
+}
+
+header {
+    background: white;
+    padding: 22px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.logo {
+    font-size: 30px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.logo a {
+    color: #222;
+    text-decoration: none;
+}
+
+nav a {
+    text-decoration: none;
+    color: #222;
+    margin-left: 25px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 0 20px;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.title h1 {
+    font-size: 38px;
+    margin-bottom: 10px;
+}
+
+.title p {
+    color: #666;
+}
+
+.form-card {
+    background: white;
+    padding: 35px;
+    border-radius: 16px;
+    border: 1px solid #ddd;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.required {
+    color: #b00020;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    background: white;
+}
+
+textarea {
+    min-height: 130px;
+    resize: vertical;
+}
+
+.photo-upload {
+    border: 2px dashed #bbb;
+    padding: 35px;
+    text-align: center;
+    border-radius: 12px;
+    background: #fafafa;
+}
+
+.photo-upload p {
+    color: #777;
+    margin-bottom: 15px;
+}
+
+.photo-upload input {
+    border: none;
+}
+
+.photo-preview {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.photo-preview img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.condition-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.condition-option {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    background: white;
+}
+
+.condition-option:hover {
+    border-color: #222;
+    background: #f5f5f5;
+}
+
+.condition-option input {
+    width: auto;
+    margin-right: 8px;
+}
+
+.publish-button {
+    width: 100%;
+    padding: 17px;
+    border: none;
+    border-radius: 9px;
+    background: #222;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.publish-button:hover {
+    opacity: 0.85;
+}
+
+.publish-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+footer {
+    margin-top: 50px;
+    padding: 30px;
+    text-align: center;
+    background: #222;
+    color: white;
+}
+
+@media (max-width: 700px) {
+
+    header {
+        padding: 18px 5%;
+    }
+
+    nav {
+        display: none;
+    }
+
+    .container {
+        margin-top: 30px;
+    }
+
+    .form-card {
+        padding: 22px;
+    }
+
+    .row {
+        grid-template-columns: 1fr;
+    }
+
+    .condition-options {
+        grid-template-columns: 1fr;
+    }
+
+    .photo-preview {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .title h1 {
+        font-size: 30px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+<a href="index.html">WEARERA</a>
+</div>
+
+<nav>
+
+<a href="index.html">
+Accueil
+</a>
+
+<a href="index.html">
+Acheter
+</a>
+
+<a href="vendre.html">
+Vendre
+</a>
+
+<span id="auth-area">
+<a href="auth.html">
+Connexion
+</a>
+</span>
+
+</nav>
+
+</header>
+
+
+<main class="container">
+
+<div class="title">
+
+<h1>
+Vendre un article
+</h1>
+
+<p>
+Donnez une deuxième vie à vos vêtements.
+</p>
+
+</div>
+
+
+<div class="form-card">
+
+<form id="sell-form">
+
+
+<!-- =====================================================
+     PHOTOS
+===================================================== -->
+
+<div class="form-group">
+
+<label>
+
+Photos
+<span class="required">*</span>
+
+</label>
+
+<div class="photo-upload">
+
+<p>
+Ajoutez jusqu'à 5 photos claires de votre article.
+</p>
+
+<input
+type="file"
+id="photos"
+accept="image/jpeg,image/png,image/webp,image/gif"
+multiple
+>
+
+<div
+id="photo-preview"
+class="photo-preview">
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     NOM
+===================================================== -->
+
+<div class="form-group">
+
+<label for="name">
+
+Nom de l'article
+<span class="required">*</span>
+
+</label>
+
+<input
+type="text"
+id="name"
+placeholder="Ex. Robe noire Zara"
+required
+>
+
+</div>
+
+
+<!-- =====================================================
+     CATEGORIE + MARQUE
+===================================================== -->
+
+<div class="row">
+
+<div class="form-group">
+
+<label for="category">
+
+Catégorie
+<span class="required">*</span>
+
+</label>
+
+<select
+id="category"
+required>
+
+<option value="">
+Choisir une catégorie
+</option>
+
+<option value="Vêtements">
+Vêtements
+</option>
+
+<option value="Chaussures">
+Chaussures
+</option>
+
+<option value="Sacs">
+Sacs
+</option>
+
+<option value="Accessoires">
+Accessoires
+</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="brand">
+Marque
+</label>
+
+<input
+type="text"
+id="brand"
+placeholder="Ex. Zara, Nike, H&M..."
+>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     TAILLE + PRIX
+===================================================== -->
+
+<div class="row">
+
+<div
+class="form-group"
+id="clothing-size-group">
+
+<label for="size">
+
+Taille
+<span class="required">*</span>
+
+</label>
+
+<select id="size">
+
+<option value="">
+Choisir une taille
+</option>
+
+<option>XXS</option>
+<option>XS</option>
+<option>S</option>
+<option>M</option>
+<option>L</option>
+<option>XL</option>
+<option>XXL</option>
+<option>Autre</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="price">
+
+Prix (CAD)
+<span class="required">*</span>
+
+</label>
+
+<input
+type="number"
+id="price"
+placeholder="Ex. 35"
+min="0"
+step="0.01"
+required
+>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     POINTURE
+===================================================== -->
+
+<div
+class="form-group"
+id="shoe-size-group"
+style="display:none;">
+
+<label for="shoe-size">
+
+Pointure
+<span class="required">*</span>
+
+</label>
+
+<select id="shoe-size">
+
+<option value="">
+Choisir une pointure
+</option>
+
+<option>5</option>
+<option>5.5</option>
+<option>6</option>
+<option>6.5</option>
+<option>7</option>
+<option>7.5</option>
+<option>8</option>
+<option>8.5</option>
+<option>9</option>
+<option>9.5</option>
+<option>10</option>
+<option>10.5</option>
+<option>11</option>
+<option>11.5</option>
+<option>12</option>
+<option>13</option>
+<option>Autre</option>
+
+</select>
+
+</div>
+
+
+<!-- =====================================================
+     ETAT
+===================================================== -->
+
+<div class="form-group">
+
+<label>
+
+État de l'article
+<span class="required">*</span>
+
+</label>
+
+<div class="condition-options">
+
+
+<label class="condition-option">
+
+<input
+type="radio"
+name="condition"
+value="Neuf"
+required
+>
+
+🆕 <strong>Neuf</strong>
+
+<br>
+
+<small>
+Jamais porté
+</small>
+
+</label>
+
+
+<label class="condition-option">
+
+<input
+type="radio"
+name="condition"
+value="5"
+>
+
+⭐ <strong>5/5</strong>
+
+<br>
+
+<small>
+Comme neuf
+</small>
+
+</label>
+
+
+<label class="condition-option">
+
+<input
+type="radio"
+name="condition"
+value="4"
+>
+
+⭐ <strong>4/5</strong>
+
+<br>
+
+<small>
+Très bon état
+</small>
+
+</label>
+
+
+<label class="condition-option">
+
+<input
+type="radio"
+name="condition"
+value="3"
+>
+
+⭐ <strong>3/5</strong>
+
+<br>
+
+<small>
+Bon état
+</small>
+
+</label>
+
+
+<label class="condition-option">
+
+<input
+type="radio"
+name="condition"
+value="2"
+>
+
+⭐ <strong>2/5</strong>
+
+<br>
+
+<small>
+État correct
+</small>
+
+</label>
+
+
+<label class="condition-option">
+
+<input
+type="radio"
+name="condition"
+value="1"
+>
+
+⭐ <strong>1/5</strong>
+
+<br>
+
+<small>
+Usé
+</small>
+
+</label>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     DEFAUTS
+===================================================== -->
+
+<div class="form-group">
+
+<label for="defects">
+Défauts ou imperfections
+</label>
+
+<textarea
+id="defects"
+placeholder="Ex. Petite tache sur la manche, fermeture légèrement usée..."
+></textarea>
+
+</div>
+
+
+<!-- =====================================================
+     DESCRIPTION
+===================================================== -->
+
+<div class="form-group">
+
+<label for="description">
+Description de l'article
+</label>
+
+<textarea
+id="description"
+placeholder="Décrivez votre article : coupe, matière, couleur, occasion..."
+></textarea>
+
+</div>
+
+
+<!-- =====================================================
+     PROVINCE + VILLE
+===================================================== -->
+
+<div class="row">
+
+<div class="form-group">
+
+<label for="province">
+
+Province / territoire
+<span class="required">*</span>
+
+</label>
+
+<select
+id="province"
+required>
+
+<option value="">
+Choisir une province
+</option>
+
+<option value="AB">
+Alberta
+</option>
+
+<option value="BC">
+Colombie-Britannique
+</option>
+
+<option value="PE">
+Île-du-Prince-Édouard
+</option>
+
+<option value="MB">
+Manitoba
+</option>
+
+<option value="NB">
+Nouveau-Brunswick
+</option>
+
+<option value="NS">
+Nouvelle-Écosse
+</option>
+
+<option value="ON">
+Ontario
+</option>
+
+<option value="QC">
+Québec
+</option>
+
+<option value="SK">
+Saskatchewan
+</option>
+
+<option value="NL">
+Terre-Neuve-et-Labrador
+</option>
+
+<option value="NT">
+Territoires du Nord-Ouest
+</option>
+
+<option value="NU">
+Nunavut
+</option>
+
+<option value="YT">
+Yukon
+</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="city">
+
+Ville
+<span class="required">*</span>
+
+</label>
+
+<select
+id="city"
+required>
+
+<option value="">
+Choisir d'abord une province
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+<button
+type="submit"
+class="publish-button"
+id="publish-button">
+
+Publier mon article
+
+</button>
+
+</form>
+
+</div>
+
+</main>
+
+
+<footer>
+
+WEARERA ©️ 2026
+
+<br>
+
+La mode de seconde main au Canada.
+
+</footer>
+
+
+<script>
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+"https://tpmdiwviyrnmergaqyit.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_HNghaWql020DW11APCBAcw_WOGu882V";
+
+const supabaseClient =
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
+
+/* =====================================================
+   AUTHENTIFICATION
+===================================================== */
+
+async function updateAuthArea() {
+
+    const {
+        data: { user }
+    } =
+        await supabaseClient.auth.getUser();
+
+    const authArea =
+        document.getElementById("auth-area");
+
+    if (user) {
+
+        const firstName =
+            user.user_metadata?.first_name ||
+            "Mon compte";
+
+        authArea.innerHTML =
+            "<span style='color:#666;font-size:14px'>" +
+            "Bonjour, " +
+            firstName +
+            "</span>" +
+
+            "<a href='#' id='logout-link' " +
+            "style='margin-left:15px'>" +
+            "Se déconnecter" +
+            "</a>";
+
+        document
+            .getElementById("logout-link")
+            .addEventListener(
+                "click",
+                async function(e) {
+
+                    e.preventDefault();
+
+                    await supabaseClient
+                        .auth
+                        .signOut();
+
+                    window.location.href =
+                        "index.html";
+                }
+            );
+
+    } else {
+
+        authArea.innerHTML =
+            "<a href='auth.html'>" +
+            "Connexion" +
+            "</a>";
+    }
+}
+
+updateAuthArea();
+
+
+/* =====================================================
+   VILLES DU CANADA
+===================================================== */
+
+const cities = {
+
+    AB: [
+        "Calgary",
+        "Edmonton",
+        "Red Deer",
+        "Lethbridge",
+        "Fort McMurray"
+    ],
+
+    BC: [
+        "Vancouver",
+        "Victoria",
+        "Surrey",
+        "Burnaby",
+        "Kelowna",
+        "Richmond"
+    ],
+
+    PE: [
+        "Charlottetown",
+        "Summerside",
+        "Stratford"
+    ],
+
+    MB: [
+        "Winnipeg",
+        "Brandon",
+        "Steinbach"
+    ],
+
+    NB: [
+        "Campbellton",
+        "Bathurst",
+        "Moncton",
+        "Dieppe",
+        "Fredericton",
+        "Saint John",
+        "Edmundston",
+        "Miramichi"
+    ],
+
+    NS: [
+        "Halifax",
+        "Sydney",
+        "Dartmouth",
+        "Truro",
+        "New Glasgow"
+    ],
+
+    ON: [
+        "Toronto",
+        "Ottawa",
+        "Mississauga",
+        "Brampton",
+        "Hamilton",
+        "London",
+        "Windsor",
+        "Kitchener",
+        "Waterloo",
+        "Kingston"
+    ],
+
+    QC: [
+        "Montréal",
+        "Québec",
+        "Laval",
+        "Gatineau",
+        "Longueuil",
+        "Sherbrooke",
+        "Trois-Rivières",
+        "Saguenay",
+        "Drummondville"
+    ],
+
+    SK: [
+        "Saskatoon",
+        "Regina",
+        "Prince Albert",
+        "Moose Jaw"
+    ],
+
+    NL: [
+        "St. John's",
+        "Mount Pearl",
+        "Corner Brook",
+        "Conception Bay South"
+    ],
+
+    NT: [
+        "Yellowknife",
+        "Hay River",
+        "Inuvik"
+    ],
+
+    NU: [
+        "Iqaluit",
+        "Rankin Inlet",
+        "Arviat"
+    ],
+
+    YT: [
+        "Whitehorse",
+        "Dawson City",
+        "Watson Lake"
+    ]
+
+};
+
+
+/* =====================================================
+   PROVINCE → VILLE
+===================================================== */
+
+const provinceSelect =
+    document.getElementById("province");
+
+const citySelect =
+    document.getElementById("city");
+
+provinceSelect.addEventListener(
+    "change",
+    function() {
+
+        const province =
+            provinceSelect.value;
+
+        citySelect.innerHTML = "";
+
+        if (!province) {
+
+            citySelect.innerHTML =
+                "<option value=''>" +
+                "Choisir d'abord une province" +
+                "</option>";
+
+            return;
+        }
+
+        citySelect.innerHTML =
+            "<option value=''>" +
+            "Choisir une ville" +
+            "</option>";
+
+        cities[province].forEach(
+            function(city) {
+
+                const option =
+                    document.createElement("option");
+
+                option.value = city;
+                option.textContent = city;
+
+                citySelect.appendChild(option);
+            }
+        );
+    }
+);
+
+
+/* =====================================================
+   CATEGORIE
+===================================================== */
+
+const categorySelect =
+    document.getElementById("category");
+
+const clothingSizeGroup =
+    document.getElementById(
+        "clothing-size-group"
+    );
+
+const sizeSelect =
+    document.getElementById("size");
+
+const shoeSizeGroup =
+    document.getElementById(
+        "shoe-size-group"
+    );
+
+const shoeSizeSelect =
+    document.getElementById(
+        "shoe-size"
+    );
+
+
+function updateCategoryFields() {
+
+    const category =
+        categorySelect.value;
+
+    const isClothing =
+        category === "Vêtements";
+
+    const isShoes =
+        category === "Chaussures";
+
+
+    clothingSizeGroup.style.display =
+        isClothing ? "" : "none";
+
+    sizeSelect.required =
+        isClothing;
+
+    if (!isClothing) {
+        sizeSelect.value = "";
+    }
+
+
+    shoeSizeGroup.style.display =
+        isShoes ? "" : "none";
+
+    shoeSizeSelect.required =
+        isShoes;
+
+    if (!isShoes) {
+        shoeSizeSelect.value = "";
+    }
+}
+
+categorySelect.addEventListener(
+    "change",
+    updateCategoryFields
+);
+
+updateCategoryFields();
+
+
+/* =====================================================
+   APERÇU DES PHOTOS
+===================================================== */
+
+const photoInput =
+    document.getElementById("photos");
+
+const photoPreview =
+    document.getElementById(
+        "photo-preview"
+    );
+
+
+photoInput.addEventListener(
+    "change",
+    function() {
+
+        photoPreview.innerHTML = "";
+
+        const files =
+            Array.from(photoInput.files);
+
+        if (files.length > 5) {
+
+            alert(
+                "Vous pouvez sélectionner maximum 5 photos."
+            );
+
+            photoInput.value = "";
+
+            return;
+        }
+
+        files.forEach(function(file) {
+
+            const img =
+                document.createElement("img");
+
+            img.src =
+                URL.createObjectURL(file);
+
+            img.alt =
+                "Aperçu de la photo";
+
+            photoPreview.appendChild(img);
+
+        });
+
+    }
+);
+
+
+/* =====================================================
+   PUBLICATION
+===================================================== */
+
+const form =
+    document.getElementById("sell-form");
+
+const publishButton =
+    document.getElementById(
+        "publish-button"
+    );
+
+
+form.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        /* ---------------------------------------------
+           VERIFICATION UTILISATEUR
+        --------------------------------------------- */
+
+        const {
+            data: { user },
+            error: authError
+        } =
+            await supabaseClient.auth.getUser();
+
+
+        if (authError || !user) {
+
+            alert(
+                "Vous devez être connecté pour publier un article."
+            );
+
+            window.location.href =
+                "auth.html";
+
+            return;
+        }
+
+
+        /* ---------------------------------------------
+           RECUPERATION DES DONNEES
+        --------------------------------------------- */
+
+        const name =
+            document.getElementById("name")
+                .value
+                .trim();
+
+        const category =
+            categorySelect.value;
+
+        const brand =
+            document.getElementById("brand")
+                .value
+                .trim();
+
+        let size = null;
+
+        if (category === "Vêtements") {
+            size = sizeSelect.value;
+        }
+
+        const shoeSize =
+            category === "Chaussures"
+                ? shoeSizeSelect.value
+                : null;
+
+        const price =
+            parseFloat(
+                document.getElementById("price")
+                    .value
+            );
+
+        const conditionInput =
+            document.querySelector(
+                'input[name="condition"]:checked'
+            );
+
+        const condition =
+            conditionInput
+                ? conditionInput.value
+                : null;
+
+        const defects =
+            document.getElementById("defects")
+                .value
+                .trim();
+
+        const description =
+            document.getElementById("description")
+                .value
+                .trim();
+
+        const province =
+            provinceSelect.value;
+
+        const city =
+            citySelect.value;
+
+
+        /* ---------------------------------------------
+           PHOTOS
+        --------------------------------------------- */
+
+        const files =
+            Array.from(photoInput.files);
+
+
+        if (!files.length) {
+
+            alert(
+                "Veuillez ajouter au moins une photo."
+            );
+
+            return;
+        }
+
+
+        if (files.length > 5) {
+
+            alert(
+                "Vous pouvez ajouter maximum 5 photos."
+            );
+
+            return;
+        }
+
+
+        /* ---------------------------------------------
+           VALIDATION
+        --------------------------------------------- */
+
+        if (
+            !name ||
+            !category ||
+            isNaN(price) ||
+            price < 0 ||
+            !condition ||
+            !province ||
+            !city
+        ) {
+
+            alert(
+                "Veuillez remplir tous les champs obligatoires."
+            );
+
+            return;
+        }
+
+
+        if (
+            category === "Vêtements" &&
+            !size
+        ) {
+
+            alert(
+                "Veuillez sélectionner une taille."
+            );
+
+            return;
+        }
+
+
+        if (
+            category === "Chaussures" &&
+            !shoeSize
+        ) {
+
+            alert(
+                "Veuillez sélectionner une pointure."
+            );
+
+            return;
+        }
+
+
+        /* ---------------------------------------------
+           BOUTON
+        --------------------------------------------- */
+
+        publishButton.disabled = true;
+
+        publishButton.textContent =
+            "Envoi des photos...";
+
+
+        try {
+
+            /* -----------------------------------------
+               UPLOAD DES PHOTOS
+            ----------------------------------------- */
+
+            const photoUrls = [];
+
+
+            for (
+                let i = 0;
+                i < files.length;
+                i++
+            ) {
+
+                const file =
+                    files[i];
+
+
+                /* Vérifier type */
+
+                if (
+                    !file.type.startsWith("image/")
+                ) {
+
+                    throw new Error(
+                        "Tous les fichiers doivent être des images."
+                    );
+                }
+
+
+                /* Limite 10 MB */
+
+                if (
+                    file.size > 10 * 1024 * 1024
+                ) {
+
+                    throw new Error(
+                        "Chaque photo doit faire moins de 10 MB."
+                    );
+                }
+
+
+                const extension =
+                    file.name
+                        .split(".")
+                        .pop()
+                        .toLowerCase();
+
+
+                const fileName =
+                    user.id +
+                    "/" +
+                    Date.now() +
+                    "-" +
+                    Math.random()
+                        .toString(36)
+                        .substring(2) +
+                    "." +
+                    extension;
+
+
+                const {
+                    error: uploadError
+                } =
+                    await supabaseClient
+                        .storage
+                        .from("articles-photos")
+                        .upload(
+                            fileName,
+                            file,
+                            {
+                                cacheControl: "3600",
+                                upsert: false,
+                                contentType: file.type
+                            }
+                        );
+
+
+                if (uploadError) {
+
+                    throw new Error(
+                        "Erreur photo : " +
+                        uploadError.message
+                    );
+                }
+
+
+                const {
+                    data: publicUrlData
+                } =
+                    supabaseClient
+                        .storage
+                        .from("articles-photos")
+                        .getPublicUrl(
+                            fileName
+                        );
+
+
+                photoUrls.push(
+                    publicUrlData.publicUrl
+                );
+
+            }
+
+
+            /* -----------------------------------------
+               PUBLICATION
+            ----------------------------------------- */
+
+            publishButton.textContent =
+                "Publication de l'article...";
+
+
+            const articleData = {
+
+                name: name,
+
+                category: category,
+
+                brand: brand || null,
+
+                size: size,
+
+                price: price,
+
+                condition: condition,
+
+                defects:
+                    defects || null,
+
+                description:
+                    description || null,
+
+                province: province,
+
+                city: city,
+
+                photo_urls: photoUrls,
+
+                seller_id: user.id
+
+            };
+
+
+            if (
+                category === "Chaussures"
+            ) {
+
+                articleData.shoe_size =
+                    shoeSize;
+
+            }
+
+
+            /* -----------------------------------------
+               INSERTION SUPABASE
+            ----------------------------------------- */
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from("Articles")
+                    .insert([articleData])
+                    .select()
+                    .single();
+
+
+            if (error) {
+
+                console.error(
+                    "Erreur Supabase :",
+                    error
+                );
+
+                throw new Error(
+                    error.message
+                );
+            }
+
+
+            /* -----------------------------------------
+               SUCCES
+            ----------------------------------------- */
+
+            console.log(
+                "Article publié :",
+                data
+            );
+
+
+            alert(
+                "Votre article a été publié avec succès ! 🎉"
+            );
+
+
+            form.reset();
+
+            photoPreview.innerHTML = "";
+
+            updateCategoryFields();
+
+            citySelect.innerHTML =
+                "<option value=''>" +
+                "Choisir d'abord une province" +
+                "</option>";
+
+
+        } catch (error) {
+
+            console.error(
+                "Erreur :",
+                error
+            );
+
+            alert(
+                "Erreur lors de la publication : " +
+                error.message
+            );
+
+        } finally {
+
+            publishButton.disabled = false;
+
+            publishButton.textContent =
+                "Publier mon article";
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>

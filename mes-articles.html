@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Mes articles — WEARERA</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f7f5f2;
+    color: #222;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+    background: white;
+    padding: 22px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.logo {
+    font-size: 30px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.logo a {
+    color: #222;
+    text-decoration: none;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+}
+
+nav a {
+    text-decoration: none;
+    color: #222;
+    margin-left: 25px;
+}
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container {
+    max-width: 1100px;
+    margin: 50px auto;
+    padding: 0 20px;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.title h1 {
+    font-size: 38px;
+    margin-bottom: 10px;
+}
+
+.title p {
+    color: #666;
+}
+
+/* =========================
+   SECTIONS
+========================= */
+
+.section {
+    margin-bottom: 45px;
+}
+
+.section-title {
+    font-size: 25px;
+    margin-bottom: 20px;
+}
+
+/* =========================
+   ARTICLES GRID
+========================= */
+
+.articles-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+/* =========================
+   ARTICLE CARD
+========================= */
+
+.article-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.article-image {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    display: block;
+    background: #eee;
+}
+
+.article-info {
+    padding: 18px;
+}
+
+.article-name {
+    font-size: 19px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.article-brand {
+    color: #777;
+    margin-bottom: 8px;
+}
+
+.article-price {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.article-details {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.article-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.edit-button,
+.delete-button {
+    flex: 1;
+    padding: 11px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.edit-button {
+    background: #222;
+    color: white;
+    border: none;
+}
+
+.edit-button:hover {
+    opacity: 0.85;
+}
+
+.delete-button {
+    background: white;
+    color: #b00020;
+    border: 1px solid #b00020;
+}
+
+.delete-button:hover {
+    background: #b00020;
+    color: white;
+}
+
+/* =========================
+   EMPTY MESSAGE
+========================= */
+
+.empty-message {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 14px;
+    padding: 40px 20px;
+    text-align: center;
+    color: #666;
+}
+
+.empty-message h3 {
+    color: #222;
+    margin-bottom: 10px;
+}
+
+.sell-button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 13px 22px;
+    background: #222;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+/* =========================
+   LOADING
+========================= */
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+    margin-top: 50px;
+    padding: 30px;
+    text-align: center;
+    background: #222;
+    color: white;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 800px) {
+
+    header {
+        padding: 18px 5%;
+    }
+
+    nav a {
+        margin-left: 12px;
+        font-size: 14px;
+    }
+
+    .container {
+        margin-top: 30px;
+    }
+
+    .title h1 {
+        font-size: 30px;
+    }
+
+    .articles-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .article-image {
+        height: 220px;
+    }
+
+}
+
+@media (max-width: 550px) {
+
+    nav {
+        display: none;
+    }
+
+    .articles-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .article-image {
+        height: 300px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="logo">
+        <a href="index.html">WEARERA</a>
+    </div>
+
+    <nav>
+
+        <a href="index.html">
+            Accueil
+        </a>
+
+        <a href="index.html">
+            Acheter
+        </a>
+
+        <a href="vendre.html">
+            Vendre
+        </a>
+
+        <a href="mes-articles.html">
+            Mes articles
+        </a>
+
+        <span id="auth-area">
+
+            <a href="auth.html">
+                Connexion
+            </a>
+
+        </span>
+
+    </nav>
+
+</header>
+
+
+<main class="container">
+
+
+    <div class="title">
+
+        <h1>
+            Mes articles
+        </h1>
+
+        <p>
+            Gérez les articles que vous avez publiés sur WEARERA.
+        </p>
+
+    </div>
+
+
+    <!-- =========================
+         ARTICLES
+    ========================= -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+            Mes publications
+        </h2>
+
+        <div
+            id="articles-container"
+            class="articles-grid">
+
+            <div class="loading">
+                Chargement de vos articles...
+            </div>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<footer>
+
+    WEARERA ©️ 2026
+
+    <br>
+
+    La mode de seconde main au Canada.
+
+</footer>
+
+
+<script>
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+    "https://tpmdiwviyrnmergaqyit.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_HNghaWql020DW11APCBAcw_WOGu882V";
+
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const articlesContainer =
+    document.getElementById(
+        "articles-container"
+    );
+
+const authArea =
+    document.getElementById(
+        "auth-area"
+    );
+
+
+/* =====================================================
+   AUTHENTIFICATION
+===================================================== */
+
+async function checkUser() {
+
+    const {
+        data: { user },
+        error
+    } =
+        await supabaseClient.auth.getUser();
+
+
+    if (error || !user) {
+
+        articlesContainer.innerHTML = `
+
+            <div class="empty-message">
+
+                <h3>
+                    Vous devez être connecté.
+                </h3>
+
+                <p>
+                    Connectez-vous pour voir vos articles.
+                </p>
+
+                <a
+                    href="auth.html"
+                    class="sell-button">
+
+                    Se connecter
+
+                </a>
+
+            </div>
+
+        `;
+
+        return null;
+    }
+
+
+    updateAuthArea(user);
+
+    return user;
+}
+
+
+/* =====================================================
+   AUTH AREA
+===================================================== */
+
+function updateAuthArea(user) {
+
+    const firstName =
+        user.user_metadata?.first_name ||
+        "Mon compte";
+
+
+    authArea.innerHTML = `
+
+        <span
+            style="
+                color:#666;
+                font-size:14px;
+                margin-left:20px;
+            ">
+
+            Bonjour, ${firstName}
+
+        </span>
+
+        <a
+            href="#"
+            id="logout-link"
+            style="margin-left:15px;">
+
+            Se déconnecter
+
+        </a>
+
+    `;
+
+
+    document
+        .getElementById("logout-link")
+        .addEventListener(
+            "click",
+            async function(event) {
+
+                event.preventDefault();
+
+
+                await supabaseClient
+                    .auth
+                    .signOut();
+
+
+                window.location.href =
+                    "index.html";
+
+            }
+        );
+
+}
+
+
+/* =====================================================
+   CHARGER LES ARTICLES DU VENDEUR
+===================================================== */
+
+async function loadMyArticles(user) {
+
+    articlesContainer.innerHTML = `
+
+        <div class="loading">
+
+            Chargement de vos articles...
+
+        </div>
+
+    `;
+
+
+    const {
+        data: articles,
+        error
+    } =
+        await supabaseClient
+            .from("Articles")
+            .select("*")
+            .eq("seller_id", user.id)
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Erreur chargement articles :",
+            error
+        );
+
+
+        articlesContainer.innerHTML = `
+
+            <div class="empty-message">
+
+                <h3>
+                    Impossible de charger vos articles.
+                </h3>
+
+                <p>
+                    ${error.message}
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    if (!articles || articles.length === 0) {
+
+        articlesContainer.innerHTML = `
+
+            <div class="empty-message">
+
+                <h3>
+                    Vous n'avez encore publié aucun article.
+                </h3>
+
+                <p>
+                    Commencez à vendre sur WEARERA.
+                </p>
+
+                <a
+                    href="vendre.html"
+                    class="sell-button">
+
+                    Vendre un article
+
+                </a>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    articlesContainer.innerHTML = "";
+
+
+    articles.forEach(
+        function(article) {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+            card.className =
+                "article-card";
+
+
+            /* =========================
+               IMAGE
+            ========================= */
+
+            let imageUrl = "";
+
+
+            if (
+                article.photo_urls &&
+                article.photo_urls.length > 0
+            ) {
+
+                imageUrl =
+                    article.photo_urls[0];
+
+            }
+
+
+            /* =========================
+               CARTE
+            ========================= */
+
+            card.innerHTML = `
+
+                ${
+                    imageUrl
+
+                    ?
+
+                    `
+                    <img
+                        src="${imageUrl}"
+                        class="article-image"
+                        alt="${escapeHtml(article.name)}"
+                    >
+                    `
+
+                    :
+
+                    `
+                    <div
+                        class="article-image"
+                        style="
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                            color:#999;
+                        ">
+
+                        Aucune photo
+
+                    </div>
+                    `
+                }
+
+
+                <div class="article-info">
+
+
+                    <div class="article-name">
+
+                        ${escapeHtml(article.name)}
+
+                    </div>
+
+
+                    ${
+                        article.brand
+
+                        ?
+
+                        `
+                        <div class="article-brand">
+
+                            ${escapeHtml(article.brand)}
+
+                        </div>
+                        `
+
+                        :
+
+                        ""
+                    }
+
+
+                    <div class="article-price">
+
+                        ${Number(article.price).toFixed(2)} $ CAD
+
+                    </div>
+
+
+                    <div class="article-details">
+
+                        <strong>Catégorie :</strong>
+                        ${escapeHtml(article.category)}
+
+                        <br>
+
+                        ${
+                            article.size
+
+                            ?
+
+                            `
+                            <strong>Taille :</strong>
+                            ${escapeHtml(article.size)}
+
+                            <br>
+                            `
+
+                            :
+
+                            ""
+                        }
+
+
+                        ${
+                            article.shoe_size
+
+                            ?
+
+                            `
+                            <strong>Pointure :</strong>
+                            ${escapeHtml(article.shoe_size)}
+
+                            <br>
+                            `
+
+                            :
+
+                            ""
+                        }
+
+
+                        <strong>État :</strong>
+                        ${escapeHtml(article.condition)}
+
+                        <br>
+
+                        ${escapeHtml(article.city)},
+                        ${escapeHtml(article.province)}
+
+                    </div>
+
+
+                    <div class="article-actions">
+
+
+                        <button
+                            class="edit-button"
+                            onclick="editArticle('${article.id}')">
+
+                            ✏️ Modifier
+
+                        </button>
+
+
+                        <button
+                            class="delete-button"
+                            onclick="deleteArticle('${article.id}')">
+
+                            🗑️ Supprimer
+
+                        </button>
+
+
+                    </div>
+
+
+                </div>
+
+            `;
+
+
+            articlesContainer.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   MODIFIER
+===================================================== */
+
+function editArticle(articleId) {
+
+    /*
+       Pour l'instant on redirige vers une future
+       page de modification.
+
+       Nous allons créer cette page ensuite.
+    */
+
+    window.location.href =
+        "modifier-article.html?id=" +
+        encodeURIComponent(articleId);
+
+}
+
+
+/* =====================================================
+   SUPPRIMER
+===================================================== */
+
+async function deleteArticle(articleId) {
+
+    const confirmation =
+        confirm(
+            "Voulez-vous vraiment supprimer cet article ?\n\nCette action est définitive."
+        );
+
+
+    if (!confirmation) {
+        return;
+    }
+
+
+    try {
+
+        const {
+            data: { user },
+            error: authError
+        } =
+            await supabaseClient
+                .auth
+                .getUser();
+
+
+        if (authError || !user) {
+
+            alert(
+                "Votre session a expiré. Veuillez vous reconnecter."
+            );
+
+            window.location.href =
+                "auth.html";
+
+            return;
+        }
+
+
+        /*
+           IMPORTANT :
+           On vérifie que l'article appartient
+           bien à l'utilisateur connecté.
+        */
+
+        const {
+            data: article,
+            error: articleError
+        } =
+            await supabaseClient
+                .from("Articles")
+                .select("id, seller_id")
+                .eq("id", articleId)
+                .eq("seller_id", user.id)
+                .single();
+
+
+        if (articleError || !article) {
+
+            throw new Error(
+                "Vous n'avez pas l'autorisation de supprimer cet article."
+            );
+
+        }
+
+
+        /* =========================
+           SUPPRESSION
+        ========================= */
+
+        const {
+            error: deleteError
+        } =
+            await supabaseClient
+                .from("Articles")
+                .delete()
+                .eq("id", articleId)
+                .eq("seller_id", user.id);
+
+
+        if (deleteError) {
+
+            throw new Error(
+                deleteError.message
+            );
+
+        }
+
+
+        alert(
+            "Article supprimé avec succès."
+        );
+
+
+        /*
+           Recharger la liste
+        */
+
+        await loadMyArticles(user);
+
+
+    } catch (error) {
+
+        console.error(
+            "Erreur suppression :",
+            error
+        );
+
+
+        alert(
+            "Impossible de supprimer l'article :\n" +
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   PROTECTION TEXTE HTML
+===================================================== */
+
+function escapeHtml(value) {
+
+    if (value === null ||
+        value === undefined) {
+
+        return "";
+
+    }
+
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =====================================================
+   DEMARRAGE
+===================================================== */
+
+async function init() {
+
+    const user =
+        await checkUser();
+
+
+    if (!user) {
+        return;
+    }
+
+
+    await loadMyArticles(user);
+
+}
+
+
+init();
+
+</script>
+
+
+</body>
+
+</html>

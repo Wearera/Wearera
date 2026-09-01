@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Modifier mon article — WEARERA</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f7f5f2;
+    color: #222;
+}
+
+header {
+    background: white;
+    padding: 22px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.logo {
+    font-size: 30px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.logo a {
+    color: #222;
+    text-decoration: none;
+}
+
+nav a {
+    text-decoration: none;
+    color: #222;
+    margin-left: 25px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 45px auto;
+    padding: 0 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.form-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 14px;
+    padding: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    background: white;
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+button,
+.back-button {
+    flex: 1;
+    padding: 13px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+}
+
+.save-button {
+    background: #222;
+    color: white;
+    border: none;
+}
+
+.save-button:hover {
+    opacity: .85;
+}
+
+.back-button {
+    background: white;
+    color: #222;
+    border: 1px solid #ccc;
+}
+
+.message {
+    margin-bottom: 20px;
+    padding: 14px;
+    border-radius: 8px;
+    display: none;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+}
+
+footer {
+    margin-top: 50px;
+    padding: 30px;
+    text-align: center;
+    background: #222;
+    color: white;
+}
+
+@media (max-width: 600px) {
+    header {
+        padding: 18px 5%;
+    }
+
+    nav {
+        display: none;
+    }
+
+    .container {
+        margin-top: 30px;
+    }
+
+    .form-card {
+        padding: 20px;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        <a href="index.html">WEARERA</a>
+    </div>
+
+    <nav>
+        <a href="index.html">Accueil</a>
+        <a href="vendre.html">Vendre</a>
+        <a href="mes-articles.html">Mes articles</a>
+    </nav>
+
+</header>
+
+<main class="container">
+
+    <h1>Modifier mon article</h1>
+
+    <div id="loading" class="loading">
+        Chargement de l'article...
+    </div>
+
+    <div id="message" class="message"></div>
+
+    <div id="form-container" style="display:none;">
+
+        <div class="form-card">
+
+            <form id="edit-form">
+
+                <div class="form-group">
+                    <label for="name">Nom de l'article</label>
+                    <input type="text" id="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Catégorie</label>
+                    <input type="text" id="category" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="brand">Marque</label>
+                    <input type="text" id="brand">
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Prix ($ CAD)</label>
+                    <input type="number" id="price" step="0.01" min="0" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="condition">État</label>
+                    <select id="condition" required>
+                        <option value="">Choisir</option>
+                        <option value="Neuf">Neuf</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="defects">Défauts</label>
+                    <textarea id="defects"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="city">Ville</label>
+                    <input type="text" id="city" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="province">Province</label>
+                    <input type="text" id="province" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="shoe_size">Pointure</label>
+                    <input type="text" id="shoe_size">
+                </div>
+
+                <div class="buttons">
+
+                    <a
+                        href="mes-articles.html"
+                        class="back-button">
+                        Annuler
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="save-button">
+                        Enregistrer les modifications
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</main>
+
+<footer>
+    WEARERA ©️ 2026
+    <br>
+    La mode de seconde main au Canada.
+</footer>
+
+
+<script>
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+    "https://tpmdiwviyrnmergaqyit.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_HNghaWql020DW11APCBAcw_WOGu882V";
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const loading =
+    document.getElementById("loading");
+
+const formContainer =
+    document.getElementById("form-container");
+
+const message =
+    document.getElementById("message");
+
+const form =
+    document.getElementById("edit-form");
+
+
+/* =====================================================
+   ARTICLE ID
+===================================================== */
+
+const urlParams =
+    new URLSearchParams(window.location.search);
+
+const articleId =
+    urlParams.get("id");
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+function showMessage(text, type = "error") {
+
+    message.textContent = text;
+
+    message.style.display = "block";
+
+    if (type === "success") {
+        message.style.background = "#e8f5e9";
+        message.style.color = "#1b5e20";
+    } else {
+        message.style.background = "#ffebee";
+        message.style.color = "#b00020";
+    }
+}
+
+
+/* =====================================================
+   CHARGER L'ARTICLE
+===================================================== */
+
+async function loadArticle() {
+
+    if (!articleId) {
+
+        loading.style.display = "none";
+
+        showMessage(
+            "Article introuvable."
+        );
+
+        return;
+    }
+
+
+    const {
+        data: { user },
+        error: authError
+    } =
+        await supabaseClient.auth.getUser();
+
+
+    if (authError || !user) {
+
+        loading.style.display = "none";
+
+        showMessage(
+            "Vous devez être connecté pour modifier un article."
+        );
+
+        return;
+    }
+
+
+    const {
+        data: article,
+        error
+    } =
+        await supabaseClient
+            .from("Articles")
+            .select("*")
+            .eq("id", articleId)
+            .eq("seller_id", user.id)
+            .single();
+
+
+    if (error || !article) {
+
+        console.error(error);
+
+        loading.style.display = "none";
+
+        showMessage(
+            "Article introuvable ou vous n'êtes pas autorisé à le modifier."
+        );
+
+        return;
+    }
+
+
+    /* =========================
+       REMPLIR LE FORMULAIRE
+    ========================= */
+
+    document.getElementById("name").value =
+        article.name || "";
+
+    document.getElementById("category").value =
+        article.category || "";
+
+    document.getElementById("brand").value =
+        article.brand || "";
+
+    document.getElementById("price").value =
+        article.price ?? "";
+
+    document.getElementById("condition").value =
+        article.condition || "";
+
+    document.getElementById("defects").value =
+        article.defects || "";
+
+    document.getElementById("description").value =
+        article.description || "";
+
+    document.getElementById("city").value =
+        article.city || "";
+
+    document.getElementById("province").value =
+        article.province || "";
+
+    document.getElementById("shoe_size").value =
+        article.shoe_size || "";
+
+
+    loading.style.display = "none";
+
+    formContainer.style.display = "block";
+}
+
+
+/* =====================================================
+   ENREGISTRER
+===================================================== */
+
+form.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+
+    const {
+        data: { user },
+        error: authError
+    } =
+        await supabaseClient.auth.getUser();
+
+
+    if (authError || !user) {
+
+        showMessage(
+            "Votre session a expiré. Veuillez vous reconnecter."
+        );
+
+        return;
+    }
+
+
+    const updatedArticle = {
+
+        name:
+            document.getElementById("name").value.trim(),
+
+        category:
+            document.getElementById("category").value.trim(),
+
+        brand:
+            document.getElementById("brand").value.trim(),
+
+        price:
+            Number(
+                document.getElementById("price").value
+            ),
+
+        condition:
+            document.getElementById("condition").value,
+
+        defects:
+            document.getElementById("defects").value.trim(),
+
+        description:
+            document.getElementById("description").value.trim(),
+
+        city:
+            document.getElementById("city").value.trim(),
+
+        province:
+            document.getElementById("province").value.trim(),
+
+        shoe_size:
+            document.getElementById("shoe_size").value.trim()
+
+    };
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("Articles")
+            .update(updatedArticle)
+            .eq("id", articleId)
+            .eq("seller_id", user.id);
+
+
+    if (error) {
+
+        console.error(error);
+
+        showMessage(
+            "Impossible de modifier l'article : " +
+            error.message
+        );
+
+        return;
+    }
+
+
+    showMessage(
+        "Article modifié avec succès.",
+        "success"
+    );
+
+
+    setTimeout(function() {
+
+        window.location.href =
+            "mes-articles.html";
+
+    }, 1000);
+
+});
+
+
+/* =====================================================
+   DEMARRAGE
+===================================================== */
+
+loadArticle();
+
+</script>
+
+</body>
+</html>

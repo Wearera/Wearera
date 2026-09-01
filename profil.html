@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Mon profil — WEARERA</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f7f5f2;
+    color: #222;
+}
+
+/* ================= HEADER ================= */
+
+header {
+    background: white;
+    padding: 22px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.logo {
+    font-size: 30px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.logo a {
+    color: #222;
+    text-decoration: none;
+}
+
+nav a {
+    text-decoration: none;
+    color: #222;
+    margin-left: 25px;
+    font-size: 15px;
+}
+
+/* ================= PAGE ================= */
+
+.container {
+    max-width: 700px;
+    margin: 45px auto;
+    padding: 0 20px;
+}
+
+.page-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.page-title h1 {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.page-title p {
+    color: #666;
+}
+
+/* ================= CARD ================= */
+
+.profile-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 16px;
+    padding: 35px;
+}
+
+/* ================= MESSAGES ================= */
+
+.message {
+    display: none;
+    padding: 13px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.error {
+    background: #fce4e4;
+    border: 1px solid #b00020;
+    color: #b00020;
+}
+
+.success {
+    background: #e4f5e4;
+    border: 1px solid #2e7d32;
+    color: #2e7d32;
+}
+
+/* ================= PHOTO ================= */
+
+.avatar-section {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.avatar {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: #eee;
+    margin: 0 auto 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid #ddd;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+}
+
+.avatar-placeholder {
+    font-size: 48px;
+    color: #999;
+}
+
+.photo-button {
+    display: inline-block;
+    padding: 11px 18px;
+    border-radius: 8px;
+    background: #222;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.photo-button:hover {
+    opacity: 0.85;
+}
+
+#avatar-input {
+    display: none;
+}
+
+.remove-photo {
+    display: none;
+    margin-left: 8px;
+    padding: 11px 18px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: white;
+    color: #222;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.remove-photo:hover {
+    background: #f5f5f5;
+}
+
+/* ================= INFORMATIONS ================= */
+
+.info-section {
+    border-top: 1px solid #eee;
+    padding-top: 25px;
+}
+
+.info-row {
+    margin-bottom: 22px;
+}
+
+.info-row label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.info-value {
+    width: 100%;
+    padding: 13px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: #f7f5f2;
+    color: #444;
+    font-size: 15px;
+}
+
+/* ================= CHAMPS MODIFIABLES ================= */
+
+input.info-value,
+select.info-value {
+    background: white;
+    color: #222;
+    outline: none;
+    transition: border 0.2s;
+}
+
+input.info-value:focus,
+select.info-value:focus {
+    border-color: #222;
+}
+
+/* ================= SAVE ================= */
+
+.save-button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 5px;
+    border: none;
+    border-radius: 9px;
+    background: #222;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.save-button:hover {
+    opacity: 0.88;
+}
+
+.save-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ================= LOGOUT ================= */
+
+.logout-button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 15px;
+    border: 1px solid #222;
+    border-radius: 9px;
+    background: white;
+    color: #222;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.logout-button:hover {
+    background: #222;
+    color: white;
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 700px) {
+
+    header {
+        padding: 18px 5%;
+    }
+
+    nav {
+        display: none;
+    }
+
+    .container {
+        margin-top: 30px;
+    }
+
+    .profile-card {
+        padding: 22px;
+    }
+
+    .page-title h1 {
+        font-size: 27px;
+    }
+
+    .avatar {
+        width: 115px;
+        height: 115px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= HEADER ================= -->
+
+<header>
+
+<div class="logo">
+<a href="index.html">WEARERA</a>
+</div>
+
+<nav>
+
+<a href="index.html">Accueil</a>
+
+<a href="index.html">Acheter</a>
+
+<a href="vendre.html">Vendre</a>
+
+<a href="profile.html">Mon profil</a>
+
+</nav>
+
+</header>
+
+
+<!-- ================= PAGE ================= -->
+
+<main class="container">
+
+<div class="page-title">
+
+<h1>Mon profil</h1>
+
+<p>Gérez vos informations personnelles.</p>
+
+</div>
+
+
+<div class="profile-card">
+
+
+<!-- MESSAGES -->
+
+<div id="error-message" class="message error"></div>
+
+<div id="success-message" class="message success"></div>
+
+
+<!-- ================= PHOTO ================= -->
+
+<div class="avatar-section">
+
+<div class="avatar">
+
+<div id="avatar-placeholder" class="avatar-placeholder">
+👤
+</div>
+
+<img id="avatar-image" alt="Photo de profil">
+
+</div>
+
+
+<input
+type="file"
+id="avatar-input"
+accept="image/jpeg,image/png,image/webp"
+>
+
+
+<label
+for="avatar-input"
+class="photo-button"
+>
+Ajouter une photo
+</label>
+
+
+<button
+id="remove-photo"
+class="remove-photo"
+type="button"
+>
+Supprimer
+</button>
+
+</div>
+
+
+<!-- ================= INFORMATIONS ================= -->
+
+<div class="info-section">
+
+
+<!-- PRÉNOM -->
+
+<div class="info-row">
+
+<label for="first-name">
+Prénom
+</label>
+
+<input
+id="first-name"
+class="info-value"
+type="text"
+placeholder="Votre prénom"
+>
+
+</div>
+
+
+<!-- VILLE -->
+
+<div class="info-row">
+
+<label for="city">
+Ville
+</label>
+
+<input
+id="city"
+class="info-value"
+type="text"
+placeholder="Ex. Campbellton"
+>
+
+</div>
+
+
+<!-- PROVINCE -->
+
+<div class="info-row">
+
+<label for="province">
+Province
+</label>
+
+<select
+id="province"
+class="info-value"
+>
+
+<option value="">
+Sélectionnez votre province
+</option>
+
+<option value="Alberta">
+Alberta
+</option>
+
+<option value="Colombie-Britannique">
+Colombie-Britannique
+</option>
+
+<option value="Île-du-Prince-Édouard">
+Île-du-Prince-Édouard
+</option>
+
+<option value="Manitoba">
+Manitoba
+</option>
+
+<option value="Nouveau-Brunswick">
+Nouveau-Brunswick
+</option>
+
+<option value="Nouvelle-Écosse">
+Nouvelle-Écosse
+</option>
+
+<option value="Ontario">
+Ontario
+</option>
+
+<option value="Québec">
+Québec
+</option>
+
+<option value="Saskatchewan">
+Saskatchewan
+</option>
+
+<option value="Terre-Neuve-et-Labrador">
+Terre-Neuve-et-Labrador
+</option>
+
+</select>
+
+</div>
+
+
+<!-- BOUTON ENREGISTRER -->
+
+<button
+id="save-button"
+class="save-button"
+type="button"
+>
+Enregistrer les modifications
+</button>
+
+
+</div>
+
+
+<!-- ================= DECONNEXION ================= -->
+
+<button
+id="logout-button"
+class="logout-button"
+type="button"
+>
+Se déconnecter
+</button>
+
+
+</div>
+
+</main>
+
+
+<script>
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+"https://tpmdiwviyrnmergaqyit.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_HNghaWql020DW11APCBAcw_WOGu882V";
+
+const supabaseClient =
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const avatarInput =
+document.getElementById("avatar-input");
+
+const avatarImage =
+document.getElementById("avatar-image");
+
+const avatarPlaceholder =
+document.getElementById("avatar-placeholder");
+
+const removePhoto =
+document.getElementById("remove-photo");
+
+const firstName =
+document.getElementById("first-name");
+
+const city =
+document.getElementById("city");
+
+const province =
+document.getElementById("province");
+
+const errorMessage =
+document.getElementById("error-message");
+
+const successMessage =
+document.getElementById("success-message");
+
+const saveButton =
+document.getElementById("save-button");
+
+const logoutButton =
+document.getElementById("logout-button");
+
+
+/* =====================================================
+   MESSAGES
+===================================================== */
+
+function showError(message) {
+
+    errorMessage.textContent = message;
+
+    errorMessage.style.display =
+        "block";
+
+    successMessage.style.display =
+        "none";
+
+}
+
+
+function showSuccess(message) {
+
+    successMessage.textContent =
+        message;
+
+    successMessage.style.display =
+        "block";
+
+    errorMessage.style.display =
+        "none";
+
+}
+
+
+function hideMessages() {
+
+    errorMessage.style.display =
+        "none";
+
+    successMessage.style.display =
+        "none";
+
+}
+
+
+/* =====================================================
+   CHARGER LE PROFIL
+===================================================== */
+
+async function loadProfile() {
+
+    hideMessages();
+
+
+    const {
+        data: {
+            user
+        },
+        error: userError
+    } =
+        await supabaseClient.auth.getUser();
+
+
+    /* Vérifier connexion */
+
+    if (userError || !user) {
+
+        window.location.href =
+            "auth.html";
+
+        return;
+
+    }
+
+
+    /* Récupérer profil */
+
+    const {
+        data: profile,
+        error
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select("*")
+            .eq("id", user.id)
+            .maybeSingle();
+
+
+    if (error) {
+
+        console.error(
+            "Erreur profil :",
+            error
+        );
+
+        showError(
+            "Impossible de charger votre profil."
+        );
+
+        return;
+
+    }
+
+
+    /* ================= PRÉNOM ================= */
+
+    if (profile?.first_name) {
+
+        firstName.value =
+            profile.first_name;
+
+    }
+    else if (user.user_metadata?.first_name) {
+
+        firstName.value =
+            user.user_metadata.first_name;
+
+    }
+
+
+    /* ================= VILLE ================= */
+
+    if (profile?.city) {
+
+        city.value =
+            profile.city;
+
+    }
+
+
+    /* ================= PROVINCE ================= */
+
+    if (profile?.province) {
+
+        province.value =
+            profile.province;
+
+    }
+
+
+    /* ================= PHOTO ================= */
+
+    if (profile?.avatar_url) {
+
+        avatarImage.src =
+            profile.avatar_url;
+
+        avatarImage.style.display =
+            "block";
+
+        avatarPlaceholder.style.display =
+            "none";
+
+        removePhoto.style.display =
+            "inline-block";
+
+    }
+
+}
+
+
+/* =====================================================
+   ENREGISTRER INFORMATIONS
+===================================================== */
+
+saveButton.addEventListener(
+    "click",
+    async function() {
+
+        hideMessages();
+
+
+        const {
+            data: {
+                user
+            },
+            error: userError
+        } =
+            await supabaseClient.auth.getUser();
+
+
+        if (userError || !user) {
+
+            window.location.href =
+                "auth.html";
+
+            return;
+
+        }
+
+
+        const newFirstName =
+            firstName.value.trim();
+
+        const newCity =
+            city.value.trim();
+
+        const newProvince =
+            province.value;
+
+
+        if (!newFirstName) {
+
+            showError(
+                "Veuillez entrer votre prénom."
+            );
+
+            return;
+
+        }
+
+
+        if (!newCity) {
+
+            showError(
+                "Veuillez entrer votre ville."
+            );
+
+            return;
+
+        }
+
+
+        if (!newProvince) {
+
+            showError(
+                "Veuillez sélectionner votre province."
+            );
+
+            return;
+
+        }
+
+
+        /* Désactiver bouton */
+
+        saveButton.disabled =
+            true;
+
+        saveButton.textContent =
+            "Enregistrement...";
+
+
+        try {
+
+            const {
+                error
+            } =
+                await supabaseClient
+                    .from("profiles")
+                    .update({
+
+                        first_name:
+                            newFirstName,
+
+                        city:
+                            newCity,
+
+                        province:
+                            newProvince,
+
+                        updated_at:
+                            new Date().toISOString()
+
+                    })
+                    .eq(
+                        "id",
+                        user.id
+                    );
+
+
+            if (error) {
+
+                console.error(
+                    "Erreur sauvegarde :",
+                    error
+                );
+
+                showError(
+                    "Impossible d'enregistrer les modifications."
+                );
+
+                return;
+
+            }
+
+
+            showSuccess(
+                "Votre profil a été mis à jour avec succès."
+            );
+
+
+        }
+        catch(error) {
+
+            console.error(error);
+
+            showError(
+                "Une erreur est survenue."
+            );
+
+        }
+        finally {
+
+            saveButton.disabled =
+                false;
+
+            saveButton.textContent =
+                "Enregistrer les modifications";
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   UPLOAD PHOTO
+===================================================== */
+
+avatarInput.addEventListener(
+    "change",
+    async function() {
+
+        hideMessages();
+
+
+        const file =
+            avatarInput.files[0];
+
+
+        if (!file) {
+            return;
+        }
+
+
+        const allowedTypes = [
+            "image/jpeg",
+            "image/png",
+            "image/webp"
+        ];
+
+
+        if (
+            !allowedTypes.includes(
+                file.type
+            )
+        ) {
+
+            showError(
+                "Veuillez choisir une image JPG, PNG ou WebP."
+            );
+
+            avatarInput.value = "";
+
+            return;
+
+        }
+
+
+        if (
+            file.size >
+            5 * 1024 * 1024
+        ) {
+
+            showError(
+                "La photo doit faire moins de 5 Mo."
+            );
+
+            avatarInput.value = "";
+
+            return;
+
+        }
+
+
+        const {
+            data: {
+                user
+            }
+        } =
+            await supabaseClient.auth.getUser();
+
+
+        if (!user) {
+
+            window.location.href =
+                "auth.html";
+
+            return;
+
+        }
+
+
+        const extension =
+            file.name
+                .split(".")
+                .pop()
+                .toLowerCase();
+
+
+        const filePath =
+            user.id +
+            "/avatar." +
+            extension;
+
+
+        try {
+
+            const {
+                error: uploadError
+            } =
+                await supabaseClient
+                    .storage
+                    .from("avatars")
+                    .upload(
+                        filePath,
+                        file,
+                        {
+                            upsert: true,
+                            contentType:
+                                file.type
+                        }
+                    );
+
+
+            if (uploadError) {
+
+                console.error(
+                    uploadError
+                );
+
+                showError(
+                    "Impossible d'envoyer la photo."
+                );
+
+                return;
+
+            }
+
+
+            const {
+                data: publicUrlData
+            } =
+                supabaseClient
+                    .storage
+                    .from("avatars")
+                    .getPublicUrl(
+                        filePath
+                    );
+
+
+            const avatarUrl =
+                publicUrlData.publicUrl;
+
+
+            const {
+                error: updateError
+            } =
+                await supabaseClient
+                    .from("profiles")
+                    .update({
+
+                        avatar_url:
+                            avatarUrl
+
+                    })
+                    .eq(
+                        "id",
+                        user.id
+                    );
+
+
+            if (updateError) {
+
+                console.error(
+                    updateError
+                );
+
+                showError(
+                    "La photo a été envoyée, mais le profil n'a pas pu être mis à jour."
+                );
+
+                return;
+
+            }
+
+
+            avatarImage.src =
+                avatarUrl +
+                "?t=" +
+                Date.now();
+
+            avatarImage.style.display =
+                "block";
+
+            avatarPlaceholder.style.display =
+                "none";
+
+            removePhoto.style.display =
+                "inline-block";
+
+
+            showSuccess(
+                "Votre photo de profil a été mise à jour."
+            );
+
+
+        }
+        catch(error) {
+
+            console.error(error);
+
+            showError(
+                "Une erreur est survenue pendant l'envoi de la photo."
+            );
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   SUPPRIMER PHOTO
+===================================================== */
+
+removePhoto.addEventListener(
+    "click",
+    async function() {
+
+        hideMessages();
+
+
+        const {
+            data: {
+                user
+            }
+        } =
+            await supabaseClient.auth.getUser();
+
+
+        if (!user) {
+
+            window.location.href =
+                "auth.html";
+
+            return;
+
+        }
+
+
+        try {
+
+            const extensions = [
+                "jpg",
+                "jpeg",
+                "png",
+                "webp"
+            ];
+
+
+            const paths =
+                extensions.map(
+                    extension =>
+                        user.id +
+                        "/avatar." +
+                        extension
+                );
+
+
+            const {
+                error: removeError
+            } =
+                await supabaseClient
+                    .storage
+                    .from("avatars")
+                    .remove(paths);
+
+
+            if (removeError) {
+
+                console.error(
+                    removeError
+                );
+
+            }
+
+
+            const {
+                error
+            } =
+                await supabaseClient
+                    .from("profiles")
+                    .update({
+
+                        avatar_url:
+                            null
+
+                    })
+                    .eq(
+                        "id",
+                        user.id
+                    );
+
+
+            if (error) {
+
+                showError(
+                    "Impossible de supprimer la photo."
+                );
+
+                return;
+
+            }
+
+
+            avatarImage.src = "";
+
+            avatarImage.style.display =
+                "none";
+
+            avatarPlaceholder.style.display =
+                "block";
+
+            removePhoto.style.display =
+                "none";
+
+            avatarInput.value = "";
+
+
+            showSuccess(
+                "Votre photo de profil a été supprimée."
+            );
+
+
+        }
+        catch(error) {
+
+            console.error(error);
+
+            showError(
+                "Une erreur est survenue."
+            );
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   DECONNEXION
+===================================================== */
+
+logoutButton.addEventListener(
+    "click",
+    async function() {
+
+        await supabaseClient
+            .auth
+            .signOut();
+
+        window.location.href =
+            "auth.html";
+
+    }
+);
+
+
+/* =====================================================
+   INITIALISATION
+===================================================== */
+
+loadProfile();
+
+</script>
+
+</body>
+
+</html>

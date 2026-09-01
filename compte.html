@@ -1,0 +1,2089 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Mon compte — WEARERA</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f7f5f2;
+    color: #222;
+}
+
+button,
+input,
+select {
+    font-family: inherit;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+header {
+    background: white;
+    padding: 22px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.logo {
+    font-size: 30px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.logo a {
+    color: #222;
+    text-decoration: none;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+nav a {
+    color: #222;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.message-nav {
+    font-weight: bold;
+}
+
+.unread-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    margin-left: 4px;
+    border-radius: 20px;
+    background: #c62828;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+
+/* =====================================================
+   PAGE
+===================================================== */
+
+.container {
+    max-width: 1100px;
+    margin: 45px auto;
+    padding: 0 20px;
+}
+
+.page-title {
+    margin-bottom: 30px;
+}
+
+.page-title h1 {
+    font-size: 38px;
+    margin-bottom: 8px;
+}
+
+.page-title p {
+    color: #777;
+}
+
+
+/* =====================================================
+   GRID
+===================================================== */
+
+.account-grid {
+    display: grid;
+    grid-template-columns: 330px 1fr;
+    gap: 25px;
+}
+
+
+/* =====================================================
+   CARDS
+===================================================== */
+
+.card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 16px;
+    padding: 25px;
+    margin-bottom: 25px;
+}
+
+.card h2 {
+    font-size: 21px;
+    margin-bottom: 20px;
+}
+
+.card h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+
+/* =====================================================
+   PROFIL
+===================================================== */
+
+.profile-card {
+    text-align: center;
+}
+
+.avatar {
+    width: 85px;
+    height: 85px;
+    margin: 0 auto 15px;
+    border-radius: 50%;
+    background: #eee8df;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 38px;
+}
+
+.profile-name {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.profile-email {
+    color: #777;
+    font-size: 14px;
+    word-break: break-word;
+}
+
+
+/* =====================================================
+   MENU COMPTE
+===================================================== */
+
+.account-menu {
+    margin-top: 25px;
+}
+
+.account-menu a,
+.account-menu button {
+    width: 100%;
+    display: block;
+    text-align: left;
+    padding: 13px 0;
+    border: none;
+    border-bottom: 1px solid #eee;
+    background: transparent;
+    color: #222;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.account-menu a:hover,
+.account-menu button:hover {
+    padding-left: 5px;
+}
+
+.logout-button {
+    color: #b00020 !important;
+}
+
+
+/* =====================================================
+   FORMULAIRE
+===================================================== */
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: white;
+    font-size: 15px;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #222;
+}
+
+.save-button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 9px;
+    background: #222;
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.save-button:hover {
+    opacity: 0.85;
+}
+
+.save-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+.status-message {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+}
+
+.status-success {
+    display: block;
+    background: #e7f5e7;
+    border: 1px solid #2e7d32;
+    color: #2e7d32;
+}
+
+.status-error {
+    display: block;
+    background: #fce4e4;
+    border: 1px solid #b00020;
+    color: #b00020;
+}
+
+
+/* =====================================================
+   STATISTIQUES
+===================================================== */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.stat {
+    background: #f7f5f2;
+    border-radius: 10px;
+    padding: 18px 10px;
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #777;
+}
+
+
+/* =====================================================
+   ARTICLES
+===================================================== */
+
+.my-products {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.product-card {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    overflow: hidden;
+    background: white;
+}
+
+.product-image {
+    height: 190px;
+    background: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    overflow: hidden;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-info {
+    padding: 13px;
+}
+
+.product-name {
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+
+.product-price {
+    font-weight: bold;
+    font-size: 17px;
+    margin-bottom: 6px;
+}
+
+.product-location {
+    color: #777;
+    font-size: 12px;
+}
+
+.no-products {
+    padding: 35px 15px;
+    text-align: center;
+    color: #777;
+    border: 1px dashed #ccc;
+    border-radius: 12px;
+}
+
+.sell-button {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 12px 18px;
+    background: #222;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+
+/* =====================================================
+   MESSAGERIE
+===================================================== */
+
+.message-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.message-card p {
+    color: #777;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.message-button {
+    flex-shrink: 0;
+    padding: 12px 18px;
+    border-radius: 8px;
+    background: #222;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+
+/* =====================================================
+   CHARGEMENT
+===================================================== */
+
+.loading {
+    text-align: center;
+    padding: 50px;
+    color: #777;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+footer {
+    margin-top: 50px;
+    padding: 30px;
+    text-align: center;
+    background: #222;
+    color: white;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 800px) {
+
+    header {
+        padding: 18px 5%;
+    }
+
+    .logo {
+        font-size: 25px;
+    }
+
+    nav a:not(.message-nav) {
+        display: none;
+    }
+
+    nav {
+        gap: 10px;
+    }
+
+    .container {
+        margin-top: 25px;
+        padding: 0 12px;
+    }
+
+    .page-title h1 {
+        font-size: 30px;
+    }
+
+    .account-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .my-products {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .product-image {
+        height: 170px;
+    }
+
+}
+
+@media (max-width: 500px) {
+
+    .card {
+        padding: 20px;
+    }
+
+    .stats {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .stat {
+        padding: 14px 5px;
+    }
+
+    .stat-number {
+        font-size: 21px;
+    }
+
+    .my-products {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .product-image {
+        height: 145px;
+    }
+
+    .message-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .message-button {
+        text-align: center;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header>
+
+<div class="logo">
+
+<a href="index.html">
+WEARERA
+</a>
+
+</div>
+
+
+<nav>
+
+<a href="index.html">
+Accueil
+</a>
+
+<a href="index.html#articles">
+Acheter
+</a>
+
+<a href="vendre.html">
+Vendre
+</a>
+
+<a
+href="messagerie.html"
+class="message-nav">
+
+💬 Messagerie
+
+<span
+id="unread-badge"
+class="unread-badge"
+style="display:none;">
+0
+</span>
+
+</a>
+
+</nav>
+
+</header>
+
+
+<!-- =====================================================
+     CONTENU
+===================================================== -->
+
+<main class="container">
+
+
+<div
+id="page-loading"
+class="loading">
+
+Chargement de votre compte...
+
+</div>
+
+
+<div
+id="account-content"
+style="display:none;">
+
+
+<div class="page-title">
+
+<h1>
+👤 Mon compte
+</h1>
+
+<p id="welcome-text">
+Bienvenue sur WEARERA.
+</p>
+
+</div>
+
+
+<div class="account-grid">
+
+
+<!-- =================================================
+     COLONNE GAUCHE
+================================================== -->
+
+<div>
+
+
+<div class="card profile-card">
+
+<div class="avatar">
+👤
+</div>
+
+<div
+id="profile-name"
+class="profile-name">
+Mon compte
+</div>
+
+<div
+id="profile-email"
+class="profile-email">
+</div>
+
+
+<div class="account-menu">
+
+<a href="#informations">
+⚙️ Mes informations
+</a>
+
+<a href="#articles">
+👗 Mes articles
+</a>
+
+<a href="messagerie.html">
+💬 Ma messagerie
+</a>
+
+<a href="vendre.html">
+➕ Vendre un article
+</a>
+
+<button
+id="logout-button"
+class="logout-button">
+
+🚪 Se déconnecter
+
+</button>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>
+💬 Messagerie
+</h2>
+
+<p
+style="color:#777;line-height:1.5;">
+
+Discutez avec les acheteurs et les vendeurs
+directement sur WEARERA.
+
+</p>
+
+<a
+href="messagerie.html"
+class="message-button"
+style="display:inline-block;margin-top:15px;">
+
+Ouvrir la messagerie
+
+</a>
+
+</div>
+
+</div>
+
+
+<!-- =================================================
+     COLONNE DROITE
+================================================== -->
+
+<div>
+
+
+<!-- INFORMATIONS -->
+
+<div
+class="card"
+id="informations">
+
+<h2>
+⚙️ Mes informations
+</h2>
+
+
+<form id="profile-form">
+
+
+<div class="form-group">
+
+<label for="first-name">
+Prénom
+</label>
+
+<input
+type="text"
+id="first-name"
+placeholder="Votre prénom"
+required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="email">
+Adresse e-mail
+</label>
+
+<input
+type="email"
+id="email"
+disabled
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="province">
+Province / territoire
+</label>
+
+<select id="province">
+
+<option value="">
+Choisir une province
+</option>
+
+<option value="AB">
+Alberta
+</option>
+
+<option value="BC">
+Colombie-Britannique
+</option>
+
+<option value="PE">
+Île-du-Prince-Édouard
+</option>
+
+<option value="MB">
+Manitoba
+</option>
+
+<option value="NB">
+Nouveau-Brunswick
+</option>
+
+<option value="NS">
+Nouvelle-Écosse
+</option>
+
+<option value="ON">
+Ontario
+</option>
+
+<option value="QC">
+Québec
+</option>
+
+<option value="SK">
+Saskatchewan
+</option>
+
+<option value="NL">
+Terre-Neuve-et-Labrador
+</option>
+
+<option value="NT">
+Territoires du Nord-Ouest
+</option>
+
+<option value="NU">
+Nunavut
+</option>
+
+<option value="YT">
+Yukon
+</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="city">
+Ville
+</label>
+
+<select id="city">
+
+<option value="">
+Choisir une ville
+</option>
+
+</select>
+
+</div>
+
+
+<button
+type="submit"
+id="save-button"
+class="save-button">
+
+Enregistrer mes modifications
+
+</button>
+
+
+<div
+id="status-message"
+class="status-message">
+</div>
+
+
+</form>
+
+</div>
+
+
+<!-- STATISTIQUES -->
+
+<div class="card">
+
+<h2>
+📊 Mon activité
+</h2>
+
+
+<div class="stats">
+
+<div class="stat">
+
+<span
+id="article-count"
+class="stat-number">
+0
+</span>
+
+<span class="stat-label">
+Articles
+</span>
+
+</div>
+
+
+<div class="stat">
+
+<span
+id="conversation-count"
+class="stat-number">
+0
+</span>
+
+<span class="stat-label">
+Conversations
+</span>
+
+</div>
+
+
+<div class="stat">
+
+<span
+id="unread-count"
+class="stat-number">
+0
+</span>
+
+<span class="stat-label">
+Messages non lus
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ARTICLES -->
+
+<div
+class="card"
+id="articles">
+
+<h2>
+👗 Mes articles
+</h2>
+
+
+<div
+id="my-products"
+class="my-products">
+
+<div class="loading">
+Chargement...
+</div>
+
+</div>
+
+</div>
+
+
+</div>
+
+</div>
+
+</div>
+
+</main>
+
+
+<footer>
+
+WEARERA ©️ 2026
+
+<br>
+
+La mode de seconde main au Canada.
+
+</footer>
+
+
+<script>
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+"https://tpmdiwviyrnmergaqyit.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_HNghaWql020DW11APCBAcw_WOGu882V";
+
+const supabaseClient =
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+let currentUser = null;
+
+
+/* =====================================================
+   VILLES
+===================================================== */
+
+const cities = {
+
+    AB: [
+        "Calgary",
+        "Edmonton",
+        "Red Deer",
+        "Lethbridge",
+        "Fort McMurray"
+    ],
+
+    BC: [
+        "Vancouver",
+        "Victoria",
+        "Surrey",
+        "Burnaby",
+        "Kelowna",
+        "Richmond"
+    ],
+
+    PE: [
+        "Charlottetown",
+        "Summerside",
+        "Stratford"
+    ],
+
+    MB: [
+        "Winnipeg",
+        "Brandon",
+        "Steinbach"
+    ],
+
+    NB: [
+        "Campbellton",
+        "Bathurst",
+        "Moncton",
+        "Dieppe",
+        "Fredericton",
+        "Saint John",
+        "Edmundston",
+        "Miramichi"
+    ],
+
+    NS: [
+        "Halifax",
+        "Sydney",
+        "Dartmouth",
+        "Truro",
+        "New Glasgow"
+    ],
+
+    ON: [
+        "Toronto",
+        "Ottawa",
+        "Mississauga",
+        "Brampton",
+        "Hamilton",
+        "London",
+        "Windsor",
+        "Kitchener",
+        "Waterloo",
+        "Kingston"
+    ],
+
+    QC: [
+        "Montréal",
+        "Québec",
+        "Laval",
+        "Gatineau",
+        "Longueuil",
+        "Sherbrooke",
+        "Trois-Rivières",
+        "Saguenay",
+        "Drummondville"
+    ],
+
+    SK: [
+        "Saskatoon",
+        "Regina",
+        "Prince Albert",
+        "Moose Jaw"
+    ],
+
+    NL: [
+        "St. John's",
+        "Mount Pearl",
+        "Corner Brook",
+        "Conception Bay South"
+    ],
+
+    NT: [
+        "Yellowknife",
+        "Hay River",
+        "Inuvik"
+    ],
+
+    NU: [
+        "Iqaluit",
+        "Rankin Inlet",
+        "Arviat"
+    ],
+
+    YT: [
+        "Whitehorse",
+        "Dawson City",
+        "Watson Lake"
+    ]
+
+};
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const pageLoading =
+document.getElementById(
+    "page-loading"
+);
+
+const accountContent =
+document.getElementById(
+    "account-content"
+);
+
+const profileName =
+document.getElementById(
+    "profile-name"
+);
+
+const profileEmail =
+document.getElementById(
+    "profile-email"
+);
+
+const welcomeText =
+document.getElementById(
+    "welcome-text"
+);
+
+const firstNameInput =
+document.getElementById(
+    "first-name"
+);
+
+const emailInput =
+document.getElementById(
+    "email"
+);
+
+const provinceInput =
+document.getElementById(
+    "province"
+);
+
+const cityInput =
+document.getElementById(
+    "city"
+);
+
+const profileForm =
+document.getElementById(
+    "profile-form"
+);
+
+const saveButton =
+document.getElementById(
+    "save-button"
+);
+
+const statusMessage =
+document.getElementById(
+    "status-message"
+);
+
+const myProducts =
+document.getElementById(
+    "my-products"
+);
+
+const unreadBadge =
+document.getElementById(
+    "unread-badge"
+);
+
+
+/* =====================================================
+   AUTHENTIFICATION
+===================================================== */
+
+async function getCurrentUser() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .auth
+            .getUser();
+
+
+    if (error) {
+
+        console.error(
+            "Erreur utilisateur :",
+            error
+        );
+
+        return null;
+    }
+
+
+    return data.user;
+
+}
+
+
+/* =====================================================
+   AFFICHER VILLES
+===================================================== */
+
+function populateCities(
+    selectedProvince,
+    selectedCity
+) {
+
+    cityInput.innerHTML =
+        "<option value=''>" +
+        "Choisir une ville" +
+        "</option>";
+
+
+    if (
+        !selectedProvince ||
+        !cities[selectedProvince]
+    ) {
+
+        return;
+
+    }
+
+
+    cities[selectedProvince]
+        .forEach(
+            function(city) {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value =
+                    city;
+
+                option.textContent =
+                    city;
+
+                if (
+                    city ===
+                    selectedCity
+                ) {
+
+                    option.selected =
+                        true;
+
+                }
+
+                cityInput.appendChild(
+                    option
+                );
+
+            }
+        );
+
+}
+
+
+/* =====================================================
+   CHANGEMENT PROVINCE
+===================================================== */
+
+provinceInput.addEventListener(
+    "change",
+    function() {
+
+        populateCities(
+            provinceInput.value,
+            ""
+        );
+
+    }
+);
+
+
+/* =====================================================
+   CHARGER PROFIL
+===================================================== */
+
+async function loadProfile() {
+
+    const metadata =
+        currentUser.user_metadata ||
+        {};
+
+
+    const firstName =
+        metadata.first_name ||
+        "";
+
+
+    firstNameInput.value =
+        firstName;
+
+
+    emailInput.value =
+        currentUser.email ||
+        "";
+
+
+    profileName.textContent =
+        firstName ||
+        "Mon compte";
+
+
+    profileEmail.textContent =
+        currentUser.email ||
+        "";
+
+
+    welcomeText.textContent =
+        firstName
+            ? "Bienvenue " +
+              firstName +
+              " 👋"
+            : "Bienvenue sur WEARERA 👋";
+
+
+    /*
+     * La province et la ville
+     * sont stockées dans les metadata
+     * du compte.
+     */
+
+    const province =
+        metadata.province ||
+        "";
+
+
+    const city =
+        metadata.city ||
+        "";
+
+
+    provinceInput.value =
+        province;
+
+
+    populateCities(
+        province,
+        city
+    );
+
+}
+
+
+/* =====================================================
+   ENREGISTRER PROFIL
+===================================================== */
+
+profileForm.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        const firstName =
+            firstNameInput.value.trim();
+
+
+        const province =
+            provinceInput.value;
+
+
+        const city =
+            cityInput.value;
+
+
+        if (!firstName) {
+
+            showStatus(
+                "Veuillez entrer votre prénom.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        saveButton.disabled =
+            true;
+
+
+        saveButton.textContent =
+            "Enregistrement...";
+
+
+        try {
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .auth
+                    .updateUser({
+
+                        data: {
+
+                            first_name:
+                                firstName,
+
+                            province:
+                                province ||
+                                null,
+
+                            city:
+                                city ||
+                                null
+
+                        }
+
+                    });
+
+
+            if (error) {
+
+                throw error;
+
+            }
+
+
+            currentUser =
+                data.user;
+
+
+            await loadProfile();
+
+
+            showStatus(
+                "Vos informations ont été enregistrées avec succès. ✓",
+                "success"
+            );
+
+
+        } catch(error) {
+
+            console.error(
+                "Erreur profil :",
+                error
+            );
+
+
+            showStatus(
+                "Impossible d'enregistrer : " +
+                error.message,
+                "error"
+            );
+
+        } finally {
+
+            saveButton.disabled =
+                false;
+
+            saveButton.textContent =
+                "Enregistrer mes modifications";
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   MESSAGE STATUT
+===================================================== */
+
+function showStatus(
+    message,
+    type
+) {
+
+    statusMessage.textContent =
+        message;
+
+
+    statusMessage.className =
+        "status-message " +
+        (
+            type === "success"
+                ? "status-success"
+                : "status-error"
+        );
+
+
+    setTimeout(
+        function() {
+
+            statusMessage.className =
+                "status-message";
+
+        },
+        5000
+    );
+
+}
+
+
+/* =====================================================
+   CHARGER ARTICLES UTILISATEUR
+===================================================== */
+
+async function loadMyArticles() {
+
+    myProducts.innerHTML =
+        "<div class='loading'>" +
+        "Chargement de vos articles..." +
+        "</div>";
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("Articles")
+            .select("*")
+            .eq(
+                "seller_id",
+                currentUser.id
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Erreur articles :",
+            error
+        );
+
+
+        myProducts.innerHTML =
+            "<div class='no-products'>" +
+
+            "Impossible de charger vos articles." +
+
+            "<br><br>" +
+
+            "<small>" +
+            error.message +
+            "</small>" +
+
+            "</div>";
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "article-count"
+    ).textContent =
+        data?.length || 0;
+
+
+    if (!data?.length) {
+
+        myProducts.innerHTML =
+            "<div class='no-products' " +
+            "style='grid-column:1/-1;'>" +
+
+            "<div style='font-size:40px;margin-bottom:10px'>" +
+            "👗" +
+            "</div>" +
+
+            "<strong>Vous n'avez encore aucun article.</strong>" +
+
+            "<br>" +
+
+            "<span>" +
+            "Commencez à vendre sur WEARERA." +
+            "</span>" +
+
+            "<br>" +
+
+            "<a href='vendre.html' class='sell-button'>" +
+            "Vendre un article" +
+            "</a>" +
+
+            "</div>";
+
+        return;
+
+    }
+
+
+    myProducts.innerHTML =
+        "";
+
+
+    data.forEach(
+        function(article) {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "product-card";
+
+
+            let photoUrl = "";
+
+
+            if (
+                Array.isArray(
+                    article.photo_urls
+                ) &&
+                article.photo_urls.length
+            ) {
+
+                photoUrl =
+                    article.photo_urls[0];
+
+            } else if (
+                typeof article.photo_urls ===
+                "string"
+            ) {
+
+                try {
+
+                    const parsed =
+                        JSON.parse(
+                            article.photo_urls
+                        );
+
+
+                    if (
+                        Array.isArray(parsed) &&
+                        parsed.length
+                    ) {
+
+                        photoUrl =
+                            parsed[0];
+
+                    } else {
+
+                        photoUrl =
+                            article.photo_urls;
+
+                    }
+
+                } catch(error) {
+
+                    photoUrl =
+                        article.photo_urls;
+
+                }
+
+            }
+
+
+            const image =
+                document.createElement(
+                    "div"
+                );
+
+
+            image.className =
+                "product-image";
+
+
+            if (photoUrl) {
+
+                const img =
+                    document.createElement(
+                        "img"
+                    );
+
+
+                img.src =
+                    photoUrl;
+
+
+                img.alt =
+                    article.name ||
+                    "Article";
+
+
+                img.onerror =
+                    function() {
+
+                        image.innerHTML =
+                            "Photo indisponible";
+
+                    };
+
+
+                image.appendChild(
+                    img
+                );
+
+            } else {
+
+                image.textContent =
+                    "Photo";
+
+            }
+
+
+            const info =
+                document.createElement(
+                    "div"
+                );
+
+
+            info.className =
+                "product-info";
+
+
+            const name =
+                document.createElement(
+                    "div"
+                );
+
+
+            name.className =
+                "product-name";
+
+
+            name.textContent =
+                article.name ||
+                "Article";
+
+
+            const price =
+                document.createElement(
+                    "div"
+                );
+
+
+            price.className =
+                "product-price";
+
+
+            price.textContent =
+                Number(
+                    article.price || 0
+                )
+                .toFixed(2)
+                .replace(
+                    ".00",
+                    ""
+                ) +
+                " $";
+
+
+            const location =
+                document.createElement(
+                    "div"
+                );
+
+
+            location.className =
+                "product-location";
+
+
+            location.textContent =
+                "📍 " +
+                (
+                    article.city ||
+                    "Canada"
+                );
+
+
+            info.append(
+                name,
+                price,
+                location
+            );
+
+
+            card.append(
+                image,
+                info
+            );
+
+
+            card.addEventListener(
+                "click",
+                function() {
+
+                    /*
+                     * Retour à l'accueil
+                     * avec l'article.
+                     *
+                     * Pour l'instant on utilise
+                     * l'index général.
+                     */
+
+                    window.location.href =
+                        "index.html";
+
+                }
+            );
+
+
+            myProducts.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   CHARGER STATISTIQUES MESSAGERIE
+===================================================== */
+
+async function loadMessagingStats() {
+
+    const {
+        data: conversations,
+        error: conversationError
+    } =
+        await supabaseClient
+            .from("conversations")
+            .select("id")
+            .or(
+                "buyer_id.eq." +
+                currentUser.id +
+                ",seller_id.eq." +
+                currentUser.id
+            );
+
+
+    if (conversationError) {
+
+        console.warn(
+            "Erreur conversations :",
+            conversationError.message
+        );
+
+        return;
+
+    }
+
+
+    const count =
+        conversations?.length || 0;
+
+
+    document.getElementById(
+        "conversation-count"
+    ).textContent =
+        count;
+
+
+    if (!count) {
+
+        document.getElementById(
+            "unread-count"
+        ).textContent =
+            "0";
+
+        unreadBadge.style.display =
+            "none";
+
+        return;
+
+    }
+
+
+    const ids =
+        conversations.map(
+            function(conversation) {
+
+                return conversation.id;
+
+            }
+        );
+
+
+    const {
+        data: unreadMessages,
+        error: unreadError
+    } =
+        await supabaseClient
+            .from("messages")
+            .select("id")
+            .in(
+                "conversation_id",
+                ids
+            )
+            .neq(
+                "sender_id",
+                currentUser.id
+            )
+            .eq(
+                "is_read",
+                false
+            );
+
+
+    if (unreadError) {
+
+        console.warn(
+            "Erreur messages non lus :",
+            unreadError.message
+        );
+
+        return;
+
+    }
+
+
+    const unreadCount =
+        unreadMessages?.length || 0;
+
+
+    document.getElementById(
+        "unread-count"
+    ).textContent =
+        unreadCount;
+
+
+    if (unreadCount > 0) {
+
+        unreadBadge.textContent =
+            unreadCount > 99
+                ? "99+"
+                : unreadCount;
+
+        unreadBadge.style.display =
+            "inline-flex";
+
+    } else {
+
+        unreadBadge.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =====================================================
+   DECONNEXION
+===================================================== */
+
+document
+    .getElementById(
+        "logout-button"
+    )
+    .addEventListener(
+        "click",
+        async function() {
+
+            const confirmed =
+                confirm(
+                    "Voulez-vous vraiment vous déconnecter ?"
+                );
+
+
+            if (!confirmed) {
+
+                return;
+
+            }
+
+
+            const {
+                error
+            } =
+                await supabaseClient
+                    .auth
+                    .signOut();
+
+
+            if (error) {
+
+                alert(
+                    "Impossible de se déconnecter : " +
+                    error.message
+                );
+
+                return;
+
+            }
+
+
+            window.location.href =
+                "auth.html";
+
+        }
+    );
+
+
+/* =====================================================
+   INITIALISATION
+===================================================== */
+
+async function init() {
+
+    currentUser =
+        await getCurrentUser();
+
+
+    if (!currentUser) {
+
+        window.location.href =
+            "auth.html";
+
+        return;
+
+    }
+
+
+    await loadProfile();
+
+    await loadMyArticles();
+
+    await loadMessagingStats();
+
+
+    pageLoading.style.display =
+        "none";
+
+
+    accountContent.style.display =
+        "block";
+
+}
+
+
+init();
+
+
+/* =====================================================
+   SESSION EN TEMPS RÉEL
+===================================================== */
+
+supabaseClient.auth.onAuthStateChange(
+    function(
+        event,
+        session
+    ) {
+
+        if (
+            event === "SIGNED_OUT"
+        ) {
+
+            window.location.href =
+                "auth.html";
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>

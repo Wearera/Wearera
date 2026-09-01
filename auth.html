@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Connexion — WEARERA</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f7f5f2;
+    color: #222;
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+header {
+    background: white;
+    padding: 22px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.logo {
+    font-size: 30px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.logo a {
+    color: #222;
+    text-decoration: none;
+}
+
+nav a {
+    text-decoration: none;
+    color: #222;
+    margin-left: 25px;
+    font-size: 15px;
+}
+
+/* =====================================================
+   PAGE
+===================================================== */
+
+.container {
+    max-width: 480px;
+    margin: 50px auto;
+    padding: 0 20px;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.title h1 {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.title p {
+    color: #666;
+}
+
+/* =====================================================
+   FORM CARD
+===================================================== */
+
+.form-card {
+    background: white;
+    padding: 35px;
+    border-radius: 16px;
+    border: 1px solid #ddd;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    background: white;
+    outline: none;
+}
+
+input:focus {
+    border-color: #222;
+}
+
+/* =====================================================
+   BOUTON
+===================================================== */
+
+.auth-button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 9px;
+    background: #222;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+.auth-button:hover {
+    opacity: 0.85;
+}
+
+.auth-button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+/* =====================================================
+   MESSAGES
+===================================================== */
+
+.error-message {
+    background: #fce4e4;
+    border: 1px solid #b00020;
+    color: #b00020;
+    padding: 13px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    line-height: 1.4;
+    display: none;
+}
+
+.success-message {
+    background: #e4f5e4;
+    border: 1px solid #2e7d32;
+    color: #2e7d32;
+    padding: 13px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    line-height: 1.4;
+    display: none;
+}
+
+/* =====================================================
+   TOGGLE
+===================================================== */
+
+.toggle-text {
+    text-align: center;
+    margin-top: 20px;
+    color: #666;
+    font-size: 14px;
+}
+
+.toggle-text a {
+    color: #222;
+    font-weight: bold;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+footer {
+    margin-top: 50px;
+    padding: 30px;
+    text-align: center;
+    background: #222;
+    color: white;
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 700px) {
+
+    header {
+        padding: 18px 5%;
+    }
+
+    nav {
+        display: none;
+    }
+
+    .container {
+        margin-top: 30px;
+    }
+
+    .form-card {
+        padding: 22px;
+    }
+
+    .title h1 {
+        font-size: 26px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header>
+
+<div class="logo">
+
+<a href="index.html">
+WEARERA
+</a>
+
+</div>
+
+
+<nav>
+
+<a href="index.html">
+Accueil
+</a>
+
+<a href="index.html">
+Acheter
+</a>
+
+<a href="vendre.html">
+Vendre
+</a>
+
+<a href="auth.html">
+Connexion
+</a>
+
+</nav>
+
+</header>
+
+
+<!-- =====================================================
+     PAGE
+===================================================== -->
+
+<main class="container">
+
+
+<div class="title">
+
+<h1 id="form-title">
+Connexion
+</h1>
+
+<p id="form-subtitle">
+Connectez-vous pour vendre et acheter.
+</p>
+
+</div>
+
+
+<div class="form-card">
+
+
+<!-- MESSAGE ERREUR -->
+
+<div
+class="error-message"
+id="error-box">
+</div>
+
+
+<!-- MESSAGE SUCCÈS -->
+
+<div
+class="success-message"
+id="success-box">
+</div>
+
+
+<!-- ===================================================
+     CONNEXION
+=================================================== -->
+
+<form id="login-form">
+
+
+<div class="form-group">
+
+<label for="login-email">
+Email
+</label>
+
+<input
+type="email"
+id="login-email"
+placeholder="vous@exemple.com"
+autocomplete="email"
+required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="login-password">
+Mot de passe
+</label>
+
+<input
+type="password"
+id="login-password"
+placeholder="Votre mot de passe"
+autocomplete="current-password"
+required
+>
+
+</div>
+
+
+<button
+type="submit"
+class="auth-button"
+id="login-button">
+
+Se connecter
+
+</button>
+
+</form>
+
+
+<!-- ===================================================
+     INSCRIPTION
+=================================================== -->
+
+<form
+id="signup-form"
+style="display:none;">
+
+
+<div class="form-group">
+
+<label for="signup-firstname">
+Prénom
+</label>
+
+<input
+type="text"
+id="signup-firstname"
+placeholder="Votre prénom"
+autocomplete="given-name"
+required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="signup-email">
+Email
+</label>
+
+<input
+type="email"
+id="signup-email"
+placeholder="vous@exemple.com"
+autocomplete="email"
+required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="signup-password">
+Mot de passe
+</label>
+
+<input
+type="password"
+id="signup-password"
+placeholder="Choisissez un mot de passe"
+autocomplete="new-password"
+required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="signup-confirm">
+Confirmer le mot de passe
+</label>
+
+<input
+type="password"
+id="signup-confirm"
+placeholder="Confirmez votre mot de passe"
+autocomplete="new-password"
+required
+>
+
+</div>
+
+
+<button
+type="submit"
+class="auth-button"
+id="signup-button">
+
+Créer mon compte
+
+</button>
+
+</form>
+
+
+<!-- ===================================================
+     BASCULE
+=================================================== -->
+
+<div
+class="toggle-text"
+id="toggle-area">
+
+<span id="toggle-label">
+Pas encore de compte ?
+</span>
+
+<a id="toggle-link">
+Créer un compte
+</a>
+
+</div>
+
+
+</div>
+
+</main>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+WEARERA ©️ 2026
+
+<br>
+
+La mode de seconde main au Canada.
+
+</footer>
+
+
+<script>
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+"https://tpmdiwviyrnmergaqyit.supabase.co";
+
+
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_HNghaWql020DW11APCBAcw_WOGu882V";
+
+
+const supabaseClient =
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const loginForm =
+document.getElementById(
+    "login-form"
+);
+
+const signupForm =
+document.getElementById(
+    "signup-form"
+);
+
+const formTitle =
+document.getElementById(
+    "form-title"
+);
+
+const formSubtitle =
+document.getElementById(
+    "form-subtitle"
+);
+
+const toggleLabel =
+document.getElementById(
+    "toggle-label"
+);
+
+const toggleLink =
+document.getElementById(
+    "toggle-link"
+);
+
+const errorBox =
+document.getElementById(
+    "error-box"
+);
+
+const successBox =
+document.getElementById(
+    "success-box"
+);
+
+const loginButton =
+document.getElementById(
+    "login-button"
+);
+
+const signupButton =
+document.getElementById(
+    "signup-button"
+);
+
+
+/* =====================================================
+   MESSAGES
+===================================================== */
+
+function hideMessages() {
+
+    errorBox.style.display =
+        "none";
+
+    successBox.style.display =
+        "none";
+
+}
+
+
+function showError(message) {
+
+    errorBox.textContent =
+        message;
+
+    errorBox.style.display =
+        "block";
+
+    successBox.style.display =
+        "none";
+
+}
+
+
+function showSuccess(message) {
+
+    successBox.textContent =
+        message;
+
+    successBox.style.display =
+        "block";
+
+    errorBox.style.display =
+        "none";
+
+}
+
+
+/* =====================================================
+   BASCULE CONNEXION / INSCRIPTION
+===================================================== */
+
+let isLoginMode = true;
+
+
+function showLogin() {
+
+    isLoginMode = true;
+
+    loginForm.style.display =
+        "";
+
+    signupForm.style.display =
+        "none";
+
+    formTitle.textContent =
+        "Connexion";
+
+    formSubtitle.textContent =
+        "Connectez-vous pour vendre et acheter.";
+
+    toggleLabel.textContent =
+        "Pas encore de compte ?";
+
+    toggleLink.textContent =
+        "Créer un compte";
+
+    hideMessages();
+
+}
+
+
+function showSignup() {
+
+    isLoginMode = false;
+
+    loginForm.style.display =
+        "none";
+
+    signupForm.style.display =
+        "";
+
+    formTitle.textContent =
+        "Créer un compte";
+
+    formSubtitle.textContent =
+        "Rejoignez WEARERA pour vendre et acheter.";
+
+    toggleLabel.textContent =
+        "Vous avez déjà un compte ?";
+
+    toggleLink.textContent =
+        "Se connecter";
+
+    hideMessages();
+
+}
+
+
+toggleLink.addEventListener(
+    "click",
+    function() {
+
+        if (isLoginMode) {
+
+            showSignup();
+
+        } else {
+
+            showLogin();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   VERIFIER EMAIL
+===================================================== */
+
+function isValidEmail(email) {
+
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        .test(email);
+
+}
+
+
+/* =====================================================
+   REDIRECTION SI DÉJÀ CONNECTÉ
+===================================================== */
+
+async function redirectIfConnected() {
+
+    const {
+        data: {
+            user
+        }
+    } =
+        await supabaseClient
+            .auth
+            .getUser();
+
+
+    if (user) {
+
+        window.location.href =
+            "index.html";
+
+    }
+
+}
+
+
+redirectIfConnected();
+
+
+/* =====================================================
+   CONNEXION
+===================================================== */
+
+loginForm.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        hideMessages();
+
+
+        const email =
+            document
+                .getElementById(
+                    "login-email"
+                )
+                .value
+                .trim()
+                .toLowerCase();
+
+
+        const password =
+            document
+                .getElementById(
+                    "login-password"
+                )
+                .value;
+
+
+        /* ---------------------------------------------
+           VERIFICATIONS
+        --------------------------------------------- */
+
+        if (!email) {
+
+            showError(
+                "Veuillez entrer votre adresse e-mail."
+            );
+
+            return;
+
+        }
+
+
+        if (!isValidEmail(email)) {
+
+            showError(
+                "Veuillez entrer une adresse e-mail valide."
+            );
+
+            return;
+
+        }
+
+
+        if (!password) {
+
+            showError(
+                "Veuillez entrer votre mot de passe."
+            );
+
+            return;
+
+        }
+
+
+        /* ---------------------------------------------
+           BOUTON
+        --------------------------------------------- */
+
+        loginButton.disabled =
+            true;
+
+        loginButton.textContent =
+            "Connexion...";
+
+
+        try {
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .auth
+                    .signInWithPassword({
+
+                        email:
+                            email,
+
+                        password:
+                            password
+
+                    });
+
+
+            /* -----------------------------------------
+               ERREUR CONNEXION
+            ----------------------------------------- */
+
+            if (error) {
+
+                console.error(
+                    "Erreur connexion :",
+                    error
+                );
+
+
+                /*
+                 * On ne révèle pas si l'adresse
+                 * existe ou non.
+                 *
+                 * Le message reste volontairement
+                 * générique pour la sécurité.
+                 */
+
+                showError(
+                    "Adresse e-mail ou mot de passe incorrect."
+                );
+
+
+                return;
+
+            }
+
+
+            /* -----------------------------------------
+               CONNEXION REUSSIE
+            ----------------------------------------- */
+
+            if (data?.user) {
+
+                window.location.href =
+                    "index.html";
+
+            } else {
+
+                showError(
+                    "Impossible de terminer la connexion. Veuillez réessayer."
+                );
+
+            }
+
+
+        } catch(error) {
+
+            console.error(
+                "Erreur inattendue :",
+                error
+            );
+
+
+            showError(
+                "Une erreur est survenue. Vérifiez votre connexion et réessayez."
+            );
+
+
+        } finally {
+
+            loginButton.disabled =
+                false;
+
+            loginButton.textContent =
+                "Se connecter";
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   INSCRIPTION
+===================================================== */
+
+signupForm.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        hideMessages();
+
+
+        const firstname =
+            document
+                .getElementById(
+                    "signup-firstname"
+                )
+                .value
+                .trim();
+
+
+        const email =
+            document
+                .getElementById(
+                    "signup-email"
+                )
+                .value
+                .trim()
+                .toLowerCase();
+
+
+        const password =
+            document
+                .getElementById(
+                    "signup-password"
+                )
+                .value;
+
+
+        const confirm =
+            document
+                .getElementById(
+                    "signup-confirm"
+                )
+                .value;
+
+
+        /* ---------------------------------------------
+           VERIFICATIONS
+        --------------------------------------------- */
+
+        if (!firstname) {
+
+            showError(
+                "Veuillez entrer votre prénom."
+            );
+
+            return;
+
+        }
+
+
+        if (!email) {
+
+            showError(
+                "Veuillez entrer votre adresse e-mail."
+            );
+
+            return;
+
+        }
+
+
+        if (!isValidEmail(email)) {
+
+            showError(
+                "Veuillez entrer une adresse e-mail valide."
+            );
+
+            return;
+
+        }
+
+
+        if (!password) {
+
+            showError(
+                "Veuillez choisir un mot de passe."
+            );
+
+            return;
+
+        }
+
+
+        if (password.length < 6) {
+
+            showError(
+                "Le mot de passe doit contenir au moins 6 caractères."
+            );
+
+            return;
+
+        }
+
+
+        if (password !== confirm) {
+
+            showError(
+                "Les mots de passe ne correspondent pas."
+            );
+
+            return;
+
+        }
+
+
+        /* ---------------------------------------------
+           BOUTON
+        --------------------------------------------- */
+
+        signupButton.disabled =
+            true;
+
+        signupButton.textContent =
+            "Création...";
+
+
+        try {
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .auth
+                    .signUp({
+
+                        email:
+                            email,
+
+                        password:
+                            password,
+
+                        options: {
+
+                            data: {
+
+                                first_name:
+                                    firstname
+
+                            }
+
+                        }
+
+                    });
+
+
+            if (error) {
+
+                console.error(
+                    "Erreur inscription :",
+                    error
+                );
+
+
+                /*
+                 * Messages plus compréhensibles
+                 */
+
+                const errorMessage =
+                    String(
+                        error.message ||
+                        ""
+                    ).toLowerCase();
+
+
+                if (
+                    errorMessage.includes(
+                        "already registered"
+                    ) ||
+                    errorMessage.includes(
+                        "already exists"
+                    )
+                ) {
+
+                    showError(
+                        "Cette adresse e-mail est déjà utilisée."
+                    );
+
+                } else {
+
+                    showError(
+                        "Impossible de créer le compte. Veuillez vérifier vos informations."
+                    );
+
+                }
+
+
+                return;
+
+            }
+
+
+            /* -----------------------------------------
+               CONFIRMATION EMAIL
+            ----------------------------------------- */
+
+            if (
+                data.user &&
+                !data.session
+            ) {
+
+                showSuccess(
+                    "Compte créé ! Vérifiez votre adresse e-mail pour confirmer votre inscription, puis connectez-vous."
+                );
+
+
+                signupForm.reset();
+
+
+                setTimeout(
+                    showLogin,
+                    300
+                );
+
+
+                return;
+
+            }
+
+
+            /* -----------------------------------------
+               SESSION IMMEDIATE
+            ----------------------------------------- */
+
+            if (data.session) {
+
+                window.location.href =
+                    "index.html";
+
+                return;
+
+            }
+
+
+            showSuccess(
+                "Compte créé avec succès."
+            );
+
+
+        } catch(error) {
+
+            console.error(
+                "Erreur inattendue inscription :",
+                error
+            );
+
+
+            showError(
+                "Une erreur est survenue. Veuillez réessayer."
+            );
+
+        } finally {
+
+            signupButton.disabled =
+                false;
+
+            signupButton.textContent =
+                "Créer mon compte";
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>

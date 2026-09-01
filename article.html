@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Articles — WEARERA</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f7f5f2;
+    color: #222;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+    background: white;
+    padding: 22px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.logo {
+    font-size: 30px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.logo a {
+    color: #222;
+    text-decoration: none;
+}
+
+nav a {
+    text-decoration: none;
+    color: #222;
+    margin-left: 25px;
+}
+
+#auth-area {
+    margin-left: 10px;
+}
+
+/* =========================
+   CONTENU
+========================= */
+
+.container {
+    max-width: 1200px;
+    margin: 45px auto;
+    padding: 0 20px;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.title h1 {
+    font-size: 38px;
+    margin-bottom: 10px;
+}
+
+.title p {
+    color: #666;
+}
+
+/* =========================
+   FILTRES
+========================= */
+
+.filters {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 30px;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.filters input,
+.filters select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    background: white;
+}
+
+.filter-button {
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #222;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.filter-button:hover {
+    opacity: 0.85;
+}
+
+/* =========================
+   ARTICLES
+========================= */
+
+.articles-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.article-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 14px;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+}
+
+.article-card:hover {
+    transform: translateY(-3px);
+}
+
+.article-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+    background: #eee;
+}
+
+.article-content {
+    padding: 18px;
+}
+
+.article-name {
+    font-size: 19px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.article-brand {
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.article-price {
+    font-size: 21px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.article-info {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.view-button {
+    display: block;
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px;
+    text-align: center;
+    background: #222;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.view-button:hover {
+    opacity: 0.85;
+}
+
+/* =========================
+   MESSAGE
+========================= */
+
+.message {
+    text-align: center;
+    padding: 50px 20px;
+    color: #666;
+    font-size: 16px;
+}
+
+.loading {
+    text-align: center;
+    padding: 50px;
+    color: #666;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+    margin-top: 60px;
+    padding: 30px;
+    text-align: center;
+    background: #222;
+    color: white;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 800px) {
+
+    header {
+        padding: 18px 5%;
+    }
+
+    nav {
+        display: none;
+    }
+
+    .container {
+        margin-top: 30px;
+    }
+
+    .title h1 {
+        font-size: 30px;
+    }
+
+    .filters {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .articles-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .article-image {
+        height: 220px;
+    }
+
+}
+
+@media (max-width: 500px) {
+
+    .filters {
+        grid-template-columns: 1fr;
+    }
+
+    .articles-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .article-image {
+        height: 300px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header>
+
+<div class="logo">
+<a href="index.html">WEARERA</a>
+</div>
+
+<nav>
+
+<a href="index.html">
+Accueil
+</a>
+
+<a href="articles.html">
+Acheter
+</a>
+
+<a href="vendre.html">
+Vendre
+</a>
+
+<span id="auth-area">
+
+<a href="auth.html">
+Connexion
+</a>
+
+</span>
+
+</nav>
+
+</header>
+
+
+<!-- =========================
+     CONTENU
+========================= -->
+
+<main class="container">
+
+<div class="title">
+
+<h1>
+Les articles
+</h1>
+
+<p>
+Découvrez la mode de seconde main au Canada.
+</p>
+
+</div>
+
+
+<!-- =========================
+     FILTRES
+========================= -->
+
+<div class="filters">
+
+<input
+type="text"
+id="search"
+placeholder="Rechercher un article..."
+>
+
+<select id="category">
+
+<option value="">
+Toutes les catégories
+</option>
+
+<option value="Vêtements">
+Vêtements
+</option>
+
+<option value="Chaussures">
+Chaussures
+</option>
+
+<option value="Sacs">
+Sacs
+</option>
+
+<option value="Accessoires">
+Accessoires
+</option>
+
+</select>
+
+
+<select id="province">
+
+<option value="">
+Toutes les provinces
+</option>
+
+<option value="AB">
+Alberta
+</option>
+
+<option value="BC">
+Colombie-Britannique
+</option>
+
+<option value="PE">
+Île-du-Prince-Édouard
+</option>
+
+<option value="MB">
+Manitoba
+</option>
+
+<option value="NB">
+Nouveau-Brunswick
+</option>
+
+<option value="NS">
+Nouvelle-Écosse
+</option>
+
+<option value="ON">
+Ontario
+</option>
+
+<option value="QC">
+Québec
+</option>
+
+<option value="SK">
+Saskatchewan
+</option>
+
+<option value="NL">
+Terre-Neuve-et-Labrador
+</option>
+
+<option value="NT">
+Territoires du Nord-Ouest
+</option>
+
+<option value="NU">
+Nunavut
+</option>
+
+<option value="YT">
+Yukon
+</option>
+
+</select>
+
+
+<button
+class="filter-button"
+id="reset-button">
+
+Réinitialiser
+
+</button>
+
+</div>
+
+
+<!-- =========================
+     LISTE DES ARTICLES
+========================= -->
+
+<div
+id="loading"
+class="loading">
+
+Chargement des articles...
+
+</div>
+
+
+<div
+id="articles-grid"
+class="articles-grid">
+
+</div>
+
+
+<div
+id="message"
+class="message"
+style="display:none;">
+
+Aucun article trouvé.
+
+</div>
+
+
+</main>
+
+
+<footer>
+
+WEARERA ©️ 2026
+
+<br>
+
+La mode de seconde main au Canada.
+
+</footer>
+
+
+<script>
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+"https://tpmdiwviyrnmergaqyit.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_HNghaWql020DW11APCBAcw_WOGu882V";
+
+const supabaseClient =
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
+
+/* =====================================================
+   AUTHENTIFICATION
+===================================================== */
+
+async function updateAuthArea() {
+
+    const {
+        data: { user }
+    } =
+    await supabaseClient.auth.getUser();
+
+    const authArea =
+        document.getElementById("auth-area");
+
+
+    if (user) {
+
+        const firstName =
+            user.user_metadata?.first_name ||
+            "Mon compte";
+
+
+        authArea.innerHTML =
+
+            "<span style='color:#666;font-size:14px'>" +
+
+            "Bonjour, " +
+
+            firstName +
+
+            "</span>" +
+
+            "<a href='#' id='logout-link' " +
+
+            "style='margin-left:15px'>" +
+
+            "Se déconnecter" +
+
+            "</a>";
+
+
+        document
+            .getElementById("logout-link")
+            .addEventListener(
+                "click",
+                async function(event) {
+
+                    event.preventDefault();
+
+                    await supabaseClient
+                        .auth
+                        .signOut();
+
+                    window.location.href =
+                        "index.html";
+
+                }
+            );
+
+    }
+
+}
+
+
+updateAuthArea();
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const articlesGrid =
+    document.getElementById(
+        "articles-grid"
+    );
+
+const loading =
+    document.getElementById(
+        "loading"
+    );
+
+const message =
+    document.getElementById(
+        "message"
+    );
+
+const searchInput =
+    document.getElementById(
+        "search"
+    );
+
+const categorySelect =
+    document.getElementById(
+        "category"
+    );
+
+const provinceSelect =
+    document.getElementById(
+        "province"
+    );
+
+const resetButton =
+    document.getElementById(
+        "reset-button"
+    );
+
+
+/* =====================================================
+   CHARGER LES ARTICLES
+===================================================== */
+
+async function loadArticles() {
+
+    loading.style.display = "block";
+
+    articlesGrid.innerHTML = "";
+
+    message.style.display = "none";
+
+
+    try {
+
+        const {
+            data: articles,
+            error
+        } =
+
+        await supabaseClient
+
+            .from("Articles")
+
+            .select("*")
+
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+        if (error) {
+
+            console.error(
+                "Erreur Supabase :",
+                error
+            );
+
+            throw error;
+
+        }
+
+
+        loading.style.display = "none";
+
+
+        if (
+            !articles ||
+            articles.length === 0
+        ) {
+
+            message.style.display =
+                "block";
+
+            return;
+
+        }
+
+
+        displayArticles(articles);
+
+
+    } catch (error) {
+
+        loading.style.display = "none";
+
+        console.error(error);
+
+        message.textContent =
+            "Impossible de charger les articles.";
+
+        message.style.display =
+            "block";
+
+    }
+
+}
+
+
+/* =====================================================
+   AFFICHER LES ARTICLES
+===================================================== */
+
+function displayArticles(articles) {
+
+    const search =
+        searchInput.value
+            .trim()
+            .toLowerCase();
+
+    const category =
+        categorySelect.value;
+
+    const province =
+        provinceSelect.value;
+
+
+    const filteredArticles =
+        articles.filter(
+            function(article) {
+
+                const matchesSearch =
+
+                    !search ||
+
+                    (
+                        article.name &&
+                        article.name
+                            .toLowerCase()
+                            .includes(search)
+                    ) ||
+
+                    (
+                        article.brand &&
+                        article.brand
+                            .toLowerCase()
+                            .includes(search)
+                    );
+
+
+                const matchesCategory =
+
+                    !category ||
+
+                    article.category ===
+                    category;
+
+
+                const matchesProvince =
+
+                    !province ||
+
+                    article.province ===
+                    province;
+
+
+                return (
+                    matchesSearch &&
+                    matchesCategory &&
+                    matchesProvince
+                );
+
+            }
+        );
+
+
+    articlesGrid.innerHTML = "";
+
+
+    if (
+        filteredArticles.length === 0
+    ) {
+
+        message.textContent =
+            "Aucun article ne correspond à votre recherche.";
+
+        message.style.display =
+            "block";
+
+        return;
+
+    }
+
+
+    message.style.display =
+        "none";
+
+
+    filteredArticles.forEach(
+        function(article) {
+
+            createArticleCard(article);
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   CARTE ARTICLE
+===================================================== */
+
+function createArticleCard(article) {
+
+    const card =
+        document.createElement("div");
+
+    card.className =
+        "article-card";
+
+
+    /* =========================
+       PHOTO
+    ========================= */
+
+    let imageUrl =
+        "";
+
+
+    if (
+        Array.isArray(article.photo_urls) &&
+        article.photo_urls.length > 0
+    ) {
+
+        imageUrl =
+            article.photo_urls[0];
+
+    }
+
+
+    if (!imageUrl) {
+
+        imageUrl =
+            "https://via.placeholder.com/600x600?text=WEARERA";
+
+    }
+
+
+    /* =========================
+       CONDITION
+    ========================= */
+
+    let conditionText =
+        article.condition || "";
+
+
+    if (
+        conditionText !== "Neuf"
+    ) {
+
+        conditionText =
+            conditionText + "/5";
+
+    }
+
+
+    /* =========================
+       INFORMATIONS
+    ========================= */
+
+    card.innerHTML = `
+
+        <img
+            src="${imageUrl}"
+            alt="${escapeHtml(article.name || "Article")}"
+            class="article-image"
+        >
+
+        <div class="article-content">
+
+            <div class="article-name">
+
+                ${escapeHtml(
+                    article.name || "Article"
+                )}
+
+            </div>
+
+
+            ${
+                article.brand
+                ?
+
+                `<div class="article-brand">
+                    ${escapeHtml(article.brand)}
+                </div>`
+
+                :
+
+                ""
+            }
+
+
+            <div class="article-price">
+
+                ${Number(article.price).toFixed(2)} $
+
+            </div>
+
+
+            <div class="article-info">
+
+                ${
+                    article.category
+                    ?
+                    "Catégorie : " +
+                    escapeHtml(article.category) +
+                    "<br>"
+                    :
+                    ""
+                }
+
+
+                ${
+                    article.size
+                    ?
+                    "Taille : " +
+                    escapeHtml(article.size) +
+                    "<br>"
+                    :
+                    ""
+                }
+
+
+                ${
+                    article.shoe_size
+                    ?
+                    "Pointure : " +
+                    escapeHtml(article.shoe_size) +
+                    "<br>"
+                    :
+                    ""
+                }
+
+
+                ${
+                    conditionText
+                    ?
+                    "État : " +
+                    escapeHtml(conditionText) +
+                    "<br>"
+                    :
+                    ""
+                }
+
+
+                ${
+                    article.city
+                    ?
+                    escapeHtml(article.city)
+                    :
+                    ""
+                }
+
+            </div>
+
+
+            <a
+                href="article.html?id=${encodeURIComponent(article.id)}"
+                class="view-button">
+
+                Voir l'article
+
+            </a>
+
+        </div>
+
+    `;
+
+
+    articlesGrid.appendChild(card);
+
+}
+
+
+/* =====================================================
+   SECURITE HTML
+===================================================== */
+
+function escapeHtml(value) {
+
+    return String(value)
+
+        .replace(/&/g, "&amp;")
+
+        .replace(/</g, "&lt;")
+
+        .replace(/>/g, "&gt;")
+
+        .replace(/"/g, "&quot;")
+
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =====================================================
+   FILTRES
+===================================================== */
+
+searchInput.addEventListener(
+    "input",
+    function() {
+
+        loadArticles();
+
+    }
+);
+
+
+categorySelect.addEventListener(
+    "change",
+    function() {
+
+        loadArticles();
+
+    }
+);
+
+
+provinceSelect.addEventListener(
+    "change",
+    function() {
+
+        loadArticles();
+
+    }
+);
+
+
+resetButton.addEventListener(
+    "click",
+    function() {
+
+        searchInput.value = "";
+
+        categorySelect.value = "";
+
+        provinceSelect.value = "";
+
+        loadArticles();
+
+    }
+);
+
+
+/* =====================================================
+   DEMARRAGE
+===================================================== */
+
+loadArticles();
+
+</script>
+
+</body>
+
+</html>
