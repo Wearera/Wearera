@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>WEARERA — Mes ventes</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f7f5f2;
+    color: #222;
+}
+
+button, input, select, textarea {
+    font-family: inherit;
+}
+
+/* HEADER */
+
+header {
+    background: white;
+    padding: 22px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 30px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.logo a {
+    text-decoration: none;
+    color: #222;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #222;
+    font-size: 15px;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* CONTENU */
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 7%;
+}
+
+.page-title h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.page-title p {
+    color: #777;
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+/* ORDER CARDS */
+
+.order-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.order-card {
+    background: white;
+    border-radius: 14px;
+    border: 1px solid #ddd;
+    padding: 22px;
+    transition: 0.2s;
+}
+
+.order-card:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+}
+
+.order-header {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.order-photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    object-fit: cover;
+    background: #eee;
+    flex-shrink: 0;
+}
+
+.order-no-photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    background: #eee;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+    font-size: 28px;
+}
+
+.order-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.order-info h3 {
+    font-size: 17px;
+    margin-bottom: 4px;
+}
+
+.order-buyer {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 4px;
+}
+
+.order-date {
+    font-size: 12px;
+    color: #999;
+}
+
+/* STATUS BADGE */
+
+.status-badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-paid {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-shipped {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.status-delivered {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-completed {
+    background: #c3e6cb;
+    color: #1b5e20;
+}
+
+.status-disputed {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* ORDER DETAILS */
+
+.order-details {
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+    margin-top: 5px;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+.detail-row strong {
+    color: #222;
+}
+
+.payout-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.payout-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.payout-released {
+    background: #d4edda;
+    color: #155724;
+}
+
+.payout-held {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* SELLER NOTICE */
+
+.seller-notice {
+    background: #e8f5e9;
+    border: 1px solid #a5d6a7;
+    border-radius: 10px;
+    padding: 15px 18px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #2e7d32;
+}
+
+.seller-notice strong {
+    color: #1b5e20;
+}
+
+/* SHIP FORM */
+
+.ship-form {
+    margin-top: 15px;
+    padding: 15px;
+    background: #f7f5f2;
+    border-radius: 8px;
+}
+
+.ship-form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 7px;
+    font-size: 14px;
+}
+
+.ship-form input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.ship-form button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    background: #222;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.ship-form button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.ship-form button:hover:not(:disabled) {
+    background: #444;
+}
+
+/* TRACKING DISPLAY */
+
+.tracking-info {
+    background: #f7f5f2;
+    border-radius: 8px;
+    padding: 12px 15px;
+    margin-top: 12px;
+    font-size: 14px;
+}
+
+.tracking-info strong {
+    color: #222;
+}
+
+/* EMPTY / LOADING */
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #777;
+}
+
+.empty-state .icon {
+    font-size: 50px;
+    margin-bottom: 15px;
+}
+
+.empty-state h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #222;
+}
+
+.empty-state p {
+    margin-bottom: 20px;
+}
+
+.empty-state a {
+    display: inline-block;
+    padding: 14px 30px;
+    background: #222;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.empty-state a:hover {
+    background: #444;
+}
+
+.loading {
+    text-align: center;
+    padding: 50px;
+    color: #777;
+}
+
+/* FOOTER */
+
+footer {
+    margin-top: 50px;
+    padding: 30px;
+    text-align: center;
+    background: #222;
+    color: white;
+}
+
+/* MOBILE */
+
+@media (max-width: 800px) {
+
+    header {
+        padding: 18px 5%;
+    }
+
+    nav {
+        gap: 12px;
+    }
+
+    nav a:not(.message-nav):not(.profile-nav):not(.cart-nav) {
+        display: none;
+    }
+
+    .container {
+        padding: 30px 5%;
+    }
+
+    .order-header {
+        flex-wrap: wrap;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<header>
+
+<div class="logo">
+<a href="index.html">WEARERA</a>
+</div>
+
+<nav>
+<a href="index.html">Accueil</a>
+<a href="index.html#articles">Acheter</a>
+<a href="vendre.html">Vendre</a>
+<a href="mes-articles.html">Mes articles</a>
+<a href="panier.html" class="cart-nav">🛒 Panier</a>
+<a href="messagerie.html" class="message-nav">💬 Messagerie</a>
+<a href="compte.html" class="profile-nav">👤 Compte</a>
+</nav>
+
+</header>
+
+<!-- CONTENU -->
+
+<main class="container">
+
+<div class="page-title">
+<h1>💰 Mes ventes</h1>
+<p>Suivez les commandes reçues : statut, suivi et versement.</p>
+</div>
+
+<div id="loading" class="loading">
+Chargement de vos ventes...
+</div>
+
+<div id="orders-content" style="display:none;">
+
+<div id="seller-notice-area"></div>
+
+<div id="orders-list" class="order-list"></div>
+
+<div id="empty-orders" class="empty-state" style="display:none;">
+<div class="icon">💰</div>
+<h3>Aucune vente pour le moment</h3>
+<p>Lorsqu'un acheteur commandera un de vos articles, la commande apparaîtra ici.</p>
+<a href="vendre.html">Vendre un article</a>
+</div>
+
+</div>
+
+</main>
+
+<footer>
+WEARERA ©️ 2026
+<br>
+La mode de seconde main au Canada.
+</footer>
+
+<script>
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+    "https://wcamvnvhcguxwujcwyyj.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndjYW12bnZoY2d1eHd1amN3eXlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMjcwNDYsImV4cCI6MjEwMzgwMzA0Nn0.qnkYuFIcbRP8aBzPyIfxamOfVvBrU3nNhMa__NiyYPA";
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const loading = document.getElementById("loading");
+const ordersContent = document.getElementById("orders-content");
+const ordersList = document.getElementById("orders-list");
+const emptyOrders = document.getElementById("empty-orders");
+const noticeArea = document.getElementById("seller-notice-area");
+
+let currentUser = null;
+
+/* =====================================================
+   FORMAT
+===================================================== */
+
+function formatPrice(price) {
+    return Number(price || 0).toFixed(2).replace(".00", "") + " $";
+}
+
+function formatDate(dateStr) {
+    if (!dateStr) return "—";
+    const d = new Date(dateStr);
+    return d.toLocaleDateString("fr-CA", {
+        year: "numeric",
+        month: "short",
+        day: "numeric"
+    });
+}
+
+function getFirstPhoto(article) {
+    if (Array.isArray(article.photo_urls) && article.photo_urls.length) {
+        return article.photo_urls[0];
+    }
+    if (typeof article.photo_urls === "string") {
+        try {
+            const parsed = JSON.parse(article.photo_urls);
+            if (Array.isArray(parsed) && parsed.length) return parsed[0];
+            return article.photo_urls;
+        } catch (e) {
+            return article.photo_urls;
+        }
+    }
+    return "";
+}
+
+function statusLabel(status) {
+    const labels = {
+        paid: "Paiement reçu",
+        shipped: "Expédiée",
+        delivered: "Livrée",
+        completed: "Terminée",
+        disputed: "Litige en cours"
+    };
+    return labels[status] || status;
+}
+
+function payoutLabel(status) {
+    const labels = {
+        pending: "En attente",
+        released: "Versé",
+        held: "Bloqué"
+    };
+    return labels[status] || status;
+}
+
+/* =====================================================
+   CHARGER LES VENTES
+===================================================== */
+
+async function loadOrders() {
+
+    const { data: { user }, error: authError } =
+        await supabaseClient.auth.getUser();
+
+    if (authError || !user) {
+        window.location.href = "auth.html?redirect=mes-ventes.html";
+        return;
+    }
+
+    currentUser = user;
+
+    const { data: orders, error: ordersError } = await supabaseClient
+        .from("orders")
+        .select(`
+            id,
+            article_id,
+            buyer_id,
+            seller_price,
+            wearera_fee,
+            item_total,
+            shipping_cost,
+            grand_total,
+            status,
+            tracking_number,
+            shipped_at,
+            delivered_at,
+            verification_deadline,
+            completed_at,
+            payout_status,
+            fee_waived,
+            created_at
+        `)
+        .eq("seller_id", user.id)
+        .order("created_at", { ascending: false });
+
+    loading.style.display = "none";
+    ordersContent.style.display = "block";
+
+    if (ordersError) {
+        console.error("Erreur ventes :", ordersError);
+        ordersList.innerHTML =
+            "<p style='color:#c62828;text-align:center;padding:30px'>" +
+            "Impossible de charger vos ventes. " + ordersError.message +
+            "</p>";
+        return;
+    }
+
+    if (!orders || orders.length === 0) {
+        emptyOrders.style.display = "block";
+        return;
+    }
+
+    /* Show notice if there are paid orders needing action */
+    const paidOrders = orders.filter(function(o) { return o.status === "paid"; });
+    if (paidOrders.length > 0) {
+        noticeArea.innerHTML =
+            "<div class='seller-notice'>" +
+            "<strong>Vous avez " + paidOrders.length + " commande(s) à préparer.</strong><br>" +
+            "Indiquez le numéro de suivi dès que l'article est expédié." +
+            "</div>";
+    }
+
+    const articleIds = orders.map(function(o) { return o.article_id; });
+
+    const { data: articles } = await supabaseClient
+        .from("Articles")
+        .select("id, name, brand, photo_urls")
+        .in("id", articleIds);
+
+    const articleMap = {};
+    (articles || []).forEach(function(a) { articleMap[a.id] = a; });
+
+    /* Get buyer names */
+    const buyerIds = orders.map(function(o) { return o.buyer_id; });
+    const { data: buyerProfiles } = await supabaseClient
+        .from("public_profiles")
+        .select("id, first_name")
+        .in("id", buyerIds);
+
+    const buyerMap = {};
+    (buyerProfiles || []).forEach(function(p) { buyerMap[p.id] = p; });
+
+    ordersList.innerHTML = "";
+
+    orders.forEach(function(order) {
+
+        const article = articleMap[order.article_id] || {};
+        const photoUrl = getFirstPhoto(article);
+        const buyer = buyerMap[order.buyer_id] || {};
+
+        const card = document.createElement("div");
+        card.className = "order-card";
+
+        let photoHtml;
+        if (photoUrl) {
+            photoHtml = "<img class='order-photo' src='" + photoUrl +
+                "' alt='" + (article.name || "Article") + "'>";
+        } else {
+            photoHtml = "<div class='order-no-photo'>📷</div>";
+        }
+
+        let statusBadge = "<span class='status-badge status-" + order.status + "'>" +
+            statusLabel(order.status) + "</span>";
+
+        /* Seller sees what they receive (seller_price) */
+        let detailsHtml =
+            "<div class='order-details'>" +
+                "<div class='detail-row'><span>Montant à recevoir</span><span><strong>" +
+                    formatPrice(order.seller_price) + "</strong></span></div>";
+
+        if (order.fee_waived) {
+            detailsHtml +=
+                "<div class='detail-row'><span>Frais WEARERA</span>" +
+                "<span style='color:#2e7d32'>Offerts (lancement)</span></div>";
+        } else {
+            detailsHtml +=
+                "<div class='detail-row'><span>Frais WEARERA (déduits)</span><span>" +
+                    formatPrice(order.wearera_fee) + "</span></div>";
+        }
+
+        detailsHtml +=
+            "<div class='detail-row'><span>Prix payé par l'acheteur</span><span>" +
+                formatPrice(order.grand_total) + "</span></div>";
+
+        /* Payout status */
+        let payoutClass = "payout-pending";
+        if (order.payout_status === "released") payoutClass = "payout-released";
+        if (order.payout_status === "held") payoutClass = "payout-held";
+
+        detailsHtml +=
+            "<div class='detail-row'><span>Statut du versement</span>" +
+                "<span class='" + payoutClass + "'>" +
+                payoutLabel(order.payout_status) + "</span></div>" +
+            "</div>";
+
+        /* Tracking info or ship form */
+        let trackingHtml = "";
+        if (order.tracking_number) {
+            trackingHtml =
+                "<div class='tracking-info'><strong>Numéro de suivi :</strong> " +
+                order.tracking_number + "</div>";
+        }
+
+        let shipFormHtml = "";
+        if (order.status === "paid") {
+            shipFormHtml =
+                "<div class='ship-form' id='ship-form-" + order.id + "'>" +
+                    "<label for='tracking-" + order.id + "'>Numéro de suivi</label>" +
+                    "<input type='text' id='tracking-" + order.id + "' placeholder='Ex: 1Z999AA10123456784'>" +
+                    "<button data-order-id='" + order.id + "' class='ship-btn'>Marquer comme expédiée</button>" +
+                "</div>";
+        }
+
+        let shippedInfo = "";
+        if (order.shipped_at) {
+            shippedInfo = "<div class='detail-row'><span>Expédiée le</span><span>" +
+                formatDate(order.shipped_at) + "</span></div>";
+        }
+
+        let deliveredInfo = "";
+        if (order.delivered_at) {
+            deliveredInfo = "<div class='detail-row'><span>Livrée le</span><span>" +
+                formatDate(order.delivered_at) + "</span></div>";
+        }
+
+        let completedInfo = "";
+        if (order.completed_at) {
+            completedInfo = "<div class='detail-row'><span>Terminée le</span><span>" +
+                formatDate(order.completed_at) + "</span></div>";
+        }
+
+        let disputeInfo = "";
+        if (order.status === "disputed") {
+            disputeInfo =
+                "<div class='tracking-info' style='background:#fce4e4;border:1px solid #c62828'>" +
+                "<strong style='color:#c62828'>Litige signalé par l'acheteur :</strong><br>" +
+                (order.dispute_reason || "Aucune raison fournie") +
+                "</div>";
+        }
+
+        card.innerHTML =
+            "<div class='order-header'>" +
+                photoHtml +
+                "<div class='order-info'>" +
+                    "<h3>" + (article.name || "Article") + "</h3>" +
+                    "<div class='order-buyer'>Acheteur : " +
+                        (buyer.first_name || "Utilisateur WEARERA") + "</div>" +
+                    "<div class='order-date'>Vendue le " + formatDate(order.created_at) + "</div>" +
+                "</div>" +
+                statusBadge +
+            "</div>" +
+            detailsHtml +
+            shippedInfo +
+            deliveredInfo +
+            completedInfo +
+            trackingHtml +
+            disputeInfo +
+            shipFormHtml;
+
+        ordersList.appendChild(card);
+    });
+
+    /* Bind ship buttons */
+    document.querySelectorAll(".ship-btn").forEach(function(btn) {
+        btn.addEventListener("click", async function() {
+            const orderId = this.getAttribute("data-order-id");
+            const trackingInput = document.getElementById("tracking-" + orderId);
+            const trackingNumber = trackingInput.value.trim();
+
+            if (!trackingNumber) {
+                alert("Veuillez entrer un numéro de suivi.");
+                return;
+            }
+
+            this.disabled = true;
+            this.textContent = "Enregistrement...";
+
+            const { error } = await supabaseClient
+                .from("orders")
+                .update({
+                    status: "shipped",
+                    tracking_number: trackingNumber,
+                    shipped_at: new Date().toISOString()
+                })
+                .eq("id", orderId);
+
+            if (error) {
+                console.error(error);
+                this.disabled = false;
+                this.textContent = "Marquer comme expédiée";
+                alert("Erreur : " + error.message);
+                return;
+            }
+
+            loadOrders();
+        });
+    });
+}
+
+/* =====================================================
+   DEMARRAGE
+===================================================== */
+
+loadOrders();
+
+</script>
+
+</body>
+
+</html>

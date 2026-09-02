@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>WEARERA — Mes achats</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f7f5f2;
+    color: #222;
+}
+
+button, input, select, textarea {
+    font-family: inherit;
+}
+
+/* HEADER */
+
+header {
+    background: white;
+    padding: 22px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 30px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.logo a {
+    text-decoration: none;
+    color: #222;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #222;
+    font-size: 15px;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* CONTENU */
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 7%;
+}
+
+.page-title h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.page-title p {
+    color: #777;
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+/* ORDER CARDS */
+
+.order-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.order-card {
+    background: white;
+    border-radius: 14px;
+    border: 1px solid #ddd;
+    padding: 22px;
+    transition: 0.2s;
+}
+
+.order-card:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+}
+
+.order-header {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.order-photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    object-fit: cover;
+    background: #eee;
+    flex-shrink: 0;
+}
+
+.order-no-photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    background: #eee;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+    font-size: 28px;
+}
+
+.order-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.order-info h3 {
+    font-size: 17px;
+    margin-bottom: 4px;
+}
+
+.order-brand {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 4px;
+}
+
+.order-date {
+    font-size: 12px;
+    color: #999;
+}
+
+/* STATUS BADGE */
+
+.status-badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-paid {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-shipped {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.status-delivered {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-completed {
+    background: #c3e6cb;
+    color: #1b5e20;
+}
+
+.status-disputed {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* ORDER DETAILS */
+
+.order-details {
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+    margin-top: 5px;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+.detail-row strong {
+    color: #222;
+}
+
+.detail-total {
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+    margin-top: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #222;
+}
+
+/* TRACKING */
+
+.tracking-info {
+    background: #f7f5f2;
+    border-radius: 8px;
+    padding: 12px 15px;
+    margin-top: 12px;
+    font-size: 14px;
+}
+
+.tracking-info strong {
+    color: #222;
+}
+
+/* VERIFICATION TIMER */
+
+.verification-timer {
+    background: #fff8e1;
+    border: 1px solid #ffe082;
+    border-radius: 8px;
+    padding: 12px 15px;
+    margin-top: 12px;
+    font-size: 14px;
+    color: #5d4037;
+}
+
+.verification-timer strong {
+    color: #e65100;
+}
+
+/* ACTIONS */
+
+.order-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.action-button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-confirm {
+    background: #2e7d32;
+    color: white;
+}
+
+.btn-confirm:hover {
+    background: #1b5e20;
+}
+
+.btn-dispute {
+    background: white;
+    border: 1px solid #c62828;
+    color: #c62828;
+}
+
+.btn-dispute:hover {
+    background: #fce4e4;
+}
+
+.action-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* DISPUTE FORM */
+
+.dispute-form {
+    display: none;
+    margin-top: 12px;
+    padding: 15px;
+    background: #fce4e4;
+    border-radius: 8px;
+}
+
+.dispute-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #c62828;
+    border-radius: 6px;
+    font-size: 14px;
+    resize: vertical;
+    min-height: 70px;
+    margin-bottom: 10px;
+}
+
+.dispute-form button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    background: #c62828;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* EMPTY / LOADING */
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #777;
+}
+
+.empty-state .icon {
+    font-size: 50px;
+    margin-bottom: 15px;
+}
+
+.empty-state h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #222;
+}
+
+.empty-state p {
+    margin-bottom: 20px;
+}
+
+.empty-state a {
+    display: inline-block;
+    padding: 14px 30px;
+    background: #222;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.empty-state a:hover {
+    background: #444;
+}
+
+.loading {
+    text-align: center;
+    padding: 50px;
+    color: #777;
+}
+
+/* FOOTER */
+
+footer {
+    margin-top: 50px;
+    padding: 30px;
+    text-align: center;
+    background: #222;
+    color: white;
+}
+
+/* MOBILE */
+
+@media (max-width: 800px) {
+
+    header {
+        padding: 18px 5%;
+    }
+
+    nav {
+        gap: 12px;
+    }
+
+    nav a:not(.message-nav):not(.profile-nav):not(.cart-nav) {
+        display: none;
+    }
+
+    .container {
+        padding: 30px 5%;
+    }
+
+    .order-header {
+        flex-wrap: wrap;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<header>
+
+<div class="logo">
+<a href="index.html">WEARERA</a>
+</div>
+
+<nav>
+<a href="index.html">Accueil</a>
+<a href="index.html#articles">Acheter</a>
+<a href="vendre.html">Vendre</a>
+<a href="mes-articles.html">Mes articles</a>
+<a href="panier.html" class="cart-nav">🛒 Panier</a>
+<a href="messagerie.html" class="message-nav">💬 Messagerie</a>
+<a href="compte.html" class="profile-nav">👤 Compte</a>
+</nav>
+
+</header>
+
+<!-- CONTENU -->
+
+<main class="container">
+
+<div class="page-title">
+<h1>🛍️ Mes achats</h1>
+<p>Suivez vos commandes : statut, suivi et délai de vérification.</p>
+</div>
+
+<div id="loading" class="loading">
+Chargement de vos achats...
+</div>
+
+<div id="orders-content" style="display:none;">
+
+<div id="orders-list" class="order-list"></div>
+
+<div id="empty-orders" class="empty-state" style="display:none;">
+<div class="icon">🛍️</div>
+<h3>Aucun achat pour le moment</h3>
+<p>Parcourez les articles et passez votre première commande.</p>
+<a href="index.html#articles">Voir les articles</a>
+</div>
+
+</div>
+
+</main>
+
+<footer>
+WEARERA ©️ 2026
+<br>
+La mode de seconde main au Canada.
+</footer>
+
+<script>
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+    "https://wcamvnvhcguxwujcwyyj.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndjYW12bnZoY2d1eHd1amN3eXlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMjcwNDYsImV4cCI6MjEwMzgwMzA0Nn0.qnkYuFIcbRP8aBzPyIfxamOfVvBrU3nNhMa__NiyYPA";
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const loading = document.getElementById("loading");
+const ordersContent = document.getElementById("orders-content");
+const ordersList = document.getElementById("orders-list");
+const emptyOrders = document.getElementById("empty-orders");
+
+let currentUser = null;
+
+/* =====================================================
+   FORMAT
+===================================================== */
+
+function formatPrice(price) {
+    return Number(price || 0).toFixed(2).replace(".00", "") + " $";
+}
+
+function formatDate(dateStr) {
+    if (!dateStr) return "—";
+    const d = new Date(dateStr);
+    return d.toLocaleDateString("fr-CA", {
+        year: "numeric",
+        month: "short",
+        day: "numeric"
+    });
+}
+
+function getFirstPhoto(article) {
+    if (Array.isArray(article.photo_urls) && article.photo_urls.length) {
+        return article.photo_urls[0];
+    }
+    if (typeof article.photo_urls === "string") {
+        try {
+            const parsed = JSON.parse(article.photo_urls);
+            if (Array.isArray(parsed) && parsed.length) return parsed[0];
+            return article.photo_urls;
+        } catch (e) {
+            return article.photo_urls;
+        }
+    }
+    return "";
+}
+
+function statusLabel(status) {
+    const labels = {
+        paid: "Paiement reçu",
+        shipped: "Expédiée",
+        delivered: "Livrée",
+        completed: "Terminée",
+        disputed: "Litige en cours"
+    };
+    return labels[status] || status;
+}
+
+function timeRemaining(deadline) {
+    if (!deadline) return null;
+    const now = new Date();
+    const dl = new Date(deadline);
+    const diff = dl - now;
+    if (diff <= 0) return "Délai expiré";
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const days = Math.floor(hours / 24);
+    if (days > 0) {
+        return days + " jour(s) et " + (hours % 24) + " heure(s) restants";
+    }
+    return hours + " heure(s) restante(s)";
+}
+
+/* =====================================================
+   CHARGER LES ACHATS
+===================================================== */
+
+async function loadOrders() {
+
+    const { data: { user }, error: authError } =
+        await supabaseClient.auth.getUser();
+
+    if (authError || !user) {
+        window.location.href = "auth.html?redirect=mes-achats.html";
+        return;
+    }
+
+    currentUser = user;
+
+    const { data: orders, error: ordersError } = await supabaseClient
+        .from("orders")
+        .select(`
+            id,
+            article_id,
+            seller_id,
+            seller_price,
+            wearera_fee,
+            item_total,
+            shipping_cost,
+            grand_total,
+            status,
+            tracking_number,
+            shipped_at,
+            delivered_at,
+            verification_deadline,
+            completed_at,
+            fee_waived,
+            created_at
+        `)
+        .eq("buyer_id", user.id)
+        .order("created_at", { ascending: false });
+
+    loading.style.display = "none";
+    ordersContent.style.display = "block";
+
+    if (ordersError) {
+        console.error("Erreur achats :", ordersError);
+        ordersList.innerHTML =
+            "<p style='color:#c62828;text-align:center;padding:30px'>" +
+            "Impossible de charger vos achats. " + ordersError.message +
+            "</p>";
+        return;
+    }
+
+    if (!orders || orders.length === 0) {
+        emptyOrders.style.display = "block";
+        return;
+    }
+
+    const articleIds = orders.map(function(o) { return o.article_id; });
+
+    const { data: articles } = await supabaseClient
+        .from("Articles")
+        .select("id, name, brand, photo_urls")
+        .in("id", articleIds);
+
+    const articleMap = {};
+    (articles || []).forEach(function(a) { articleMap[a.id] = a; });
+
+    ordersList.innerHTML = "";
+
+    orders.forEach(function(order) {
+
+        const article = articleMap[order.article_id] || {};
+        const photoUrl = getFirstPhoto(article);
+
+        const card = document.createElement("div");
+        card.className = "order-card";
+
+        let photoHtml;
+        if (photoUrl) {
+            photoHtml = "<img class='order-photo' src='" + photoUrl +
+                "' alt='" + (article.name || "Article") + "'>";
+        } else {
+            photoHtml = "<div class='order-no-photo'>📷</div>";
+        }
+
+        let statusBadge = "<span class='status-badge status-" + order.status + "'>" +
+            statusLabel(order.status) + "</span>";
+
+        let detailsHtml =
+            "<div class='order-details'>" +
+                "<div class='detail-row'><span>Prix de l'article</span><span>" +
+                    formatPrice(order.seller_price) + "</span></div>";
+
+        if (order.fee_waived) {
+            detailsHtml +=
+                "<div class='detail-row'><span>Frais WEARERA</span>" +
+                "<span style='color:#2e7d32'>Offerts (lancement)</span></div>";
+        } else {
+            detailsHtml +=
+                "<div class='detail-row'><span>Frais WEARERA (8%)</span><span>" +
+                    formatPrice(order.wearera_fee) + "</span></div>";
+        }
+
+        detailsHtml +=
+            "<div class='detail-row'><span>Livraison</span><span>" +
+                (order.shipping_cost > 0 ? formatPrice(order.shipping_cost) : "À convenir") +
+                "</span></div>" +
+            "<div class='detail-row detail-total'><span>Total</span><span>" +
+                formatPrice(order.grand_total) + "</span></div>" +
+            "</div>";
+
+        let trackingHtml = "";
+        if (order.tracking_number) {
+            trackingHtml =
+                "<div class='tracking-info'><strong>Numéro de suivi :</strong> " +
+                order.tracking_number + "</div>";
+        }
+
+        let timerHtml = "";
+        if (order.status === "delivered" && order.verification_deadline) {
+            const remaining = timeRemaining(order.verification_deadline);
+            timerHtml =
+                "<div class='verification-timer'>" +
+                "<strong>Délai de vérification :</strong> " + remaining +
+                "<br>Confirmez que tout est conforme ou signalez un problème." +
+                "</div>";
+        }
+
+        let actionsHtml = "";
+        if (order.status === "delivered") {
+            actionsHtml =
+                "<div class='order-actions'>" +
+                    "<button class='action-button btn-confirm' data-order-id='" + order.id + "' data-action='confirm'>" +
+                        "Tout est conforme" +
+                    "</button>" +
+                    "<button class='action-button btn-dispute' data-order-id='" + order.id + "' data-action='dispute'>" +
+                        "Signaler un problème" +
+                    "</button>" +
+                "</div>" +
+                "<div class='dispute-form' id='dispute-form-" + order.id + "'>" +
+                    "<textarea id='dispute-reason-" + order.id + "' placeholder='Décrivez le problème...'></textarea>" +
+                    "<button data-order-id='" + order.id + "' id='submit-dispute-" + order.id + "'>" +
+                        "Envoyer le signalement" +
+                    "</button>" +
+                "</div>";
+        }
+
+        let shippedInfo = "";
+        if (order.shipped_at) {
+            shippedInfo = "<div class='detail-row'><span>Expédiée le</span><span>" +
+                formatDate(order.shipped_at) + "</span></div>";
+        }
+
+        let deliveredInfo = "";
+        if (order.delivered_at) {
+            deliveredInfo = "<div class='detail-row'><span>Livrée le</span><span>" +
+                formatDate(order.delivered_at) + "</span></div>";
+        }
+
+        let completedInfo = "";
+        if (order.completed_at) {
+            completedInfo = "<div class='detail-row'><span>Terminée le</span><span>" +
+                formatDate(order.completed_at) + "</span></div>";
+        }
+
+        card.innerHTML =
+            "<div class='order-header'>" +
+                photoHtml +
+                "<div class='order-info'>" +
+                    "<h3>" + (article.name || "Article") + "</h3>" +
+                    "<div class='order-brand'>" + (article.brand || "Marque non indiquée") + "</div>" +
+                    "<div class='order-date'>Commande du " + formatDate(order.created_at) + "</div>" +
+                "</div>" +
+                statusBadge +
+            "</div>" +
+            detailsHtml +
+            shippedInfo +
+            deliveredInfo +
+            completedInfo +
+            trackingHtml +
+            timerHtml +
+            actionsHtml;
+
+        ordersList.appendChild(card);
+    });
+
+    /* Bind action buttons */
+    document.querySelectorAll(".btn-confirm").forEach(function(btn) {
+        btn.addEventListener("click", async function() {
+            const orderId = this.getAttribute("data-order-id");
+            this.disabled = true;
+            this.textContent = "Confirmation...";
+
+            const { error } = await supabaseClient
+                .from("orders")
+                .update({
+                    status: "completed",
+                    completed_at: new Date().toISOString()
+                })
+                .eq("id", orderId);
+
+            if (error) {
+                console.error(error);
+                this.disabled = false;
+                this.textContent = "Tout est conforme";
+                alert("Erreur : " + error.message);
+                return;
+            }
+
+            loadOrders();
+        });
+    });
+
+    document.querySelectorAll(".btn-dispute").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+            const orderId = this.getAttribute("data-order-id");
+            document.getElementById("dispute-form-" + orderId).style.display = "block";
+        });
+    });
+
+    document.querySelectorAll("[id^='submit-dispute-']").forEach(function(btn) {
+        btn.addEventListener("click", async function() {
+            const orderId = this.getAttribute("data-order-id");
+            const reasonEl = document.getElementById("dispute-reason-" + orderId);
+            const reason = reasonEl.value.trim();
+
+            if (!reason) {
+                alert("Veuillez décrire le problème.");
+                return;
+            }
+
+            this.disabled = true;
+            this.textContent = "Envoi...";
+
+            const { error } = await supabaseClient
+                .from("orders")
+                .update({
+                    status: "disputed",
+                    disputed_at: new Date().toISOString(),
+                    dispute_reason: reason
+                })
+                .eq("id", orderId);
+
+            if (error) {
+                console.error(error);
+                this.disabled = false;
+                this.textContent = "Envoyer le signalement";
+                alert("Erreur : " + error.message);
+                return;
+            }
+
+            loadOrders();
+        });
+    });
+}
+
+/* =====================================================
+   DEMARRAGE
+===================================================== */
+
+loadOrders();
+
+</script>
+
+</body>
+
+</html>

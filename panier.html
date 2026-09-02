@@ -456,13 +456,18 @@ Chargement de votre panier...
 <div id="cart-summary" class="cart-summary" style="display:none;">
 
 <div class="summary-row">
-<span>Sous-total</span>
+<span>Prix des articles</span>
 <span id="subtotal">0 $</span>
 </div>
 
 <div class="summary-row">
+<span>Frais WEARERA (8%)</span>
+<span id="wearera-fee">0 $</span>
+</div>
+
+<div class="summary-row">
 <span>Livraison</span>
-<span>À convenir avec le vendeur</span>
+<span id="shipping-cost">À convenir</span>
 </div>
 
 <div class="summary-row summary-total">
@@ -527,6 +532,9 @@ const supabaseClient =
    ELEMENTS
 ===================================================== */
 
+let user = null;
+let pendingCartData = [];
+
 const loading =
     document.getElementById("loading");
 
@@ -544,6 +552,9 @@ const cartSummary =
 
 const subtotalEl =
     document.getElementById("subtotal");
+
+const weareraFeeEl =
+    document.getElementById("wearera-fee");
 
 const totalEl =
     document.getElementById("total");
@@ -674,6 +685,7 @@ async function loadCart() {
     articles.forEach(function(a) { articleMap[a.id] = a; });
 
     let subtotal = 0;
+    pendingCartData = [];
 
     cartItems.innerHTML = "";
 
@@ -683,7 +695,10 @@ async function loadCart() {
 
         if (!article) return;
 
-        subtotal += Number(article.price || 0);
+        const price = Number(article.price || 0);
+        subtotal += price;
+
+        pendingCartData.push({ row: row, article: article });
 
         const photoUrl = getFirstPhoto(article);
 
@@ -741,9 +756,13 @@ async function loadCart() {
 
     cartSummary.style.display = "block";
 
-    subtotalEl.textContent = formatPrice(subtotal);
+    /* 8% WEARERA fee on article price only */
+    const weareraFee = subtotal * 0.08;
+    const total = subtotal + weareraFee;
 
-    totalEl.textContent = formatPrice(subtotal);
+    subtotalEl.textContent = formatPrice(subtotal);
+    weareraFeeEl.textContent = formatPrice(weareraFee);
+    totalEl.textContent = formatPrice(total);
 
     document.querySelectorAll(".cart-remove").forEach(function(btn) {
 
@@ -779,14 +798,119 @@ async function loadCart() {
 }
 
 /* =====================================================
-   CHECKOUT
+   CHECKOUT — Créer les commandes
 ===================================================== */
 
-checkoutButton.addEventListener("click", function() {
+checkoutButton.addEventListener("click", async function() {
 
-    checkoutNotice.style.display = "block";
+    if (pendingCartData.length === 0) return;
 
-    checkoutNotice.scrollIntoView({ behavior: "smooth" });
+    checkoutButton.disabled = true;
+    checkoutButton.textContent = "Création des commandes...";
+
+    let successCount = 0;
+    let errorCount = 0;
+    let errorMsg = "";
+
+    for (const item of pendingCartData) {
+
+        const article = item.article;
+        const cartRowId = item.row.id;
+
+        const sellerPrice = Number(article.price || 0);
+        const weareraFee = sellerPrice * 0.08;
+        const itemTotal = sellerPrice + weareraFee;
+
+        const { data: existingOrders } = await supabaseClient
+            .from("orders")
+            .select("id")
+            .eq("buyer_id", user.id)
+            .eq("article_id", article.id)
+            .neq("status", "disputed");
+
+        if (existingOrders && existingOrders.length > 0) {
+            errorCount++;
+            errorMsg = "Cet article a déjà été commandé.";
+            continue;
+        }
+
+        const { data: allOrders } = await supabaseClient
+            .from("orders")
+            .select("id")
+            .eq("buyer_id", user.id);
+
+        const buyerTransactionNumber = (allOrders?.length || 0) + 1;
+        const feeWaived = buyerTransactionNumber <= 2;
+        const finalFee = feeWaived ? 0 : weareraFee;
+        const finalItemTotal = sellerPrice + finalFee;
+
+        const { error: orderError } = await supabaseClient
+            .from("orders")
+            .insert({
+                buyer_id: user.id,
+                article_id: article.id,
+                seller_id: article.seller_id,
+                seller_price: sellerPrice,
+                wearera_fee: finalFee,
+                item_total: finalItemTotal,
+                shipping_cost: 0,
+                grand_total: finalItemTotal,
+                status: "paid",
+                fee_waived: feeWaived,
+                buyer_transaction_number: buyerTransactionNumber,
+                payout_status: "pending"
+            });
+
+        if (orderError) {
+            console.error("Erreur commande :", orderError);
+            errorCount++;
+            errorMsg = orderError.message;
+            continue;
+        }
+
+        await supabaseClient
+            .from("cart_items")
+            .delete()
+            .eq("id", cartRowId);
+
+        successCount++;
+    }
+
+    checkoutButton.disabled = false;
+    checkoutButton.textContent = "Passer au paiement";
+
+    if (successCount > 0 && errorCount === 0) {
+
+        checkoutNotice.querySelector("h3").textContent =
+            "Commande créée avec succès !";
+        checkoutNotice.querySelector("p").innerHTML =
+            "Vos commandes ont été créées avec le statut <strong>« Paiement reçu »</strong>.<br>" +
+            "Le paiement en ligne sera disponible prochainement.<br><br>" +
+            "Vous pouvez suivre vos commandes dans la section <a href='mes-achats.html' style='color:#222;font-weight:bold'>Mes achats</a>.";
+        checkoutNotice.style.display = "block";
+        checkoutNotice.scrollIntoView({ behavior: "smooth" });
+
+        loadCart();
+
+    } else if (successCount > 0 && errorCount > 0) {
+
+        checkoutNotice.querySelector("h3").textContent =
+            "Partiellement créé";
+        checkoutNotice.querySelector("p").innerHTML =
+            successCount + " commande(s) créée(s), " + errorCount + " échec(s).<br>" +
+            "Voir <a href='mes-achats.html' style='color:#222;font-weight:bold'>Mes achats</a>.";
+        checkoutNotice.style.display = "block";
+        loadCart();
+
+    } else {
+
+        checkoutNotice.querySelector("h3").textContent =
+            "Impossible de créer la commande";
+        checkoutNotice.querySelector("p").textContent =
+            errorMsg || "Une erreur est survenue. Veuillez réessayer.";
+        checkoutNotice.style.display = "block";
+        checkoutNotice.scrollIntoView({ behavior: "smooth" });
+    }
 
 });
 
