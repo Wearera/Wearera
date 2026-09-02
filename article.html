@@ -216,6 +216,153 @@ nav a {
 }
 
 /* =========================
+   DETAIL ARTICLE
+========================= */
+
+.detail-wrap {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.detail-back {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #222;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.detail-back:hover {
+    text-decoration: underline;
+}
+
+.detail-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.detail-photo {
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+    display: block;
+    background: #eee;
+}
+
+.detail-no-photo {
+    width: 100%;
+    height: 450px;
+    background: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+    font-size: 50px;
+}
+
+.detail-body {
+    padding: 30px;
+}
+
+.detail-name {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.detail-brand {
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+.detail-price {
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.detail-info {
+    color: #555;
+    font-size: 15px;
+    line-height: 1.8;
+    margin-bottom: 20px;
+}
+
+.detail-description {
+    color: #444;
+    font-size: 15px;
+    line-height: 1.7;
+    margin-bottom: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.detail-seller {
+    display: flex;
+    gap: 12px;
+}
+
+.contact-seller-button {
+    flex: 1;
+    padding: 16px;
+    border: none;
+    border-radius: 10px;
+    background: #222;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.contact-seller-button:hover {
+    opacity: 0.85;
+}
+
+.contact-seller-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.add-to-cart-button {
+    flex: 1;
+    padding: 16px;
+    border: none;
+    border-radius: 10px;
+    background: #1b5e20;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.add-to-cart-button:hover {
+    opacity: 0.85;
+}
+
+.add-to-cart-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.detail-message {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #1b5e20;
+    text-align: center;
+}
+
+.detail-error {
+    text-align: center;
+    padding: 60px 20px;
+    color: #c62828;
+    font-size: 18px;
+}
+
+/* =========================
    FOOTER
 ========================= */
 
@@ -332,6 +479,64 @@ Connexion
 ========================= -->
 
 <main class="container">
+
+<!-- =========================
+     VUE DETAIL
+========================= -->
+
+<div id="detail-view" style="display:none;">
+
+<div class="detail-wrap">
+
+<a href="article.html" class="detail-back">← Retour aux articles</a>
+
+<div id="detail-loading" class="loading">Chargement de l'article...</div>
+
+<div id="detail-error" class="detail-error" style="display:none;">Article introuvable.</div>
+
+<div id="detail-card" style="display:none;">
+
+<div class="detail-card">
+
+<div id="detail-photo-container"></div>
+
+<div class="detail-body">
+
+<div id="detail-name" class="detail-name"></div>
+
+<div id="detail-brand" class="detail-brand"></div>
+
+<div id="detail-price" class="detail-price"></div>
+
+<div id="detail-info" class="detail-info"></div>
+
+<div id="detail-description" class="detail-description"></div>
+
+<div class="detail-seller">
+
+<a id="contact-seller-link" href="#" class="contact-seller-button">Contacter le vendeur</a>
+
+<button id="add-to-cart-btn" class="add-to-cart-button">🛒 Ajouter au panier</button>
+
+</div>
+
+<div id="detail-message" class="detail-message"></div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- =========================
+     VUE LISTE
+========================= -->
+
+<div id="list-view">
 
 <div class="title">
 
@@ -485,6 +690,8 @@ Aucun article trouvé.
 </div>
 
 
+</div>
+
 </main>
 
 
@@ -580,9 +787,6 @@ async function updateAuthArea() {
     }
 
 }
-
-
-updateAuthArea();
 
 
 /* =====================================================
@@ -1054,12 +1258,6 @@ resetButton.addEventListener(
     }
 );
 
-
-/* =====================================================
-   DEMARRAGE
-===================================================== */
-
-loadArticles();
 
 </script>
 
