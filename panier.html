@@ -605,11 +605,11 @@ function getFirstPhoto(article) {
 async function loadCart() {
 
     const {
-        data: { user },
+        data: { user: authUser },
         error: authError
     } = await supabaseClient.auth.getUser();
 
-    if (authError || !user) {
+    if (authError || !authUser) {
 
         loading.style.display = "none";
 
@@ -621,6 +621,8 @@ async function loadCart() {
 
         return;
     }
+
+    user = authUser;
 
     const {
         data: cartRows,
@@ -812,6 +814,8 @@ checkoutButton.addEventListener("click", async function() {
     let errorCount = 0;
     let errorMsg = "";
 
+    try {
+
     for (const item of pendingCartData) {
 
         const article = item.article;
@@ -887,6 +891,11 @@ checkoutButton.addEventListener("click", async function() {
             .eq("id", cartRowId);
 
         successCount++;
+    }
+
+    } catch (err) {
+        console.error("Erreur inattendue :", err);
+        errorMsg = err.message || "Une erreur inattendue est survenue.";
     }
 
     checkoutButton.disabled = false;
