@@ -564,6 +564,7 @@ async function loadOrders() {
             buyer_id,
             seller_price,
             wearera_fee,
+            seller_fee,
             item_total,
             shipping_cost,
             grand_total,
@@ -657,12 +658,12 @@ async function loadOrders() {
 
         if (order.fee_waived) {
             detailsHtml +=
-                "<div class='detail-row'><span>Frais WEARERA</span>" +
+                "<div class='detail-row'><span>Frais WEARERA vendeur</span>" +
                 "<span style='color:#2e7d32'>Offerts (lancement)</span></div>";
         } else {
             detailsHtml +=
-                "<div class='detail-row'><span>Frais WEARERA (déduits)</span><span>" +
-                    formatPrice(order.wearera_fee) + "</span></div>";
+                "<div class='detail-row'><span>Frais WEARERA vendeur (2%)</span><span>" +
+                    formatPrice(order.seller_fee) + "</span></div>";
         }
 
         detailsHtml +=

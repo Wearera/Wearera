@@ -818,7 +818,8 @@ checkoutButton.addEventListener("click", async function() {
         const cartRowId = item.row.id;
 
         const sellerPrice = Number(article.price || 0);
-        const weareraFee = sellerPrice * 0.08;
+        const buyerFee = sellerPrice * 0.08;
+        const itemTotal = sellerPrice + buyerFee;
 
         const { data: existingOrders } = await supabaseClient
             .from("orders")
@@ -845,10 +846,15 @@ checkoutButton.addEventListener("click", async function() {
 
         const sellerTransactionNumber = (sellerOrders?.length || 0) + 1;
 
-        /* Fee is waived only if: seller is eligible AND this is their first transaction */
-        const feeWaived = sellerEligible === true && sellerTransactionNumber === 1;
-        const finalFee = feeWaived ? 0 : weareraFee;
-        const finalItemTotal = sellerPrice + finalFee;
+        /* Seller fee: 0% on first eligible transaction, 2% afterward */
+        let sellerFee = 0;
+        let feeWaived = false;
+        if (sellerEligible === true && sellerTransactionNumber === 1) {
+            sellerFee = 0;
+            feeWaived = true;
+        } else {
+            sellerFee = sellerPrice * 0.02;
+        }
 
         const { error: orderError } = await supabaseClient
             .from("orders")
@@ -857,10 +863,11 @@ checkoutButton.addEventListener("click", async function() {
                 article_id: article.id,
                 seller_id: article.seller_id,
                 seller_price: sellerPrice,
-                wearera_fee: finalFee,
-                item_total: finalItemTotal,
+                wearera_fee: buyerFee,
+                seller_fee: sellerFee,
+                item_total: itemTotal,
                 shipping_cost: 0,
-                grand_total: finalItemTotal,
+                grand_total: itemTotal,
                 status: "paid",
                 fee_waived: feeWaived,
                 buyer_transaction_number: 0,

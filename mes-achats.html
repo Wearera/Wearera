@@ -649,15 +649,9 @@ async function loadOrders() {
                 "<div class='detail-row'><span>Prix de l'article</span><span>" +
                     formatPrice(order.seller_price) + "</span></div>";
 
-        if (order.fee_waived) {
-            detailsHtml +=
-                "<div class='detail-row'><span>Frais WEARERA</span>" +
-                "<span style='color:#2e7d32'>Offerts (lancement)</span></div>";
-        } else {
-            detailsHtml +=
-                "<div class='detail-row'><span>Frais WEARERA (8%)</span><span>" +
-                    formatPrice(order.wearera_fee) + "</span></div>";
-        }
+        detailsHtml +=
+            "<div class='detail-row'><span>Frais WEARERA (8%)</span><span>" +
+                formatPrice(order.wearera_fee) + "</span></div>";
 
         detailsHtml +=
             "<div class='detail-row'><span>Livraison</span><span>" +
