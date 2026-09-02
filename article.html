@@ -725,6 +725,11 @@ supabase.createClient(
 );
 
 
+let currentUser = null;
+
+let currentArticle = null;
+
+
 /* =====================================================
    AUTHENTIFICATION
 ===================================================== */
@@ -741,6 +746,8 @@ async function updateAuthArea() {
 
 
     if (user) {
+
+        currentUser = user;
 
         const firstName =
             user.user_metadata?.first_name ||
@@ -1257,6 +1264,200 @@ resetButton.addEventListener(
 
     }
 );
+
+
+/* =====================================================
+   VUE DETAIL ARTICLE
+========================================================= */
+
+function getArticleIdFromUrl() {
+
+    const params = new URLSearchParams(window.location.search);
+
+    return params.get("id");
+
+}
+
+
+function getFirstPhoto(article) {
+
+    if (Array.isArray(article.photo_urls) && article.photo_urls.length) {
+        return article.photo_urls[0];
+    }
+
+    if (typeof article.photo_urls === "string") {
+        try {
+            const parsed = JSON.parse(article.photo_urls);
+            if (Array.isArray(parsed) && parsed.length) return parsed[0];
+            return article.photo_urls;
+        } catch (e) {
+            return article.photo_urls;
+        }
+    }
+
+    return "";
+
+}
+
+
+async function loadArticleDetail(articleId) {
+
+    const detailView = document.getElementById("detail-view");
+    const detailLoading = document.getElementById("detail-loading");
+    const detailError = document.getElementById("detail-error");
+    const detailCard = document.getElementById("detail-card");
+
+    detailView.style.display = "block";
+    detailLoading.style.display = "block";
+    detailError.style.display = "none";
+    detailCard.style.display = "none";
+
+    const { data: article, error } = await supabaseClient
+        .from("Articles")
+        .select("*")
+        .eq("id", articleId)
+        .maybeSingle();
+
+    detailLoading.style.display = "none";
+
+    if (error || !article) {
+        detailError.style.display = "block";
+        return;
+    }
+
+    currentArticle = article;
+
+    const photoUrl = getFirstPhoto(article);
+
+    const photoContainer = document.getElementById("detail-photo-container");
+
+    if (photoUrl) {
+        photoContainer.innerHTML = '<img class="detail-photo" src="' + photoUrl + '" alt="' + escapeHtml(article.name) + '">';
+    } else {
+        photoContainer.innerHTML = '<div class="detail-no-photo">📷</div>';
+    }
+
+    document.getElementById("detail-name").textContent = article.name || "Article";
+    document.getElementById("detail-brand").textContent = article.brand || "Marque non indiquée";
+    document.getElementById("detail-price").textContent = Number(article.price || 0).toFixed(2) + " $";
+
+    let infoHtml = "";
+
+    if (article.category) infoHtml += "Catégorie : " + escapeHtml(article.category) + "<br>";
+    if (article.size) infoHtml += "Taille : " + escapeHtml(article.size) + "<br>";
+    if (article.shoe_size) infoHtml += "Pointure : " + escapeHtml(article.shoe_size) + "<br>";
+
+    let conditionText = article.condition || "";
+    if (conditionText && conditionText !== "Neuf") conditionText = conditionText + "/5";
+    if (conditionText) infoHtml += "État : " + escapeHtml(conditionText) + "<br>";
+
+    let locationText = article.city || "Canada";
+    if (article.province) locationText += ", " + article.province;
+    infoHtml += "Localisation : " + escapeHtml(locationText) + "<br>";
+
+    if (article.defects) infoHtml += "Défauts : " + escapeHtml(article.defects);
+
+    document.getElementById("detail-info").innerHTML = infoHtml;
+    document.getElementById("detail-description").textContent = article.description || "Aucune description.";
+
+    const contactLink = document.getElementById("contact-seller-link");
+    const cartBtn = document.getElementById("add-to-cart-btn");
+    const detailMsg = document.getElementById("detail-message");
+
+    contactLink.href = "messagerie.html?article_id=" + encodeURIComponent(article.id) + "&seller_id=" + encodeURIComponent(article.seller_id);
+
+    cartBtn.style.display = "inline-block";
+    cartBtn.disabled = false;
+    cartBtn.textContent = "🛒 Ajouter au panier";
+    detailMsg.textContent = "";
+
+    if (currentUser && article.seller_id === currentUser.id) {
+        cartBtn.style.display = "none";
+        detailMsg.textContent = "C'est votre article.";
+    } else if (!currentUser) {
+        cartBtn.style.display = "none";
+        detailMsg.textContent = "Connectez-vous pour ajouter au panier.";
+    }
+
+    detailCard.style.display = "block";
+
+}
+
+
+/* =====================================================
+   AJOUTER AU PANIER
+========================================================= */
+
+document.getElementById("add-to-cart-btn").addEventListener("click", async function() {
+
+    if (!currentUser) {
+        window.location.href = "auth.html?redirect=article.html?id=" + encodeURIComponent(currentArticle.id);
+        return;
+    }
+
+    if (!currentArticle) return;
+
+    const cartBtn = this;
+    const detailMsg = document.getElementById("detail-message");
+
+    cartBtn.disabled = true;
+    cartBtn.textContent = "Ajout en cours...";
+
+    const { data: existing } = await supabaseClient
+        .from("cart_items")
+        .select("id")
+        .eq("user_id", currentUser.id)
+        .eq("article_id", currentArticle.id)
+        .maybeSingle();
+
+    if (existing) {
+        cartBtn.disabled = true;
+        cartBtn.textContent = "🛒 Déjà dans le panier";
+        detailMsg.textContent = "Cet article est déjà dans votre panier.";
+        return;
+    }
+
+    const { error } = await supabaseClient
+        .from("cart_items")
+        .insert({
+            user_id: currentUser.id,
+            article_id: currentArticle.id
+        });
+
+    if (error) {
+        console.error(error);
+        cartBtn.disabled = false;
+        cartBtn.textContent = "🛒 Ajouter au panier";
+        detailMsg.textContent = "Erreur : " + error.message;
+        return;
+    }
+
+    cartBtn.disabled = true;
+    cartBtn.textContent = "✓ Ajouté au panier";
+    detailMsg.textContent = "Article ajouté ! Voir votre panier.";
+
+});
+
+
+/* =====================================================
+   DEMARRAGE
+========================================================= */
+
+(async function() {
+
+    await updateAuthArea();
+
+    const articleId = getArticleIdFromUrl();
+
+    if (articleId) {
+        document.getElementById("list-view").style.display = "none";
+        loadArticleDetail(articleId);
+    } else {
+        document.getElementById("detail-view").style.display = "none";
+        loadArticles();
+    }
+
+})();
 
 
 </script>
