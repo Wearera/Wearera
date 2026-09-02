@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>WEARERA — Mon panier</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f7f5f2;
+    color: #222;
+}
+
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+header {
+    background: white;
+    padding: 22px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 30px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.logo a {
+    text-decoration: none;
+    color: #222;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #222;
+    font-size: 15px;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* =====================================================
+   CONTENU
+===================================================== */
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 7%;
+}
+
+.page-title h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.page-title p {
+    color: #777;
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+/* =====================================================
+   CART ITEMS
+===================================================== */
+
+.cart-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.cart-item {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    padding: 18px;
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    transition: 0.2s;
+}
+
+.cart-item:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+}
+
+.cart-item-photo {
+    width: 90px;
+    height: 90px;
+    border-radius: 10px;
+    object-fit: cover;
+    background: #eee;
+    flex-shrink: 0;
+}
+
+.cart-item-no-photo {
+    width: 90px;
+    height: 90px;
+    border-radius: 10px;
+    background: #eee;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+    font-size: 28px;
+}
+
+.cart-item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.cart-item-info h3 {
+    font-size: 17px;
+    margin-bottom: 5px;
+}
+
+.cart-item-brand {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 5px;
+}
+
+.cart-item-price {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.cart-item-qty {
+    font-size: 13px;
+    color: #999;
+    margin-top: 4px;
+}
+
+.cart-remove {
+    background: none;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 8px 14px;
+    color: #c62828;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.cart-remove:hover {
+    background: #ffebee;
+    border-color: #c62828;
+}
+
+/* =====================================================
+   SUMMARY
+===================================================== */
+
+.cart-summary {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    padding: 25px;
+    margin-top: 25px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: #555;
+}
+
+.summary-total {
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+    margin-top: 5px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #222;
+}
+
+.checkout-button {
+    width: 100%;
+    padding: 17px;
+    border: none;
+    border-radius: 10px;
+    background: #222;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.checkout-button:hover {
+    background: #444;
+}
+
+.checkout-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* =====================================================
+   EMPTY / LOADING
+===================================================== */
+
+.empty-cart {
+    text-align: center;
+    padding: 60px 20px;
+    color: #777;
+}
+
+.empty-cart .icon {
+    font-size: 50px;
+    margin-bottom: 15px;
+}
+
+.empty-cart h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #222;
+}
+
+.empty-cart p {
+    margin-bottom: 20px;
+}
+
+.empty-cart a {
+    display: inline-block;
+    padding: 14px 30px;
+    background: #222;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.empty-cart a:hover {
+    background: #444;
+}
+
+.loading {
+    text-align: center;
+    padding: 50px;
+    color: #777;
+}
+
+/* =====================================================
+   CHECKOUT NOTICE
+===================================================== */
+
+.checkout-notice {
+    background: #eee8df;
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.checkout-notice h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.checkout-notice p {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.checkout-notice button {
+    padding: 12px 25px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: white;
+    color: #222;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.checkout-notice button:hover {
+    background: #f7f5f2;
+}
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+footer {
+    margin-top: 50px;
+    padding: 30px;
+    text-align: center;
+    background: #222;
+    color: white;
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 800px) {
+
+    header {
+        padding: 18px 5%;
+    }
+
+    nav {
+        gap: 12px;
+    }
+
+    nav a:not(.message-nav):not(.profile-nav):not(.cart-nav) {
+        display: none;
+    }
+
+    .container {
+        padding: 30px 5%;
+    }
+
+    .cart-item {
+        flex-wrap: wrap;
+    }
+
+    .cart-item-photo,
+    .cart-item-no-photo {
+        width: 70px;
+        height: 70px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header>
+
+<div class="logo">
+
+<a href="index.html">
+WEARERA
+</a>
+
+</div>
+
+<nav>
+
+<a href="index.html">
+Accueil
+</a>
+
+<a href="index.html#articles">
+Acheter
+</a>
+
+<a href="vendre.html">
+Vendre
+</a>
+
+<a href="mes-articles.html">
+Mes articles
+</a>
+
+<a href="panier.html" class="cart-nav">🛒 Panier</a>
+
+<a href="messagerie.html" class="message-nav">💬 Messagerie</a>
+
+<a href="profil.html" class="profile-nav">👤 Mon profil</a>
+
+</nav>
+
+</header>
+
+<!-- =====================================================
+     CONTENU
+===================================================== -->
+
+<main class="container">
+
+<div class="page-title">
+
+<h1>🛒 Mon panier</h1>
+
+<p>Vos articles sélectionnés en attente de paiement.</p>
+
+</div>
+
+<div id="loading" class="loading">
+Chargement de votre panier...
+</div>
+
+<div id="cart-content" style="display:none;">
+
+<div id="cart-items" class="cart-list">
+</div>
+
+<div id="cart-empty" class="empty-cart" style="display:none;">
+
+<div class="icon">🛒</div>
+
+<h3>Votre panier est vide</h3>
+
+<p>Parcourez les articles et ajoutez ceux qui vous intéressent.</p>
+
+<a href="index.html#articles">Voir les articles</a>
+
+</div>
+
+<div id="cart-summary" class="cart-summary" style="display:none;">
+
+<div class="summary-row">
+<span>Sous-total</span>
+<span id="subtotal">0 $</span>
+</div>
+
+<div class="summary-row">
+<span>Livraison</span>
+<span>À convenir avec le vendeur</span>
+</div>
+
+<div class="summary-row summary-total">
+<span>Total</span>
+<span id="total">0 $</span>
+</div>
+
+<button id="checkout-button" class="checkout-button">
+Passer au paiement
+</button>
+
+</div>
+
+</div>
+
+<div id="checkout-notice" class="checkout-notice" style="display:none;">
+
+<h3>Le paiement sera disponible prochainement</h3>
+
+<p>
+Pour l'instant, WEARERA ne gère pas encore les paiements en ligne.
+Vous pouvez contacter le vendeur via la messagerie pour convenir du paiement et de la livraison.
+</p>
+
+<button id="back-to-cart">
+Retour au panier
+</button>
+
+</div>
+
+</main>
+
+<footer>
+
+WEARERA ©️ 2026
+
+<br>
+
+La mode de seconde main au Canada.
+
+</footer>
+
+<script>
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+    "https://tpmdiwviyrnmergaqyit.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_HNghaWql020DW11APCBAcw_WOGu882V";
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const loading =
+    document.getElementById("loading");
+
+const cartContent =
+    document.getElementById("cart-content");
+
+const cartItems =
+    document.getElementById("cart-items");
+
+const cartEmpty =
+    document.getElementById("cart-empty");
+
+const cartSummary =
+    document.getElementById("cart-summary");
+
+const subtotalEl =
+    document.getElementById("subtotal");
+
+const totalEl =
+    document.getElementById("total");
+
+const checkoutButton =
+    document.getElementById("checkout-button");
+
+const checkoutNotice =
+    document.getElementById("checkout-notice");
+
+const backToCart =
+    document.getElementById("back-to-cart");
+
+/* =====================================================
+   FORMAT PRIX
+===================================================== */
+
+function formatPrice(price) {
+    return Number(price || 0).toFixed(2).replace(".00", "") + " $";
+}
+
+/* =====================================================
+   PHOTO URL
+===================================================== */
+
+function getFirstPhoto(article) {
+    if (Array.isArray(article.photo_urls) && article.photo_urls.length) {
+        return article.photo_urls[0];
+    }
+    if (typeof article.photo_urls === "string") {
+        try {
+            const parsed = JSON.parse(article.photo_urls);
+            if (Array.isArray(parsed) && parsed.length) {
+                return parsed[0];
+            }
+            return article.photo_urls;
+        } catch (e) {
+            return article.photo_urls;
+        }
+    }
+    return "";
+}
+
+/* =====================================================
+   CHARGER LE PANIER
+===================================================== */
+
+async function loadCart() {
+
+    const {
+        data: { user },
+        error: authError
+    } = await supabaseClient.auth.getUser();
+
+    if (authError || !user) {
+
+        loading.style.display = "none";
+
+        cartContent.style.display = "block";
+
+        cartEmpty.style.display = "block";
+
+        cartSummary.style.display = "none";
+
+        return;
+    }
+
+    const {
+        data: items,
+        error
+    } = await supabaseClient
+        .from("cart_items")
+        .select(`
+            id,
+            article_id,
+            Articles!inner (
+                id,
+                name,
+                brand,
+                price,
+                photo_urls,
+                seller_id
+            )
+        `)
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+
+    loading.style.display = "none";
+
+    cartContent.style.display = "block";
+
+    if (error) {
+
+        console.error("Erreur panier :", error);
+
+        cartItems.innerHTML =
+            "<p style='color:#c62828;text-align:center;padding:30px'>" +
+            "Impossible de charger votre panier. " +
+            error.message +
+            "</p>";
+
+        return;
+    }
+
+    if (!items || items.length === 0) {
+
+        cartEmpty.style.display = "block";
+
+        cartSummary.style.display = "none";
+
+        return;
+    }
+
+    let subtotal = 0;
+
+    cartItems.innerHTML = "";
+
+    items.forEach(function(item) {
+
+        const article = item.Articles;
+
+        if (!article) return;
+
+        subtotal += Number(article.price || 0);
+
+        const photoUrl = getFirstPhoto(article);
+
+        const row = document.createElement("div");
+
+        row.className = "cart-item";
+
+        let photoHtml;
+
+        if (photoUrl) {
+
+            photoHtml =
+                "<img class='cart-item-photo' src='" +
+                photoUrl +
+                "' alt='" +
+                (article.name || "Article") +
+                "'>";
+
+        } else {
+
+            photoHtml =
+                "<div class='cart-item-no-photo'>📷</div>";
+
+        }
+
+        row.innerHTML =
+            photoHtml +
+            "<div class='cart-item-info'>" +
+                "<h3>" + (article.name || "Article") + "</h3>" +
+                "<div class='cart-item-brand'>" +
+                    (article.brand || "Marque non indiquée") +
+                "</div>" +
+                "<div class='cart-item-price'>" +
+                    formatPrice(article.price) +
+                "</div>" +
+                "<div class='cart-item-qty'>Quantité : 1 (pièce unique)</div>" +
+            "</div>" +
+            "<button class='cart-remove' data-cart-id='" + item.id + "'>" +
+                "Retirer" +
+            "</button>";
+
+        cartItems.appendChild(row);
+    });
+
+    if (subtotal === 0) {
+
+        cartEmpty.style.display = "block";
+
+        cartSummary.style.display = "none";
+
+        return;
+    }
+
+    cartEmpty.style.display = "none";
+
+    cartSummary.style.display = "block";
+
+    subtotalEl.textContent = formatPrice(subtotal);
+
+    totalEl.textContent = formatPrice(subtotal);
+
+    document.querySelectorAll(".cart-remove").forEach(function(btn) {
+
+        btn.addEventListener("click", async function() {
+
+            const cartId = this.getAttribute("data-cart-id");
+
+            this.disabled = true;
+
+            this.textContent = "...";
+
+            const { error: delError } = await supabaseClient
+                .from("cart_items")
+                .delete()
+                .eq("id", cartId);
+
+            if (delError) {
+
+                console.error(delError);
+
+                this.disabled = false;
+
+                this.textContent = "Retirer";
+
+                alert("Impossible de retirer l'article.");
+
+                return;
+            }
+
+            loadCart();
+        });
+    });
+}
+
+/* =====================================================
+   CHECKOUT
+===================================================== */
+
+checkoutButton.addEventListener("click", function() {
+
+    checkoutNotice.style.display = "block";
+
+    checkoutNotice.scrollIntoView({ behavior: "smooth" });
+
+});
+
+backToCart.addEventListener("click", function() {
+
+    checkoutNotice.style.display = "none";
+
+});
+
+/* =====================================================
+   DEMARRAGE
+===================================================== */
+
+loadCart();
+
+</script>
+
+</body>
+
+</html>

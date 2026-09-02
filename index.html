@@ -90,6 +90,10 @@ nav a:hover {
     font-weight: bold;
 }
 
+.cart-nav {
+    font-weight: bold;
+}
+
 .unread-badge {
     display: inline-flex;
     align-items: center;
@@ -809,6 +813,9 @@ footer {
 
 </style>
 
+  <meta property="og:image" content="https://bolt.new/static/og_default.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://bolt.new/static/og_default.png">
 </head>
 
 <body>
@@ -852,6 +859,14 @@ Connexion
 </a>
 
 </span>
+
+<a
+href="panier.html"
+class="cart-nav">
+
+🛒 Panier
+
+</a>
 
 <a
 href="messagerie.html"
@@ -1562,8 +1577,17 @@ class="contact-seller-button">
 
 </button>
 
+<button
+id="add-to-cart-button"
+class="contact-seller-button"
+style="background:#1b5e20;margin-top:12px;">
+
+🛒 Ajouter au panier
+
+</button>
+
 <div
-id="seller-message"
+id="cart-message"
 class="seller-message">
 </div>
 
@@ -3316,6 +3340,16 @@ const sellerMessage =
         "seller-message"
     );
 
+const addToCartButton =
+    document.getElementById(
+        "add-to-cart-button"
+    );
+
+const cartMessage =
+    document.getElementById(
+        "cart-message"
+    );
+
 /* =====================================================
    OUVRIR ARTICLE
 ===================================================== */
@@ -3460,11 +3494,23 @@ function openArticle(item) {
     sellerMessage.textContent =
         "";
 
+    cartMessage.textContent =
+        "";
+
     contactSellerButton.disabled =
         false;
 
     contactSellerButton.textContent =
         " Contacter le vendeur";
+
+    addToCartButton.disabled =
+        false;
+
+    addToCartButton.textContent =
+        "🛒 Ajouter au panier";
+
+    addToCartButton.style.display =
+        "block";
 
     if (
         currentUser &&
@@ -3481,6 +3527,14 @@ function openArticle(item) {
         sellerMessage.textContent =
             "Vous êtes le vendeur de cet article.";
 
+        addToCartButton.style.display =
+            "none";
+
+    } else if (!currentUser) {
+
+        addToCartButton.style.display =
+            "none";
+
     }
 
     updateGallery();
@@ -3493,6 +3547,96 @@ function openArticle(item) {
         "hidden";
 
 }
+
+/* =====================================================
+   AJOUTER AU PANIER
+===================================================== */
+
+addToCartButton.addEventListener(
+    "click",
+    async function() {
+
+        if (!currentUser) {
+
+            window.location.href =
+                "auth.html?redirect=index.html";
+
+            return;
+
+        }
+
+        if (!currentArticle) {
+            return;
+        }
+
+        addToCartButton.disabled =
+            true;
+
+        addToCartButton.textContent =
+            "Ajout en cours...";
+
+        const {
+            data: existing
+        } = await supabaseClient
+            .from("cart_items")
+            .select("id")
+            .eq("user_id", currentUser.id)
+            .eq("article_id", currentArticle.id)
+            .maybeSingle();
+
+        if (existing) {
+
+            addToCartButton.disabled =
+                false;
+
+            addToCartButton.textContent =
+                "🛒 Déjà dans le panier";
+
+            cartMessage.textContent =
+                "Cet article est déjà dans votre panier.";
+
+            return;
+
+        }
+
+        const {
+            error
+        } = await supabaseClient
+            .from("cart_items")
+            .insert({
+                user_id: currentUser.id,
+                article_id: currentArticle.id
+            });
+
+        if (error) {
+
+            console.error(error);
+
+            addToCartButton.disabled =
+                false;
+
+            addToCartButton.textContent =
+                "🛒 Ajouter au panier";
+
+            cartMessage.textContent =
+                "Impossible d'ajouter au panier : " +
+                error.message;
+
+            return;
+
+        }
+
+        addToCartButton.disabled =
+            true;
+
+        addToCartButton.textContent =
+            "✓ Ajouté au panier";
+
+        cartMessage.textContent =
+            "Article ajouté ! Vous pouvez le retrouver dans votre panier.";
+
+    }
+);
 
 /* =====================================================
    GALERIE
