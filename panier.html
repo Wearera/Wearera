@@ -666,7 +666,7 @@ async function loadCart() {
         error: articlesError
     } = await supabaseClient
         .from("Articles")
-        .select("id, name, brand, price, photo_urls, seller_id")
+        .select("id, name, brand, price, photo_urls, seller_id, is_sold")
         .in("id", articleIds);
 
     if (articlesError) {
@@ -698,9 +698,13 @@ async function loadCart() {
         if (!article) return;
 
         const price = Number(article.price || 0);
-        subtotal += price;
 
-        pendingCartData.push({ row: row, article: article });
+        if (article.is_sold) {
+            pendingCartData.push({ row: row, article: article, sold: true });
+        } else {
+            subtotal += price;
+            pendingCartData.push({ row: row, article: article, sold: false });
+        }
 
         const photoUrl = getFirstPhoto(article);
 
@@ -821,6 +825,12 @@ checkoutButton.addEventListener("click", async function() {
         const article = item.article;
         const cartRowId = item.row.id;
 
+        if (item.sold || article.is_sold) {
+            errorCount++;
+            errorMsg = "L'article « " + (article.name || "Article") + " » a déjà été vendu et ne peut plus être commandé.";
+            continue;
+        }
+
         const sellerPrice = Number(article.price || 0);
         const buyerFee = sellerPrice * 0.08;
         const itemTotal = sellerPrice + buyerFee;
@@ -884,6 +894,11 @@ checkoutButton.addEventListener("click", async function() {
             errorMsg = orderError.message;
             continue;
         }
+
+        await supabaseClient
+            .from("Articles")
+            .update({ is_sold: true })
+            .eq("id", article.id);
 
         await supabaseClient
             .from("cart_items")

@@ -2749,6 +2749,8 @@ function getPhotoUrls(item) {
 
 function matchesFilters(item) {
 
+    if (item.is_sold) return false;
+
     const category =
         filterCategory.value;
 
@@ -3529,6 +3531,23 @@ function openArticle(item) {
 
         addToCartButton.style.display =
             "none";
+
+    } else if (item.is_sold) {
+
+        contactSellerButton.disabled =
+            true;
+
+        addToCartButton.disabled =
+            true;
+
+        addToCartButton.textContent =
+            "Article déjà vendu";
+
+        addToCartButton.style.display =
+            "block";
+
+        cartMessage.textContent =
+            "Cet article a déjà été vendu.";
 
     } else if (!currentUser) {
 
