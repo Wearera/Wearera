@@ -81,6 +81,62 @@ nav a:hover {
     text-decoration: underline;
 }
 
+/* DROPDOWN */
+.nav-dropdown {
+    position: relative;
+}
+
+.nav-dropdown-toggle {
+    text-decoration: none;
+    color: #222;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 0;
+}
+
+.nav-dropdown-toggle:hover {
+    text-decoration: underline;
+}
+
+.nav-dropdown-toggle .caret {
+    font-size: 11px;
+    opacity: 0.6;
+}
+
+.nav-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    min-width: 170px;
+    padding: 6px 0;
+    z-index: 1100;
+}
+
+.nav-dropdown.open .nav-dropdown-menu {
+    display: block;
+}
+
+.nav-dropdown-menu a {
+    display: block;
+    padding: 10px 18px;
+    color: #333;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.nav-dropdown-menu a:hover {
+    background: #f7f5f2;
+    text-decoration: none;
+}
+
 .message-nav {
     position: relative;
     font-weight: bold;
@@ -707,13 +763,17 @@ footer {
         gap: 12px;
     }
 
-    nav a:not(.message-nav):not(.profile-nav) {
+    nav a:not(.message-nav):not(.profile-nav):not(.cart-nav):not(.nav-dropdown-toggle) {
         display: none;
     }
 
     .message-nav,
     .profile-nav {
         display: block !important;
+    }
+
+    .nav-dropdown-toggle {
+        display: flex !important;
     }
 
     .hero {
@@ -848,9 +908,13 @@ Acheter
 Vendre
 </a>
 
-<a href="mes-articles.html">
-Mes articles
-</a>
+<div class="nav-dropdown" id="nav-dropdown">
+<a class="nav-dropdown-toggle" onclick="document.getElementById('nav-dropdown').classList.toggle('open')">Mes articles <span class="caret">▾</span></a>
+<div class="nav-dropdown-menu">
+<a href="mes-ventes.html">💰 Mes ventes</a>
+<a href="mes-achats.html">🛍️ Mes achats</a>
+</div>
+</div>
 
 <span id="auth-area">
 
