@@ -425,6 +425,10 @@ autocomplete="new-password"
 required
 >
 
+<p style="font-size:12px;color:#888;margin-top:6px;line-height:1.4">
+Au moins 8 caractères, avec des majuscules, des chiffres et des symboles. Évitez les mots de passe courants.
+</p>
+
 </div>
 
 
@@ -1013,10 +1017,10 @@ signupForm.addEventListener(
         }
 
 
-        if (password.length < 6) {
+        if (password.length < 8) {
 
             showError(
-                "Le mot de passe doit contenir au moins 6 caractères."
+                "Le mot de passe doit contenir au moins 8 caractères, avec des majuscules, des chiffres et des symboles."
             );
 
             return;
@@ -1108,10 +1112,37 @@ signupForm.addEventListener(
                         "Cette adresse e-mail est déjà utilisée."
                     );
 
+                } else if (
+                    errorMessage.includes(
+                        "weak_password"
+                    ) ||
+                    errorMessage.includes(
+                        "password is known to be weak"
+                    ) ||
+                    errorMessage.includes(
+                        "pwned"
+                    )
+                ) {
+
+                    showError(
+                        "Ce mot de passe est trop courant et donc non sécurisé. Choisissez un mot de passe plus fort (au moins 8 caractères, avec majuscules, chiffres et symboles)."
+                    );
+
+                } else if (
+                    errorMessage.includes(
+                        "rate limit"
+                    )
+                ) {
+
+                    showError(
+                        "Trop de tentatives. Veuillez patienter quelques minutes avant de réessayer."
+                    );
+
                 } else {
 
                     showError(
-                        "Impossible de créer le compte. Veuillez vérifier vos informations."
+                        "Impossible de créer le compte. " +
+                        (error.message || "Veuillez vérifier vos informations.")
                     );
 
                 }
