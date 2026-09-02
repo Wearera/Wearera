@@ -612,22 +612,11 @@ async function loadCart() {
     }
 
     const {
-        data: items,
-        error
+        data: cartRows,
+        error: cartError
     } = await supabaseClient
         .from("cart_items")
-        .select(`
-            id,
-            article_id,
-            Articles!inner (
-                id,
-                name,
-                brand,
-                price,
-                photo_urls,
-                seller_id
-            )
-        `)
+        .select("id, article_id")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
@@ -635,20 +624,20 @@ async function loadCart() {
 
     cartContent.style.display = "block";
 
-    if (error) {
+    if (cartError) {
 
-        console.error("Erreur panier :", error);
+        console.error("Erreur panier :", cartError);
 
         cartItems.innerHTML =
             "<p style='color:#c62828;text-align:center;padding:30px'>" +
             "Impossible de charger votre panier. " +
-            error.message +
+            cartError.message +
             "</p>";
 
         return;
     }
 
-    if (!items || items.length === 0) {
+    if (!cartRows || cartRows.length === 0) {
 
         cartEmpty.style.display = "block";
 
@@ -657,13 +646,40 @@ async function loadCart() {
         return;
     }
 
+    const articleIds = cartRows.map(function(r) { return r.article_id; });
+
+    const {
+        data: articles,
+        error: articlesError
+    } = await supabaseClient
+        .from("Articles")
+        .select("id, name, brand, price, photo_urls, seller_id")
+        .in("id", articleIds);
+
+    if (articlesError) {
+
+        console.error("Erreur articles :", articlesError);
+
+        cartItems.innerHTML =
+            "<p style='color:#c62828;text-align:center;padding:30px'>" +
+            "Impossible de charger les articles. " +
+            articlesError.message +
+            "</p>";
+
+        return;
+    }
+
+    const articleMap = {};
+
+    articles.forEach(function(a) { articleMap[a.id] = a; });
+
     let subtotal = 0;
 
     cartItems.innerHTML = "";
 
-    items.forEach(function(item) {
+    cartRows.forEach(function(row) {
 
-        const article = item.Articles;
+        const article = articleMap[row.article_id];
 
         if (!article) return;
 
@@ -671,9 +687,9 @@ async function loadCart() {
 
         const photoUrl = getFirstPhoto(article);
 
-        const row = document.createElement("div");
+        const item = document.createElement("div");
 
-        row.className = "cart-item";
+        item.className = "cart-item";
 
         let photoHtml;
 
@@ -693,7 +709,7 @@ async function loadCart() {
 
         }
 
-        row.innerHTML =
+        item.innerHTML =
             photoHtml +
             "<div class='cart-item-info'>" +
                 "<h3>" + (article.name || "Article") + "</h3>" +
@@ -705,11 +721,11 @@ async function loadCart() {
                 "</div>" +
                 "<div class='cart-item-qty'>Quantité : 1 (pièce unique)</div>" +
             "</div>" +
-            "<button class='cart-remove' data-cart-id='" + item.id + "'>" +
+            "<button class='cart-remove' data-cart-id='" + row.id + "'>" +
                 "Retirer" +
             "</button>";
 
-        cartItems.appendChild(row);
+        cartItems.appendChild(item);
     });
 
     if (subtotal === 0) {
