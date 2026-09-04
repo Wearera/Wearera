@@ -1,35 +1,16 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mes articles — WEARERA</title>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #f7f5f2; color: #222; }
+button, input, select, textarea { font-family: inherit; }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background: #f7f5f2;
-    color: #222;
-}
-
-/* =========================
-   HEADER
-========================= */
-
+/* HEADER */
 header {
     background: white;
     padding: 22px 7%;
@@ -37,1048 +18,359 @@ header {
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
+.logo { font-size: 30px; font-weight: bold; letter-spacing: 2px; }
+.logo a { text-decoration: none; color: #222; }
+nav { display: flex; align-items: center; gap: 22px; }
+nav a { text-decoration: none; color: #222; font-size: 15px; }
+nav a:hover { text-decoration: underline; }
+.nav-dropdown { position: relative; }
+.nav-dropdown-toggle { text-decoration: none; color: #222; font-size: 15px; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 4px 0; }
+.nav-dropdown-toggle:hover { text-decoration: underline; }
+.nav-dropdown-toggle .caret { font-size: 11px; opacity: 0.6; }
+.nav-dropdown-menu { display: none; position: absolute; top: 100%; right: 0; background: white; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); min-width: 170px; padding: 6px 0; z-index: 1100; }
+.nav-dropdown.open .nav-dropdown-menu { display: block; }
+.nav-dropdown-menu a { display: block; padding: 10px 18px; color: #333; font-size: 14px; text-decoration: none; }
+.nav-dropdown-menu a:hover { background: #f7f5f2; text-decoration: none; }
 
-.logo {
-    font-size: 30px;
-    font-weight: bold;
-    letter-spacing: 2px;
+/* CONTAINER */
+.container { max-width: 1000px; margin: 0 auto; padding: 40px 7%; }
+.page-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; }
+.page-title h1 { font-size: 32px; margin-bottom: 5px; }
+.page-title p { color: #777; font-size: 16px; }
+.sell-btn { padding: 12px 22px; background: #222; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; }
+.sell-btn:hover { background: #333; }
+
+/* ARTICLE GRID */
+.articles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+.article-card { background: white; border: 1px solid #ddd; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+.article-photo { width: 100%; height: 180px; object-fit: cover; background: #eee; display: block; }
+.article-no-photo { width: 100%; height: 180px; background: #eee; display: flex; align-items: center; justify-content: center; color: #aaa; font-size: 40px; }
+.article-info { padding: 15px; flex: 1; display: flex; flex-direction: column; }
+.article-name { font-size: 16px; font-weight: bold; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.article-brand { font-size: 13px; color: #777; margin-bottom: 8px; }
+.article-price { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
+.article-meta { font-size: 12px; color: #999; margin-bottom: 12px; }
+.article-sold-badge { display: inline-block; margin-bottom: 10px; padding: 3px 10px; background: #fde8e8; color: #c62828; border-radius: 20px; font-size: 11px; font-weight: bold; text-transform: uppercase; }
+.article-actions { display: flex; gap: 8px; margin-top: auto; }
+.btn-edit { flex: 1; padding: 9px 12px; background: #222; color: white; border: none; border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer; text-decoration: none; text-align: center; }
+.btn-edit:hover { background: #333; }
+.btn-delete { flex: 1; padding: 9px 12px; background: white; color: #c62828; border: 1px solid #c62828; border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer; }
+.btn-delete:hover { background: #fde8e8; }
+.btn-delete:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* MESSAGES */
+.loading { text-align: center; padding: 50px; color: #666; font-size: 16px; }
+.empty-state { text-align: center; padding: 60px 20px; color: #666; }
+.empty-state-icon { font-size: 60px; margin-bottom: 15px; opacity: 0.4; }
+.empty-state h3 { font-size: 22px; margin-bottom: 10px; }
+.empty-state p { font-size: 15px; color: #999; margin-bottom: 25px; }
+.error-message { background: #fde8e8; color: #c62828; border: 1px solid #f5c6c6; border-radius: 8px; padding: 12px 16px; font-size: 14px; margin-bottom: 20px; display: none; }
+.success-message { background: #e8f5e8; color: #2e7d32; border: 1px solid #c6e6c6; border-radius: 8px; padding: 12px 16px; font-size: 14px; margin-bottom: 20px; display: none; }
+
+/* LOGIN PROMPT */
+.login-prompt { text-align: center; padding: 80px 20px; }
+.login-prompt-icon { font-size: 60px; margin-bottom: 20px; opacity: 0.4; }
+.login-prompt h2 { font-size: 24px; margin-bottom: 10px; }
+.login-prompt p { font-size: 16px; color: #777; margin-bottom: 25px; }
+.login-prompt a { display: inline-block; padding: 14px 28px; background: #222; color: white; border-radius: 8px; text-decoration: none; font-size: 16px; font-weight: bold; }
+.login-prompt a:hover { background: #333; }
+
+/* FOOTER */
+footer { margin-top: 50px; padding: 40px 7% 25px; background: #222; color: white; }
+.footer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; max-width: 1000px; margin: 0 auto 30px; }
+.footer-col h4 { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; color: #999; }
+.footer-col a { display: block; color: #ccc; text-decoration: none; font-size: 14px; margin-bottom: 10px; transition: color 0.2s; }
+.footer-col a:hover { color: white; }
+.footer-bottom { text-align: center; font-size: 13px; color: #999; border-top: 1px solid #444; padding-top: 20px; }
+
+/* MOBILE */
+@media (max-width: 700px) {
+    header { padding: 18px 5%; }
+    nav { display: none; }
+    .container { padding: 30px 5%; }
+    .page-title h1 { font-size: 26px; }
+    .articles-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+    .article-photo, .article-no-photo { height: 140px; }
+    .article-actions { flex-direction: column; }
 }
-
-.logo a {
-    color: #222;
-    text-decoration: none;
-}
-
-nav {
-    display: flex;
-    align-items: center;
-}
-
-nav a {
-    text-decoration: none;
-    color: #222;
-    margin-left: 25px;
-}
-
-.nav-dropdown {
-    position: relative;
-    margin-left: 25px;
-}
-
-.nav-dropdown-toggle {
-    text-decoration: none;
-    color: #222;
-    font-size: 15px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.nav-dropdown-toggle:hover {
-    text-decoration: underline;
-}
-
-.nav-dropdown-toggle .caret {
-    font-size: 11px;
-    opacity: 0.6;
-}
-
-.nav-dropdown-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-    min-width: 170px;
-    padding: 6px 0;
-    z-index: 1100;
-}
-
-.nav-dropdown.open .nav-dropdown-menu {
-    display: block;
-}
-
-.nav-dropdown-menu a {
-    display: block;
-    padding: 10px 18px;
-    color: #333;
-    font-size: 14px;
-    text-decoration: none;
-    margin-left: 0;
-}
-
-.nav-dropdown-menu a:hover {
-    background: #f7f5f2;
-    text-decoration: none;
-}
-
-/* =========================
-   CONTAINER
-========================= */
-
-.container {
-    max-width: 1100px;
-    margin: 50px auto;
-    padding: 0 20px;
-}
-
-.title {
-    text-align: center;
-    margin-bottom: 35px;
-}
-
-.title h1 {
-    font-size: 38px;
-    margin-bottom: 10px;
-}
-
-.title p {
-    color: #666;
-}
-
-/* =========================
-   SECTIONS
-========================= */
-
-.section {
-    margin-bottom: 45px;
-}
-
-.section-title {
-    font-size: 25px;
-    margin-bottom: 20px;
-}
-
-/* =========================
-   ARTICLES GRID
-========================= */
-
-.articles-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 22px;
-}
-
-/* =========================
-   ARTICLE CARD
-========================= */
-
-.article-card {
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 14px;
-    overflow: hidden;
-}
-
-.article-image {
-    width: 100%;
-    height: 260px;
-    object-fit: cover;
-    display: block;
-    background: #eee;
-}
-
-.article-info {
-    padding: 18px;
-}
-
-.article-name {
-    font-size: 19px;
-    font-weight: bold;
-    margin-bottom: 8px;
-}
-
-.article-brand {
-    color: #777;
-    margin-bottom: 8px;
-}
-
-.article-price {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 8px;
-}
-
-.article-details {
-    color: #666;
-    font-size: 14px;
-    line-height: 1.6;
-}
-
-/* =========================
-   BUTTONS
-========================= */
-
-.article-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 18px;
-}
-
-.edit-button,
-.delete-button {
-    flex: 1;
-    padding: 11px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.edit-button {
-    background: #222;
-    color: white;
-    border: none;
-}
-
-.edit-button:hover {
-    opacity: 0.85;
-}
-
-.delete-button {
-    background: white;
-    color: #b00020;
-    border: 1px solid #b00020;
-}
-
-.delete-button:hover {
-    background: #b00020;
-    color: white;
-}
-
-/* =========================
-   EMPTY MESSAGE
-========================= */
-
-.empty-message {
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 14px;
-    padding: 40px 20px;
-    text-align: center;
-    color: #666;
-}
-
-.empty-message h3 {
-    color: #222;
-    margin-bottom: 10px;
-}
-
-.sell-button {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 13px 22px;
-    background: #222;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: bold;
-}
-
-/* =========================
-   LOADING
-========================= */
-
-.loading {
-    text-align: center;
-    padding: 40px;
-    color: #666;
-}
-
-/* =========================
-   FOOTER
-========================= */
-
-footer {
-    margin-top: 50px;
-    padding: 30px;
-    text-align: center;
-    background: #222;
-    color: white;
-}
-
-/* =========================
-   MOBILE
-========================= */
-
 @media (max-width: 800px) {
-
-    header {
-        padding: 18px 5%;
-    }
-
-    nav a {
-        margin-left: 12px;
-        font-size: 14px;
-    }
-
-    .container {
-        margin-top: 30px;
-    }
-
-    .title h1 {
-        font-size: 30px;
-    }
-
-    .articles-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .article-image {
-        height: 220px;
-    }
-
+    .footer-grid { grid-template-columns: 1fr; gap: 25px; }
 }
-
-@media (max-width: 550px) {
-
-    nav {
-        display: none;
-    }
-
-    .articles-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .article-image {
-        height: 300px;
-    }
-
-}
-
 </style>
-
 </head>
-
-
 <body>
 
-
+<!-- HEADER -->
 <header>
-
-    <div class="logo">
-        <a href="index.html">WEARERA</a>
-    </div>
-
-    <nav>
-
-        <a href="index.html">
-            Accueil
-        </a>
-
-        <a href="index.html">
-            Acheter
-        </a>
-
-        <a href="vendre.html">
-            Vendre
-        </a>
-
-        <div class="nav-dropdown" id="nav-dropdown">
-            <a class="nav-dropdown-toggle" onclick="document.getElementById('nav-dropdown').classList.toggle('open')">Mes articles <span class="caret">▾</span></a>
-            <div class="nav-dropdown-menu">
-                <a href="mes-ventes.html">💰 Mes ventes</a>
-                <a href="mes-achats.html">🛍️ Mes achats</a>
-            </div>
-        </div>
-
-        <span id="auth-area">
-
-            <a href="auth.html">
-                Connexion
-            </a>
-
-        </span>
-
-    <a href="panier.html">🛒 Panier</a>
-
-    </nav>
-
+<div class="logo"><a href="index.html">WEARERA</a></div>
+<nav>
+<a href="index.html">Accueil</a>
+<a href="index.html#articles">Acheter</a>
+<a href="vendre.html">Vendre</a>
+<div class="nav-dropdown" id="nav-dropdown">
+<a class="nav-dropdown-toggle" onclick="document.getElementById('nav-dropdown').classList.toggle('open')">Mes articles <span class="caret">▾</span></a>
+<div class="nav-dropdown-menu">
+<a href="mes-ventes.html">💰 Mes ventes</a>
+<a href="mes-achats.html">🛍️ Mes achats</a>
+</div>
+</div>
+<a href="panier.html" class="cart-nav">🛒 Panier</a>
+<a href="messagerie.html" class="message-nav">💬 Messagerie</a>
+<a href="profil.html" class="profile-nav">👤 Mon profil</a>
+</nav>
 </header>
 
-
+<!-- MAIN -->
 <main class="container">
+<div id="login-prompt" class="login-prompt" style="display:none;">
+<div class="login-prompt-icon">🔒</div>
+<h2>Connexion requise</h2>
+<p>Connectez-vous pour voir et gérer vos articles.</p>
+<a href="auth.html?redirect=mes-articles.html">Se connecter</a>
+</div>
 
+<div id="dashboard" style="display:none;">
+<div class="page-title">
+<div>
+<h1>Mes articles</h1>
+<p>Gérez les articles que vous avez mis en vente.</p>
+</div>
+<a href="vendre.html" class="sell-btn">+ Vendre un article</a>
+</div>
 
-    <div class="title">
+<div class="error-message" id="error-box"></div>
+<div class="success-message" id="success-box"></div>
 
-        <h1>
-            Mes articles
-        </h1>
-
-        <p>
-            Gérez les articles que vous avez publiés sur WEARERA.
-        </p>
-
-    </div>
-
-
-    <!-- =========================
-         ARTICLES
-    ========================= -->
-
-    <section class="section">
-
-        <h2 class="section-title">
-            Mes publications
-        </h2>
-
-        <div
-            id="articles-container"
-            class="articles-grid">
-
-            <div class="loading">
-                Chargement de vos articles...
-            </div>
-
-        </div>
-
-    </section>
-
-
+<div id="loading" class="loading">Chargement de vos articles...</div>
+<div id="articles-grid" class="articles-grid" style="display:none;"></div>
+<div id="empty-state" class="empty-state" style="display:none;">
+<div class="empty-state-icon">📦</div>
+<h3>Aucun article en vente</h3>
+<p>Vous n'avez pas encore publié d'article. Commencez à vendre dès maintenant !</p>
+<a href="vendre.html" class="sell-btn">Vendre un article</a>
+</div>
+</div>
 </main>
 
-
+<!-- FOOTER -->
 <footer>
-
-    WEARERA ©️ 2026
-
-    <br>
-
-    La mode de seconde main au Canada.
-
+<div class="footer-grid">
+<div class="footer-col">
+<h4>WEARERA</h4>
+<a href="a-propos.html">À propos de WEARERA</a>
+<a href="comment-ca-fonctionne.html">Comment ça fonctionne</a>
+<a href="faq.html">FAQ</a>
+<a href="nous-contacter.html">Nous contacter</a>
+</div>
+<div class="footer-col">
+<h4>Informations</h4>
+<a href="cgu.html">Conditions générales d'utilisation</a>
+<a href="confidentialite.html">Politique de confidentialité</a>
+<a href="protection-acheteur.html">Protection acheteur</a>
+<a href="protection-vendeur.html">Protection vendeur</a>
+<a href="frais.html">Frais WEARERA</a>
+<a href="livraison.html">Livraison</a>
+<a href="regles-communaute.html">Règles de la communauté</a>
+</div>
+<div class="footer-col">
+<h4>Compte</h4>
+<a href="profil.html">Mon profil</a>
+<a href="mes-articles.html">Mes articles</a>
+<a href="mes-achats.html">Mes achats</a>
+<a href="mes-ventes.html">Mes ventes</a>
+<a href="panier.html">Panier</a>
+<a href="messagerie.html">Messagerie</a>
+</div>
+</div>
+<div class="footer-bottom">© 2026 WEARERA — Tous droits réservés</div>
 </footer>
 
-
 <script>
+/* SUPABASE */
+const SUPABASE_URL = "https://wcamvnvhcguxwujcwyyj.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndjYW12bnZoY2d1eHd1amN3eXlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMjcwNDYsImV4cCI6MjEwMzgwMzA0Nn0.qnkYuFIcbRP8aBzPyIfxamOfVvBrU3nNhMa__NiyYPA";
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-/* =====================================================
-   SUPABASE
-===================================================== */
+let currentUser = null;
 
-const SUPABASE_URL =
-    "https://wcamvnvhcguxwujcwyyj.supabase.co";
+/* ELEMENTS */
+const loginPrompt = document.getElementById("login-prompt");
+const dashboard = document.getElementById("dashboard");
+const loading = document.getElementById("loading");
+const articlesGrid = document.getElementById("articles-grid");
+const emptyState = document.getElementById("empty-state");
+const errorBox = document.getElementById("error-box");
+const successBox = document.getElementById("success-box");
 
-const SUPABASE_PUBLISHABLE_KEY =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndjYW12bnZoY2d1eHd1amN3eXlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMjcwNDYsImV4cCI6MjEwMzgwMzA0Nn0.qnkYuFIcbRP8aBzPyIfxamOfVvBrU3nNhMa__NiyYPA";
+/* MESSAGES */
+function showError(msg) { errorBox.textContent = msg; errorBox.style.display = "block"; }
+function showSuccess(msg) { successBox.textContent = msg; successBox.style.display = "block"; errorBox.style.display = "none"; setTimeout(function() { successBox.style.display = "none"; }, 3000); }
 
-
-const supabaseClient =
-    supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-    );
-
-
-/* =====================================================
-   ELEMENTS
-===================================================== */
-
-const articlesContainer =
-    document.getElementById(
-        "articles-container"
-    );
-
-const authArea =
-    document.getElementById(
-        "auth-area"
-    );
-
-
-/* =====================================================
-   AUTHENTIFICATION
-===================================================== */
-
-async function checkUser() {
-
-    const {
-        data: { user },
-        error
-    } =
-        await supabaseClient.auth.getUser();
-
-
-    if (error || !user) {
-
-        articlesContainer.innerHTML = `
-
-            <div class="empty-message">
-
-                <h3>
-                    Vous devez être connecté.
-                </h3>
-
-                <p>
-                    Connectez-vous pour voir vos articles.
-                </p>
-
-                <a
-                    href="auth.html"
-                    class="sell-button">
-
-                    Se connecter
-
-                </a>
-
-            </div>
-
-        `;
-
-        return null;
-    }
-
-
-    updateAuthArea(user);
-
-    return user;
+/* ESCAPE HTML */
+function escapeHtml(value) {
+    return String(value || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
 
+/* FORMAT MONEY */
+function formatMoney(val) { return Number(val || 0).toFixed(2) + " $"; }
 
-/* =====================================================
-   AUTH AREA
-===================================================== */
-
-function updateAuthArea(user) {
-
-    const firstName =
-        user.user_metadata?.first_name ||
-        "Mon compte";
-
-
-    authArea.innerHTML = `
-
-        <span
-            style="
-                color:#666;
-                font-size:14px;
-                margin-left:20px;
-            ">
-
-            Bonjour, ${firstName}
-
-        </span>
-
-        <a
-            href="#"
-            id="logout-link"
-            style="margin-left:15px;">
-
-            Se déconnecter
-
-        </a>
-
-    `;
-
-
-    document
-        .getElementById("logout-link")
-        .addEventListener(
-            "click",
-            async function(event) {
-
-                event.preventDefault();
-
-
-                await supabaseClient
-                    .auth
-                    .signOut();
-
-
-                window.location.href =
-                    "index.html";
-
-            }
-        );
-
+/* FORMAT DATE */
+function formatDate(dateStr) {
+    if (!dateStr) return "—";
+    const d = new Date(dateStr);
+    return d.toLocaleDateString("fr-CA", { year: "numeric", month: "short", day: "numeric" });
 }
 
+/* GET FIRST PHOTO */
+function getFirstPhoto(article) {
+    if (Array.isArray(article.photo_urls) && article.photo_urls.length > 0) return article.photo_urls[0];
+    return "";
+}
 
-/* =====================================================
-   CHARGER LES ARTICLES DU VENDEUR
-===================================================== */
-
-async function loadMyArticles(user) {
-
-    articlesContainer.innerHTML = `
-
-        <div class="loading">
-
-            Chargement de vos articles...
-
-        </div>
-
-    `;
-
-
-    const {
-        data: articles,
-        error
-    } =
-        await supabaseClient
-            .from("Articles")
-            .select("*")
-            .eq("seller_id", user.id)
-            .order(
-                "created_at",
-                {
-                    ascending: false
-                }
-            );
-
-
-    if (error) {
-
-        console.error(
-            "Erreur chargement articles :",
-            error
-        );
-
-
-        articlesContainer.innerHTML = `
-
-            <div class="empty-message">
-
-                <h3>
-                    Impossible de charger vos articles.
-                </h3>
-
-                <p>
-                    ${error.message}
-                </p>
-
-            </div>
-
-        `;
-
-        return;
-    }
-
+/* RENDER ARTICLES */
+function renderArticles(articles) {
+    loading.style.display = "none";
 
     if (!articles || articles.length === 0) {
-
-        articlesContainer.innerHTML = `
-
-            <div class="empty-message">
-
-                <h3>
-                    Vous n'avez encore publié aucun article.
-                </h3>
-
-                <p>
-                    Commencez à vendre sur WEARERA.
-                </p>
-
-                <a
-                    href="vendre.html"
-                    class="sell-button">
-
-                    Vendre un article
-
-                </a>
-
-            </div>
-
-        `;
-
+        emptyState.style.display = "block";
         return;
     }
 
-
-    articlesContainer.innerHTML = "";
-
-
-    articles.forEach(
-        function(article) {
-
-            const card =
-                document.createElement(
-                    "div"
-                );
-
-            card.className =
-                "article-card";
-
-
-            /* =========================
-               IMAGE
-            ========================= */
-
-            let imageUrl = "";
-
-
-            if (
-                article.photo_urls &&
-                article.photo_urls.length > 0
-            ) {
-
-                imageUrl =
-                    article.photo_urls[0];
-
-            }
-
-
-            /* =========================
-               CARTE
-            ========================= */
-
-            card.innerHTML = `
-
-                ${
-                    imageUrl
-
-                    ?
-
-                    `
-                    <img
-                        src="${imageUrl}"
-                        class="article-image"
-                        alt="${escapeHtml(article.name)}"
-                    >
-                    `
-
-                    :
-
-                    `
-                    <div
-                        class="article-image"
-                        style="
-                            display:flex;
-                            align-items:center;
-                            justify-content:center;
-                            color:#999;
-                        ">
-
-                        Aucune photo
-
-                    </div>
-                    `
-                }
-
-
-                <div class="article-info">
-
-
-                    <div class="article-name">
-
-                        ${escapeHtml(article.name)}
-
-                    </div>
-
-
-                    ${
-                        article.brand
-
-                        ?
-
-                        `
-                        <div class="article-brand">
-
-                            ${escapeHtml(article.brand)}
-
-                        </div>
-                        `
-
-                        :
-
-                        ""
-                    }
-
-
-                    <div class="article-price">
-
-                        ${Number(article.price).toFixed(2)} $ CAD
-
-                    </div>
-
-
-                    <div class="article-details">
-
-                        <strong>Catégorie :</strong>
-                        ${escapeHtml(article.category)}
-
-                        <br>
-
-                        ${
-                            article.size
-
-                            ?
-
-                            `
-                            <strong>Taille :</strong>
-                            ${escapeHtml(article.size)}
-
-                            <br>
-                            `
-
-                            :
-
-                            ""
-                        }
-
-
-                        ${
-                            article.shoe_size
-
-                            ?
-
-                            `
-                            <strong>Pointure :</strong>
-                            ${escapeHtml(article.shoe_size)}
-
-                            <br>
-                            `
-
-                            :
-
-                            ""
-                        }
-
-
-                        <strong>État :</strong>
-                        ${escapeHtml(article.condition)}
-
-                        <br>
-
-                        ${escapeHtml(article.city)},
-                        ${escapeHtml(article.province)}
-
-                    </div>
-
-
-                    <div class="article-actions">
-
-
-                        <button
-                            class="edit-button"
-                            onclick="editArticle('${article.id}')">
-
-                            ✏️ Modifier
-
-                        </button>
-
-
-                        <button
-                            class="delete-button"
-                            onclick="deleteArticle('${article.id}')">
-
-                            🗑️ Supprimer
-
-                        </button>
-
-
-                    </div>
-
-
-                </div>
-
-            `;
-
-
-            articlesContainer.appendChild(
-                card
-            );
-
+    articlesGrid.style.display = "grid";
+    articlesGrid.innerHTML = "";
+
+    articles.forEach(function(article) {
+        const photoUrl = getFirstPhoto(article);
+        const card = document.createElement("div");
+        card.className = "article-card";
+
+        let html = "";
+        if (photoUrl) {
+            html += '<img src="' + escapeHtml(photoUrl) + '" alt="' + escapeHtml(article.name) + '" class="article-photo">';
+        } else {
+            html += '<div class="article-no-photo">📷</div>';
         }
-    );
 
+        html += '<div class="article-info">';
+        html += '<div class="article-name">' + escapeHtml(article.name) + '</div>';
+        if (article.brand) html += '<div class="article-brand">' + escapeHtml(article.brand) + '</div>';
+        html += '<div class="article-price">' + formatMoney(article.price) + '</div>';
+        if (article.category) html += '<div class="article-meta">Catégorie : ' + escapeHtml(article.category) + '</div>';
+        html += '<div class="article-meta">Publié le ' + formatDate(article.created_at) + '</div>';
+        if (article.is_sold) html += '<span class="article-sold-badge">Vendu</span>';
+
+        html += '<div class="article-actions">';
+        html += '<a href="modifier-article.html?id=' + article.id + '" class="btn-edit">✏️ Modifier</a>';
+        html += '<button class="btn-delete" onclick="deleteArticle(\'' + article.id + '\')">🗑️ Supprimer</button>';
+        html += '</div>';
+
+        html += '</div>';
+
+        card.innerHTML = html;
+        articlesGrid.appendChild(card);
+    });
 }
 
+/* DELETE ARTICLE */
+window.deleteArticle = async function(articleId) {
+    if (!confirm("Êtes-vous sûr de vouloir supprimer cet article ? Cette action est irréversible et supprimera également les photos.")) return;
 
-/* =====================================================
-   MODIFIER
-===================================================== */
-
-function editArticle(articleId) {
-
-    /*
-       Pour l'instant on redirige vers une future
-       page de modification.
-
-       Nous allons créer cette page ensuite.
-    */
-
-    window.location.href =
-        "modifier-article.html?id=" +
-        encodeURIComponent(articleId);
-
-}
-
-
-/* =====================================================
-   SUPPRIMER
-===================================================== */
-
-async function deleteArticle(articleId) {
-
-    const confirmation =
-        confirm(
-            "Voulez-vous vraiment supprimer cet article ?\n\nCette action est définitive."
-        );
-
-
-    if (!confirmation) {
-        return;
-    }
-
-
+    /* FIND THE ARTICLE'S PHOTOS FIRST */
     try {
+        const { data: article, error: fetchError } = await supabaseClient
+            .from("Articles")
+            .select("photo_urls, name")
+            .eq("id", articleId)
+            .maybeSingle();
 
-        const {
-            data: { user },
-            error: authError
-        } =
-            await supabaseClient
-                .auth
-                .getUser();
-
-
-        if (authError || !user) {
-
-            alert(
-                "Votre session a expiré. Veuillez vous reconnecter."
-            );
-
-            window.location.href =
-                "auth.html";
-
+        if (fetchError) {
+            showError("Erreur : " + fetchError.message);
             return;
         }
 
+        /* DELETE PHOTOS FROM STORAGE */
+        if (article && Array.isArray(article.photo_urls) && article.photo_urls.length > 0) {
+            /* EXTRACT PATHS FROM PUBLIC URLS */
+            const photoPaths = [];
+            article.photo_urls.forEach(function(url) {
+                if (url && url.includes("/article-photos/")) {
+                    const parts = url.split("/article-photos/");
+                    if (parts.length > 1) {
+                        photoPaths.push(parts[1]);
+                    }
+                }
+            });
 
-        /*
-           IMPORTANT :
-           On vérifie que l'article appartient
-           bien à l'utilisateur connecté.
-        */
+            if (photoPaths.length > 0) {
+                const { error: removeError } = await supabaseClient
+                    .storage
+                    .from("article-photos")
+                    .remove(photoPaths);
 
-        const {
-            data: article,
-            error: articleError
-        } =
-            await supabaseClient
-                .from("Articles")
-                .select("id, seller_id")
-                .eq("id", articleId)
-                .eq("seller_id", user.id)
-                .single();
-
-
-        if (articleError || !article) {
-
-            throw new Error(
-                "Vous n'avez pas l'autorisation de supprimer cet article."
-            );
-
+                if (removeError) {
+                    console.error("Erreur suppression photos :", removeError);
+                }
+            }
         }
 
-
-        /* =========================
-           SUPPRESSION
-        ========================= */
-
-        const {
-            error: deleteError
-        } =
-            await supabaseClient
-                .from("Articles")
-                .delete()
-                .eq("id", articleId)
-                .eq("seller_id", user.id);
-
+        /* DELETE ARTICLE RECORD */
+        const { error: deleteError } = await supabaseClient
+            .from("Articles")
+            .delete()
+            .eq("id", articleId);
 
         if (deleteError) {
-
-            throw new Error(
-                deleteError.message
-            );
-
+            showError("Erreur : " + deleteError.message);
+            return;
         }
 
-
-        alert(
-            "Article supprimé avec succès."
-        );
-
-
-        /*
-           Recharger la liste
-        */
-
-        await loadMyArticles(user);
-
-
-    } catch (error) {
-
-        console.error(
-            "Erreur suppression :",
-            error
-        );
-
-
-        alert(
-            "Impossible de supprimer l'article :\n" +
-            error.message
-        );
-
+        showSuccess("Article supprimé avec succès.");
+        loadArticles();
+    } catch (err) {
+        console.error(err);
+        showError("Une erreur est survenue lors de la suppression.");
     }
+};
 
+/* LOAD ARTICLES */
+async function loadArticles() {
+    loading.style.display = "block";
+    articlesGrid.style.display = "none";
+    articlesGrid.innerHTML = "";
+    emptyState.style.display = "none";
+
+    try {
+        const { data: articles, error } = await supabaseClient
+            .from("Articles")
+            .select("*")
+            .eq("seller_id", currentUser.id)
+            .order("created_at", { ascending: false });
+
+        if (error) throw error;
+
+        renderArticles(articles || []);
+    } catch (err) {
+        console.error(err);
+        loading.style.display = "none";
+        showError("Impossible de charger vos articles : " + err.message);
+    }
 }
 
-
-/* =====================================================
-   PROTECTION TEXTE HTML
-===================================================== */
-
-function escapeHtml(value) {
-
-    if (value === null ||
-        value === undefined) {
-
-        return "";
-
-    }
-
-
-    return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-
-}
-
-
-/* =====================================================
-   DEMARRAGE
-===================================================== */
-
-async function init() {
-
-    const user =
-        await checkUser();
-
-
+/* INIT */
+(async function() {
+    const { data: { user } } = await supabaseClient.auth.getUser();
     if (!user) {
+        loginPrompt.style.display = "block";
         return;
     }
-
-
-    await loadMyArticles(user);
-
-}
-
-
-init();
-
+    currentUser = user;
+    dashboard.style.display = "block";
+    loadArticles();
+})();
 </script>
-
-
 </body>
-
 </html>

@@ -3,24 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Modifier mon article — WEARERA</title>
-
+<title>Modifier l'article — WEARERA</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #f7f5f2; color: #222; }
+button, input, select, textarea { font-family: inherit; }
 
-body {
-    font-family: Arial, sans-serif;
-    background: #f7f5f2;
-    color: #222;
-}
-
+/* HEADER */
 header {
     background: white;
     padding: 22px 7%;
@@ -28,631 +18,439 @@ header {
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
+.logo { font-size: 30px; font-weight: bold; letter-spacing: 2px; }
+.logo a { text-decoration: none; color: #222; }
+nav { display: flex; align-items: center; gap: 22px; }
+nav a { text-decoration: none; color: #222; font-size: 15px; }
+nav a:hover { text-decoration: underline; }
+.nav-dropdown { position: relative; }
+.nav-dropdown-toggle { text-decoration: none; color: #222; font-size: 15px; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 4px 0; }
+.nav-dropdown-toggle:hover { text-decoration: underline; }
+.nav-dropdown-toggle .caret { font-size: 11px; opacity: 0.6; }
+.nav-dropdown-menu { display: none; position: absolute; top: 100%; right: 0; background: white; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); min-width: 170px; padding: 6px 0; z-index: 1100; }
+.nav-dropdown.open .nav-dropdown-menu { display: block; }
+.nav-dropdown-menu a { display: block; padding: 10px 18px; color: #333; font-size: 14px; text-decoration: none; }
+.nav-dropdown-menu a:hover { background: #f7f5f2; text-decoration: none; }
 
-.logo {
-    font-size: 30px;
-    font-weight: bold;
-    letter-spacing: 2px;
+/* CONTAINER */
+.container { max-width: 700px; margin: 0 auto; padding: 40px 7%; }
+.page-title h1 { font-size: 32px; margin-bottom: 10px; }
+.page-title p { color: #777; font-size: 16px; margin-bottom: 30px; }
+
+/* FORM CARD */
+.form-card { background: white; border: 1px solid #ddd; border-radius: 12px; padding: 35px; }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; font-size: 14px; margin-bottom: 6px; font-weight: bold; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 15px; outline: none; background: white; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #222; }
+.form-group textarea { resize: vertical; min-height: 100px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+/* PHOTO UPLOAD */
+.photo-upload-area { border: 2px dashed #ccc; border-radius: 10px; padding: 30px; text-align: center; cursor: pointer; transition: 0.2s; }
+.photo-upload-area:hover { border-color: #222; background: #fafafa; }
+.photo-upload-area p { color: #777; font-size: 14px; margin-top: 8px; }
+.photo-upload-icon { font-size: 40px; color: #aaa; }
+#photo-input { display: none; }
+.photo-preview { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 15px; }
+.photo-preview-item { position: relative; width: 100px; height: 100px; border-radius: 10px; overflow: hidden; border: 1px solid #ddd; }
+.photo-preview-item img { width: 100%; height: 100%; object-fit: cover; }
+.photo-preview-item .remove-photo { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.photo-label-existing { font-size: 12px; color: #999; margin-top: 4px; }
+
+/* BUTTON */
+.submit-button { width: 100%; padding: 16px; background: #222; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; transition: 0.2s; font-weight: bold; }
+.submit-button:hover { background: #333; }
+.submit-button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* MESSAGES */
+.error-message { background: #fde8e8; color: #c62828; border: 1px solid #f5c6c6; border-radius: 8px; padding: 12px 16px; font-size: 14px; margin-bottom: 20px; display: none; }
+.success-message { background: #e8f5e8; color: #2e7d32; border: 1px solid #c6e6c6; border-radius: 8px; padding: 12px 16px; font-size: 14px; margin-bottom: 20px; display: none; }
+
+/* LOADING */
+.loading-state { text-align: center; padding: 60px 20px; color: #666; font-size: 16px; }
+
+/* FOOTER */
+footer { margin-top: 50px; padding: 40px 7% 25px; background: #222; color: white; }
+.footer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; max-width: 1000px; margin: 0 auto 30px; }
+.footer-col h4 { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; color: #999; }
+.footer-col a { display: block; color: #ccc; text-decoration: none; font-size: 14px; margin-bottom: 10px; transition: color 0.2s; }
+.footer-col a:hover { color: white; }
+.footer-bottom { text-align: center; font-size: 13px; color: #999; border-top: 1px solid #444; padding-top: 20px; }
+
+/* MOBILE */
+@media (max-width: 700px) {
+    header { padding: 18px 5%; }
+    nav { display: none; }
+    .container { padding: 30px 5%; }
+    .form-card { padding: 22px; }
+    .form-row { grid-template-columns: 1fr; }
+    .page-title h1 { font-size: 26px; }
 }
-
-.logo a {
-    color: #222;
-    text-decoration: none;
-}
-
-nav a {
-    text-decoration: none;
-    color: #222;
-    margin-left: 25px;
-}
-
-.nav-dropdown {
-    position: relative;
-    margin-left: 25px;
-}
-
-.nav-dropdown-toggle {
-    text-decoration: none;
-    color: #222;
-    font-size: 15px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.nav-dropdown-toggle:hover {
-    text-decoration: underline;
-}
-
-.nav-dropdown-toggle .caret {
-    font-size: 11px;
-    opacity: 0.6;
-}
-
-.nav-dropdown-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-    min-width: 170px;
-    padding: 6px 0;
-    z-index: 1100;
-}
-
-.nav-dropdown.open .nav-dropdown-menu {
-    display: block;
-}
-
-.nav-dropdown-menu a {
-    display: block;
-    padding: 10px 18px;
-    color: #333;
-    font-size: 14px;
-    text-decoration: none;
-    margin-left: 0;
-}
-
-.nav-dropdown-menu a:hover {
-    background: #f7f5f2;
-    text-decoration: none;
-}
-
-.container {
-    max-width: 800px;
-    margin: 45px auto;
-    padding: 0 20px;
-}
-
-h1 {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.form-card {
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 14px;
-    padding: 30px;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 8px;
-}
-
-input,
-select,
-textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 15px;
-    background: white;
-}
-
-textarea {
-    min-height: 120px;
-    resize: vertical;
-}
-
-.buttons {
-    display: flex;
-    gap: 12px;
-    margin-top: 25px;
-}
-
-button,
-.back-button {
-    flex: 1;
-    padding: 13px;
-    border-radius: 8px;
-    font-size: 15px;
-    font-weight: bold;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-}
-
-.save-button {
-    background: #222;
-    color: white;
-    border: none;
-}
-
-.save-button:hover {
-    opacity: .85;
-}
-
-.back-button {
-    background: white;
-    color: #222;
-    border: 1px solid #ccc;
-}
-
-.message {
-    margin-bottom: 20px;
-    padding: 14px;
-    border-radius: 8px;
-    display: none;
-}
-
-.loading {
-    text-align: center;
-    padding: 40px;
-}
-
-footer {
-    margin-top: 50px;
-    padding: 30px;
-    text-align: center;
-    background: #222;
-    color: white;
-}
-
-@media (max-width: 600px) {
-    header {
-        padding: 18px 5%;
-    }
-
-    nav {
-        display: none;
-    }
-
-    .container {
-        margin-top: 30px;
-    }
-
-    .form-card {
-        padding: 20px;
-    }
-
-    .buttons {
-        flex-direction: column;
-    }
+@media (max-width: 800px) {
+    .footer-grid { grid-template-columns: 1fr; gap: 25px; }
 }
 </style>
 </head>
-
 <body>
 
+<!-- HEADER -->
 <header>
-
-    <div class="logo">
-        <a href="index.html">WEARERA</a>
-    </div>
-
-    <nav>
-        <a href="index.html">Accueil</a>
-        <a href="index.html#articles">Acheter</a>
-        <a href="vendre.html">Vendre</a>
-        <div class="nav-dropdown" id="nav-dropdown">
-            <a class="nav-dropdown-toggle" onclick="document.getElementById('nav-dropdown').classList.toggle('open')">Mes articles <span class="caret">▾</span></a>
-            <div class="nav-dropdown-menu">
-                <a href="mes-ventes.html">💰 Mes ventes</a>
-                <a href="mes-achats.html">🛍️ Mes achats</a>
-            </div>
-        </div>
-        <a href="panier.html">🛒 Panier</a>
-        <a href="messagerie.html">💬 Messagerie</a>
-        <a href="profil.html">👤 Mon profil</a>
-    </nav>
-
+<div class="logo"><a href="index.html">WEARERA</a></div>
+<nav>
+<a href="index.html">Accueil</a>
+<a href="index.html#articles">Acheter</a>
+<a href="vendre.html">Vendre</a>
+<div class="nav-dropdown" id="nav-dropdown">
+<a class="nav-dropdown-toggle" onclick="document.getElementById('nav-dropdown').classList.toggle('open')">Mes articles <span class="caret">▾</span></a>
+<div class="nav-dropdown-menu">
+<a href="mes-ventes.html">💰 Mes ventes</a>
+<a href="mes-achats.html">🛍️ Mes achats</a>
+</div>
+</div>
+<a href="panier.html" class="cart-nav">🛒 Panier</a>
+<a href="messagerie.html" class="message-nav">💬 Messagerie</a>
+<a href="profil.html" class="profile-nav">👤 Mon profil</a>
+</nav>
 </header>
 
+<!-- MAIN -->
 <main class="container">
+<div id="loading-state" class="loading-state">Chargement de l'article...</div>
 
-    <h1>Modifier mon article</h1>
+<div id="form-section" style="display:none;">
+<div class="page-title">
+<h1>Modifier l'article</h1>
+<p>Mettez à jour les informations de votre article.</p>
+</div>
 
-    <div id="loading" class="loading">
-        Chargement de l'article...
-    </div>
+<div class="form-card">
+<div class="error-message" id="error-box"></div>
+<div class="success-message" id="success-box"></div>
 
-    <div id="message" class="message"></div>
+<form id="edit-form">
 
-    <div id="form-container" style="display:none;">
+<div class="form-group">
+<label for="name">Nom de l'article *</label>
+<input type="text" id="name" required>
+</div>
 
-        <div class="form-card">
+<div class="form-group">
+<label for="brand">Marque</label>
+<input type="text" id="brand">
+</div>
 
-            <form id="edit-form">
+<div class="form-group">
+<label for="category">Catégorie *</label>
+<select id="category" required>
+<option value="">Sélectionner une catégorie</option>
+<option value="Vêtements">Vêtements</option>
+<option value="Chaussures">Chaussures</option>
+<option value="Sacs">Sacs</option>
+<option value="Accessoires">Accessoires</option>
+</select>
+</div>
 
-                <div class="form-group">
-                    <label for="name">Nom de l'article</label>
-                    <input type="text" id="name" required>
-                </div>
+<div class="form-group">
+<label for="price">Prix (CAD) *</label>
+<input type="number" id="price" step="0.01" min="0" required>
+</div>
 
-                <div class="form-group">
-                    <label for="category">Catégorie</label>
-                    <select id="category" required>
-                        <option value="">Choisir</option>
-                        <option value="Vêtements">Vêtements</option>
-                        <option value="Chaussures">Chaussures</option>
-                        <option value="Sacs">Sacs</option>
-                        <option value="Accessoires">Accessoires</option>
-                    </select>
-                </div>
+<div class="form-row">
+<div class="form-group">
+<label for="province">Province *</label>
+<select id="province" required>
+<option value="">Sélectionner</option>
+<option value="AB">Alberta</option>
+<option value="BC">Colombie-Britannique</option>
+<option value="PE">Île-du-Prince-Édouard</option>
+<option value="MB">Manitoba</option>
+<option value="NB">Nouveau-Brunswick</option>
+<option value="NS">Nouvelle-Écosse</option>
+<option value="ON">Ontario</option>
+<option value="QC">Québec</option>
+<option value="SK">Saskatchewan</option>
+<option value="NL">Terre-Neuve-et-Labrador</option>
+<option value="NT">Territoires du Nord-Ouest</option>
+<option value="NU">Nunavut</option>
+<option value="YT">Yukon</option>
+</select>
+</div>
 
-                <div class="form-group">
-                    <label for="size">Taille</label>
-                    <input type="text" id="size">
-                </div>
+<div class="form-group">
+<label for="city">Ville *</label>
+<input type="text" id="city" required>
+</div>
+</div>
 
-                <div class="form-group">
-                    <label for="brand">Marque</label>
-                    <input type="text" id="brand">
-                </div>
+<div class="form-group">
+<label for="description">Description</label>
+<textarea id="description"></textarea>
+</div>
 
-                <div class="form-group">
-                    <label for="price">Prix ($ CAD)</label>
-                    <input type="number" id="price" step="0.01" min="0" required>
-                </div>
+<div class="form-group">
+<label>Photos existantes</label>
+<div class="photo-preview" id="existing-photos"></div>
+</div>
 
-                <div class="form-group">
-                    <label for="condition">État</label>
-                    <select id="condition" required>
-                        <option value="">Choisir</option>
-                        <option value="Neuf">Neuf</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                </div>
+<div class="form-group">
+<label>Ajouter des photos</label>
+<div class="photo-upload-area" id="photo-upload-area">
+<div class="photo-upload-icon">📷</div>
+<p>Cliquez pour sélectionner des photos</p>
+</div>
+<input type="file" id="photo-input" accept="image/*" multiple>
+<div class="photo-preview" id="photo-preview"></div>
+</div>
 
-                <div class="form-group">
-                    <label for="defects">Défauts</label>
-                    <textarea id="defects"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="description">Description</label>
-                    <textarea id="description"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="city">Ville</label>
-                    <input type="text" id="city" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="province">Province</label>
-                    <input type="text" id="province" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="shoe_size">Pointure</label>
-                    <input type="text" id="shoe_size">
-                </div>
-
-                <div class="buttons">
-
-                    <a
-                        href="mes-articles.html"
-                        class="back-button">
-                        Annuler
-                    </a>
-
-                    <button
-                        type="submit"
-                        class="save-button">
-                        Enregistrer les modifications
-                    </button>
-
-                </div>
-
-            </form>
-
-        </div>
-
-    </div>
-
+<button type="submit" class="submit-button" id="submit-btn">Enregistrer les modifications</button>
+</form>
+</div>
+</div>
 </main>
 
+<!-- FOOTER -->
 <footer>
-    WEARERA ©️ 2026
-    <br>
-    La mode de seconde main au Canada.
+<div class="footer-grid">
+<div class="footer-col">
+<h4>WEARERA</h4>
+<a href="a-propos.html">À propos de WEARERA</a>
+<a href="comment-ca-fonctionne.html">Comment ça fonctionne</a>
+<a href="faq.html">FAQ</a>
+<a href="nous-contacter.html">Nous contacter</a>
+</div>
+<div class="footer-col">
+<h4>Informations</h4>
+<a href="cgu.html">Conditions générales d'utilisation</a>
+<a href="confidentialite.html">Politique de confidentialité</a>
+<a href="protection-acheteur.html">Protection acheteur</a>
+<a href="protection-vendeur.html">Protection vendeur</a>
+<a href="frais.html">Frais WEARERA</a>
+<a href="livraison.html">Livraison</a>
+<a href="regles-communaute.html">Règles de la communauté</a>
+</div>
+<div class="footer-col">
+<h4>Compte</h4>
+<a href="profil.html">Mon profil</a>
+<a href="mes-articles.html">Mes articles</a>
+<a href="mes-achats.html">Mes achats</a>
+<a href="mes-ventes.html">Mes ventes</a>
+<a href="panier.html">Panier</a>
+<a href="messagerie.html">Messagerie</a>
+</div>
+</div>
+<div class="footer-bottom">© 2026 WEARERA — Tous droits réservés</div>
 </footer>
 
-
 <script>
+/* SUPABASE */
+const SUPABASE_URL = "https://wcamvnvhcguxwujcwyyj.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndjYW12bnZoY2d1eHd1amN3eXlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMjcwNDYsImV4cCI6MjEwMzgwMzA0Nn0.qnkYuFIcbRP8aBzPyIfxamOfVvBrU3nNhMa__NiyYPA";
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-/* =====================================================
-   SUPABASE
-===================================================== */
+let currentUser = null;
+let articleId = null;
+let existingPhotoUrls = [];
+let selectedFiles = [];
 
-const SUPABASE_URL =
-    "https://wcamvnvhcguxwujcwyyj.supabase.co";
+/* ELEMENTS */
+const errorBox = document.getElementById("error-box");
+const successBox = document.getElementById("success-box");
+const submitBtn = document.getElementById("submit-btn");
+const photoUploadArea = document.getElementById("photo-upload-area");
+const photoInput = document.getElementById("photo-input");
+const photoPreview = document.getElementById("photo-preview");
+const existingPhotos = document.getElementById("existing-photos");
+const loadingState = document.getElementById("loading-state");
+const formSection = document.getElementById("form-section");
 
-const SUPABASE_PUBLISHABLE_KEY =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndjYW12bnZoY2d1eHd1amN3eXlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMjcwNDYsImV4cCI6MjEwMzgwMzA0Nn0.qnkYuFIcbRP8aBzPyIfxamOfVvBrU3nNhMa__NiyYPA";
+/* MESSAGES */
+function showError(msg) { errorBox.textContent = msg; errorBox.style.display = "block"; successBox.style.display = "none"; }
+function showSuccess(msg) { successBox.textContent = msg; successBox.style.display = "block"; errorBox.style.display = "none"; }
+function hideMessages() { errorBox.style.display = "none"; successBox.style.display = "none"; }
 
-const supabaseClient =
-    supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-    );
-
-
-/* =====================================================
-   ELEMENTS
-===================================================== */
-
-const loading =
-    document.getElementById("loading");
-
-const formContainer =
-    document.getElementById("form-container");
-
-const message =
-    document.getElementById("message");
-
-const form =
-    document.getElementById("edit-form");
-
-
-/* =====================================================
-   ARTICLE ID
-===================================================== */
-
-const urlParams =
-    new URLSearchParams(window.location.search);
-
-const articleId =
-    urlParams.get("id");
-
-
-/* =====================================================
-   MESSAGE
-===================================================== */
-
-function showMessage(text, type = "error") {
-
-    message.textContent = text;
-
-    message.style.display = "block";
-
-    if (type === "success") {
-        message.style.background = "#e8f5e9";
-        message.style.color = "#1b5e20";
-    } else {
-        message.style.background = "#ffebee";
-        message.style.color = "#b00020";
-    }
+/* RENDER EXISTING PHOTOS */
+function renderExistingPhotos() {
+    existingPhotos.innerHTML = "";
+    existingPhotoUrls.forEach(function(url, idx) {
+        const item = document.createElement("div");
+        item.className = "photo-preview-item";
+        item.innerHTML = '<img src="' + url + '" alt="Photo"><button type="button" class="remove-photo" data-index="' + idx + '">×</button>';
+        existingPhotos.appendChild(item);
+        item.querySelector(".remove-photo").addEventListener("click", function() {
+            existingPhotoUrls.splice(parseInt(this.dataset.index), 1);
+            renderExistingPhotos();
+        });
+    });
 }
 
-
-/* =====================================================
-   CHARGER L'ARTICLE
-===================================================== */
-
-async function loadArticle() {
-
-    if (!articleId) {
-
-        loading.style.display = "none";
-
-        showMessage(
-            "Article introuvable."
-        );
-
-        return;
-    }
-
-
-    const {
-        data: { user },
-        error: authError
-    } =
-        await supabaseClient.auth.getUser();
-
-
-    if (authError || !user) {
-
-        loading.style.display = "none";
-
-        showMessage(
-            "Vous devez être connecté pour modifier un article."
-        );
-
-        return;
-    }
-
-
-    const {
-        data: article,
-        error
-    } =
-        await supabaseClient
-            .from("Articles")
-            .select("*")
-            .eq("id", articleId)
-            .eq("seller_id", user.id)
-            .single();
-
-
-    if (error || !article) {
-
-        console.error(error);
-
-        loading.style.display = "none";
-
-        showMessage(
-            "Article introuvable ou vous n'êtes pas autorisé à le modifier."
-        );
-
-        return;
-    }
-
-
-    /* =========================
-       REMPLIR LE FORMULAIRE
-    ========================= */
-
-    document.getElementById("name").value =
-        article.name || "";
-
-    document.getElementById("category").value =
-        article.category || "";
-
-    document.getElementById("size").value =
-        article.size || "";
-
-    document.getElementById("brand").value =
-        article.brand || "";
-
-    document.getElementById("price").value =
-        article.price ?? "";
-
-    document.getElementById("condition").value =
-        article.condition || "";
-
-    document.getElementById("defects").value =
-        article.defects || "";
-
-    document.getElementById("description").value =
-        article.description || "";
-
-    document.getElementById("city").value =
-        article.city || "";
-
-    document.getElementById("province").value =
-        article.province || "";
-
-    document.getElementById("shoe_size").value =
-        article.shoe_size || "";
-
-
-    loading.style.display = "none";
-
-    formContainer.style.display = "block";
+/* RENDER NEW PHOTOS */
+function renderNewPhotos() {
+    photoPreview.innerHTML = "";
+    selectedFiles.forEach(function(file, idx) {
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            const item = document.createElement("div");
+            item.className = "photo-preview-item";
+            item.innerHTML = '<img src="' + ev.target.result + '" alt="Aperçu"><button type="button" class="remove-photo" data-index="' + idx + '">×</button>';
+            photoPreview.appendChild(item);
+            item.querySelector(".remove-photo").addEventListener("click", function() {
+                selectedFiles.splice(parseInt(this.dataset.index), 1);
+                renderNewPhotos();
+            });
+        };
+        reader.readAsDataURL(file);
+    });
 }
 
+/* PHOTO UPLOAD */
+photoUploadArea.addEventListener("click", function() { photoInput.click(); });
 
-/* =====================================================
-   ENREGISTRER
-===================================================== */
-
-form.addEventListener("submit", async function(event) {
-
-    event.preventDefault();
-
-
-    const {
-        data: { user },
-        error: authError
-    } =
-        await supabaseClient.auth.getUser();
-
-
-    if (authError || !user) {
-
-        showMessage(
-            "Votre session a expiré. Veuillez vous reconnecter."
-        );
-
-        return;
-    }
-
-
-    const updatedArticle = {
-
-        name:
-            document.getElementById("name").value.trim(),
-
-        category:
-            document.getElementById("category").value,
-
-        size:
-            document.getElementById("size").value.trim(),
-
-        brand:
-            document.getElementById("brand").value.trim(),
-
-        price:
-            Number(
-                document.getElementById("price").value
-            ),
-
-        condition:
-            document.getElementById("condition").value,
-
-        defects:
-            document.getElementById("defects").value.trim(),
-
-        description:
-            document.getElementById("description").value.trim(),
-
-        city:
-            document.getElementById("city").value.trim(),
-
-        province:
-            document.getElementById("province").value.trim(),
-
-        shoe_size:
-            document.getElementById("shoe_size").value.trim()
-
-    };
-
-
-    const {
-        error
-    } =
-        await supabaseClient
-            .from("Articles")
-            .update(updatedArticle)
-            .eq("id", articleId)
-            .eq("seller_id", user.id);
-
-
-    if (error) {
-
-        console.error(error);
-
-        showMessage(
-            "Impossible de modifier l'article : " +
-            error.message
-        );
-
-        return;
-    }
-
-
-    showMessage(
-        "Article modifié avec succès.",
-        "success"
-    );
-
-
-    setTimeout(function() {
-
-        window.location.href =
-            "mes-articles.html";
-
-    }, 1000);
-
+photoInput.addEventListener("change", function(e) {
+    const files = Array.from(e.target.files);
+    files.forEach(function(file) {
+        if (file.type.startsWith("image/")) {
+            selectedFiles.push(file);
+        }
+    });
+    renderNewPhotos();
+    photoInput.value = "";
 });
 
+/* UPLOAD NEW PHOTOS */
+async function uploadNewPhotos() {
+    const newUrls = [];
+    for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+        const ext = file.name.split(".").pop();
+        const fileName = currentUser.id + "/" + Date.now() + "_edit_" + i + "." + ext;
+        const { data, error } = await supabaseClient.storage
+            .from("articles")
+            .upload(fileName, file);
+        if (error) throw error;
+        const { data: urlData } = supabaseClient.storage
+            .from("articles")
+            .getPublicUrl(fileName);
+        newUrls.push(urlData.publicUrl);
+    }
+    return newUrls;
+}
 
-/* =====================================================
-   DEMARRAGE
-===================================================== */
+/* LOAD ARTICLE */
+async function loadArticle() {
+    const params = new URLSearchParams(window.location.search);
+    articleId = params.get("id");
 
+    if (!articleId) {
+        loadingState.textContent = "Aucun ID d'article spécifié.";
+        return;
+    }
+
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) {
+        window.location.href = "auth.html?redirect=modifier-article.html?id=" + encodeURIComponent(articleId);
+        return;
+    }
+    currentUser = user;
+
+    const { data: article, error } = await supabaseClient
+        .from("Articles")
+        .select("*")
+        .eq("id", articleId)
+        .maybeSingle();
+
+    if (error || !article) {
+        loadingState.textContent = "Article introuvable.";
+        return;
+    }
+
+    if (article.seller_id !== currentUser.id) {
+        loadingState.textContent = "Vous n'êtes pas autorisé à modifier cet article.";
+        return;
+    }
+
+    /* POPULATE FORM */
+    document.getElementById("name").value = article.name || "";
+    document.getElementById("brand").value = article.brand || "";
+    document.getElementById("category").value = article.category || "";
+    document.getElementById("price").value = article.price || "";
+    document.getElementById("province").value = article.province || "";
+    document.getElementById("city").value = article.city || "";
+    document.getElementById("description").value = article.description || "";
+
+    if (Array.isArray(article.photo_urls)) {
+        existingPhotoUrls = article.photo_urls.slice();
+        renderExistingPhotos();
+    }
+
+    loadingState.style.display = "none";
+    formSection.style.display = "block";
+}
+
+/* SUBMIT */
+document.getElementById("edit-form").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    hideMessages();
+
+    const name = document.getElementById("name").value.trim();
+    const brand = document.getElementById("brand").value.trim();
+    const category = document.getElementById("category").value;
+    const price = parseFloat(document.getElementById("price").value);
+    const province = document.getElementById("province").value;
+    const city = document.getElementById("city").value.trim();
+    const description = document.getElementById("description").value.trim();
+
+    if (!name) { showError("Veuillez entrer le nom de l'article."); return; }
+    if (!category) { showError("Veuillez sélectionner une catégorie."); return; }
+    if (!price || price <= 0) { showError("Veuillez entrer un prix valide."); return; }
+    if (!province) { showError("Veuillez sélectionner une province."); return; }
+    if (!city) { showError("Veuillez entrer une ville."); return; }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Enregistrement...";
+
+    try {
+        let allPhotos = existingPhotoUrls.slice();
+
+        if (selectedFiles.length > 0) {
+            const newUrls = await uploadNewPhotos();
+            allPhotos = allPhotos.concat(newUrls);
+        }
+
+        const { error } = await supabaseClient
+            .from("Articles")
+            .update({
+                name: name,
+                brand: brand || null,
+                category: category,
+                price: price,
+                province: province,
+                city: city,
+                description: description || null,
+                photo_urls: allPhotos
+            })
+            .eq("id", articleId);
+
+        if (error) throw error;
+
+        showSuccess("Modifications enregistrées ! Redirection...");
+        setTimeout(function() {
+            window.location.href = "mes-articles.html";
+        }, 1500);
+    } catch (err) {
+        console.error(err);
+        showError("Erreur : " + (err.message || "Impossible d'enregistrer les modifications."));
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Enregistrer les modifications";
+    }
+});
+
+/* INIT */
 loadArticle();
-
 </script>
-
 </body>
 </html>

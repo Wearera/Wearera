@@ -1,42 +1,16 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mon compte — WEARERA</title>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #f7f5f2; color: #222; }
+button, input, select, textarea { font-family: inherit; }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background: #f7f5f2;
-    color: #222;
-}
-
-button,
-input,
-select {
-    font-family: inherit;
-}
-
-
-/* =====================================================
-   HEADER
-===================================================== */
-
+/* HEADER */
 header {
     background: white;
     padding: 22px 7%;
@@ -44,584 +18,129 @@ header {
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
+.logo { font-size: 30px; font-weight: bold; letter-spacing: 2px; }
+.logo a { text-decoration: none; color: #222; }
+nav { display: flex; align-items: center; gap: 22px; }
+nav a { text-decoration: none; color: #222; font-size: 15px; }
+nav a:hover { text-decoration: underline; }
+.nav-dropdown { position: relative; }
+.nav-dropdown-toggle { text-decoration: none; color: #222; font-size: 15px; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 4px 0; }
+.nav-dropdown-toggle:hover { text-decoration: underline; }
+.nav-dropdown-toggle .caret { font-size: 11px; opacity: 0.6; }
+.nav-dropdown-menu { display: none; position: absolute; top: 100%; right: 0; background: white; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); min-width: 170px; padding: 6px 0; z-index: 1100; }
+.nav-dropdown.open .nav-dropdown-menu { display: block; }
+.nav-dropdown-menu a { display: block; padding: 10px 18px; color: #333; font-size: 14px; text-decoration: none; }
+.nav-dropdown-menu a:hover { background: #f7f5f2; text-decoration: none; }
 
-.logo {
-    font-size: 30px;
-    font-weight: bold;
-    letter-spacing: 2px;
+/* CONTAINER */
+.container { max-width: 1100px; margin: 0 auto; padding: 40px 7%; }
+.page-title h1 { font-size: 32px; margin-bottom: 10px; }
+.page-title p { color: #777; font-size: 16px; margin-bottom: 30px; }
+
+/* LAYOUT */
+.dashboard-layout { display: grid; grid-template-columns: 320px 1fr; gap: 30px; align-items: start; }
+
+/* LEFT COLUMN */
+.left-column { display: flex; flex-direction: column; gap: 20px; }
+
+/* PROFILE CARD */
+.profile-card { background: white; border: 1px solid #ddd; border-radius: 12px; padding: 25px; text-align: center; }
+.profile-avatar { width: 90px; height: 90px; border-radius: 50%; background: #eee; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid #ddd; }
+.profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.profile-avatar-placeholder { font-size: 40px; color: #999; }
+.profile-name { font-size: 20px; font-weight: bold; margin-bottom: 5px; }
+.profile-email { font-size: 14px; color: #777; margin-bottom: 20px; word-break: break-all; }
+
+/* ACCOUNT MENU */
+.account-menu { list-style: none; text-align: left; border-top: 1px solid #eee; padding-top: 18px; }
+.account-menu li { margin-bottom: 2px; }
+.account-menu a { display: flex; align-items: center; gap: 10px; padding: 11px 12px; border-radius: 8px; text-decoration: none; color: #333; font-size: 14px; transition: background 0.2s; }
+.account-menu a:hover { background: #f7f5f2; }
+.account-menu a.active { background: #f0f0f0; font-weight: bold; }
+.account-menu .menu-icon { font-size: 16px; }
+.logout-btn { display: block; width: 100%; margin-top: 15px; padding: 12px; border: 1px solid #222; border-radius: 8px; background: white; color: #222; font-size: 14px; font-weight: bold; cursor: pointer; }
+.logout-btn:hover { background: #222; color: white; }
+
+/* MESSAGERIE CARD */
+.messagerie-card { background: white; border: 1px solid #ddd; border-radius: 12px; padding: 20px; }
+.messagerie-card h3 { font-size: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.messagerie-card .msg-preview { font-size: 14px; color: #777; margin-bottom: 15px; }
+.messagerie-card .msg-link { display: inline-block; padding: 9px 16px; background: #222; color: white; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: bold; }
+.messagerie-card .msg-link:hover { background: #333; }
+.unread-pill { background: #c62828; color: white; border-radius: 50%; min-width: 20px; height: 20px; font-size: 11px; display: inline-flex; align-items: center; justify-content: center; padding: 0 5px; margin-left: 6px; }
+
+/* RIGHT COLUMN */
+.right-column { display: flex; flex-direction: column; gap: 25px; }
+
+/* STATS GRID */
+.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.stat-card { background: white; border: 1px solid #ddd; border-radius: 12px; padding: 22px; text-align: center; }
+.stat-number { font-size: 32px; font-weight: bold; margin-bottom: 5px; }
+.stat-label { font-size: 14px; color: #777; }
+
+/* ARTICLES SECTION */
+.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+.section-header h2 { font-size: 22px; }
+.section-header a { padding: 9px 18px; background: #222; color: white; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: bold; }
+.section-header a:hover { background: #333; }
+
+/* ARTICLE GRID */
+.articles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 18px; }
+.article-card { background: white; border: 1px solid #ddd; border-radius: 12px; overflow: hidden; }
+.article-photo { width: 100%; height: 160px; object-fit: cover; background: #eee; display: block; }
+.article-no-photo { width: 100%; height: 160px; background: #eee; display: flex; align-items: center; justify-content: center; color: #aaa; font-size: 36px; }
+.article-info { padding: 14px; }
+.article-name { font-size: 15px; font-weight: bold; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.article-brand { font-size: 13px; color: #777; margin-bottom: 8px; }
+.article-price { font-size: 16px; font-weight: bold; }
+.article-sold { display: inline-block; margin-top: 6px; padding: 3px 10px; background: #fde8e8; color: #c62828; border-radius: 20px; font-size: 11px; font-weight: bold; text-transform: uppercase; }
+
+/* MESSAGES */
+.loading { text-align: center; padding: 50px; color: #666; font-size: 16px; }
+.empty-state { text-align: center; padding: 50px 20px; color: #666; }
+.empty-state-icon { font-size: 50px; margin-bottom: 15px; opacity: 0.4; }
+.empty-state h3 { font-size: 20px; margin-bottom: 10px; }
+.empty-state p { font-size: 15px; color: #999; }
+.error-message { background: #fde8e8; color: #c62828; border: 1px solid #f5c6c6; border-radius: 8px; padding: 12px 16px; font-size: 14px; margin-bottom: 20px; display: none; }
+
+/* FOOTER */
+footer { margin-top: 50px; padding: 40px 7% 25px; background: #222; color: white; }
+.footer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; max-width: 1000px; margin: 0 auto 30px; }
+.footer-col h4 { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; color: #999; }
+.footer-col a { display: block; color: #ccc; text-decoration: none; font-size: 14px; margin-bottom: 10px; transition: color 0.2s; }
+.footer-col a:hover { color: white; }
+.footer-bottom { text-align: center; font-size: 13px; color: #999; border-top: 1px solid #444; padding-top: 20px; }
+
+/* MOBILE */
+@media (max-width: 900px) {
+    .dashboard-layout { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: 1fr; }
 }
-
-.logo a {
-    color: #222;
-    text-decoration: none;
+@media (max-width: 700px) {
+    header { padding: 18px 5%; }
+    nav { display: none; }
+    .container { padding: 30px 5%; }
+    .page-title h1 { font-size: 26px; }
+    .articles-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
 }
-
-nav {
-    display: flex;
-    align-items: center;
-    gap: 25px;
-}
-
-nav a {
-    color: #222;
-    text-decoration: none;
-    font-size: 15px;
-}
-
-.nav-dropdown {
-    position: relative;
-}
-
-.nav-dropdown-toggle {
-    text-decoration: none;
-    color: #222;
-    font-size: 15px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.nav-dropdown-toggle:hover {
-    text-decoration: underline;
-}
-
-.nav-dropdown-toggle .caret {
-    font-size: 11px;
-    opacity: 0.6;
-}
-
-.nav-dropdown-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-    min-width: 170px;
-    padding: 6px 0;
-    z-index: 1100;
-}
-
-.nav-dropdown.open .nav-dropdown-menu {
-    display: block;
-}
-
-.nav-dropdown-menu a {
-    display: block;
-    padding: 10px 18px;
-    color: #333;
-    font-size: 14px;
-    text-decoration: none;
-}
-
-.nav-dropdown-menu a:hover {
-    background: #f7f5f2;
-    text-decoration: none;
-}
-
-.message-nav {
-    font-weight: bold;
-}
-
-.unread-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 18px;
-    height: 18px;
-    padding: 0 5px;
-    margin-left: 4px;
-    border-radius: 20px;
-    background: #c62828;
-    color: white;
-    font-size: 10px;
-    font-weight: bold;
-}
-
-
-/* =====================================================
-   PAGE
-===================================================== */
-
-.container {
-    max-width: 1100px;
-    margin: 45px auto;
-    padding: 0 20px;
-}
-
-.page-title {
-    margin-bottom: 30px;
-}
-
-.page-title h1 {
-    font-size: 38px;
-    margin-bottom: 8px;
-}
-
-.page-title p {
-    color: #777;
-}
-
-
-/* =====================================================
-   GRID
-===================================================== */
-
-.account-grid {
-    display: grid;
-    grid-template-columns: 330px 1fr;
-    gap: 25px;
-}
-
-
-/* =====================================================
-   CARDS
-===================================================== */
-
-.card {
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 16px;
-    padding: 25px;
-    margin-bottom: 25px;
-}
-
-.card h2 {
-    font-size: 21px;
-    margin-bottom: 20px;
-}
-
-.card h3 {
-    font-size: 18px;
-    margin-bottom: 15px;
-}
-
-
-/* =====================================================
-   PROFIL
-===================================================== */
-
-.profile-card {
-    text-align: center;
-}
-
-.avatar {
-    width: 85px;
-    height: 85px;
-    margin: 0 auto 15px;
-    border-radius: 50%;
-    background: #eee8df;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 38px;
-}
-
-.profile-name {
-    font-size: 22px;
-    font-weight: bold;
-    margin-bottom: 6px;
-}
-
-.profile-email {
-    color: #777;
-    font-size: 14px;
-    word-break: break-word;
-}
-
-
-/* =====================================================
-   MENU COMPTE
-===================================================== */
-
-.account-menu {
-    margin-top: 25px;
-}
-
-.account-menu a,
-.account-menu button {
-    width: 100%;
-    display: block;
-    text-align: left;
-    padding: 13px 0;
-    border: none;
-    border-bottom: 1px solid #eee;
-    background: transparent;
-    color: #222;
-    text-decoration: none;
-    cursor: pointer;
-    font-size: 15px;
-}
-
-.account-menu a:hover,
-.account-menu button:hover {
-    padding-left: 5px;
-}
-
-.logout-button {
-    color: #b00020 !important;
-}
-
-
-/* =====================================================
-   FORMULAIRE
-===================================================== */
-
-.form-group {
-    margin-bottom: 18px;
-}
-
-label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 7px;
-}
-
-input,
-select {
-    width: 100%;
-    padding: 13px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background: white;
-    font-size: 15px;
-}
-
-input:focus,
-select:focus {
-    outline: none;
-    border-color: #222;
-}
-
-.save-button {
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 9px;
-    background: #222;
-    color: white;
-    font-weight: bold;
-    font-size: 15px;
-    cursor: pointer;
-}
-
-.save-button:hover {
-    opacity: 0.85;
-}
-
-.save-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-
-/* =====================================================
-   MESSAGE
-===================================================== */
-
-.status-message {
-    margin-top: 15px;
-    padding: 12px;
-    border-radius: 8px;
-    font-size: 14px;
-    display: none;
-}
-
-.status-success {
-    display: block;
-    background: #e7f5e7;
-    border: 1px solid #2e7d32;
-    color: #2e7d32;
-}
-
-.status-error {
-    display: block;
-    background: #fce4e4;
-    border: 1px solid #b00020;
-    color: #b00020;
-}
-
-
-/* =====================================================
-   STATISTIQUES
-===================================================== */
-
-.stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 25px;
-}
-
-.stat {
-    background: #f7f5f2;
-    border-radius: 10px;
-    padding: 18px 10px;
-    text-align: center;
-}
-
-.stat-number {
-    display: block;
-    font-size: 25px;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.stat-label {
-    font-size: 12px;
-    color: #777;
-}
-
-
-/* =====================================================
-   ARTICLES
-===================================================== */
-
-.my-products {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-}
-
-.product-card {
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    overflow: hidden;
-    background: white;
-}
-
-.product-image {
-    height: 190px;
-    background: #eee;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #888;
-    overflow: hidden;
-}
-
-.product-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.product-info {
-    padding: 13px;
-}
-
-.product-name {
-    font-weight: bold;
-    margin-bottom: 7px;
-}
-
-.product-price {
-    font-weight: bold;
-    font-size: 17px;
-    margin-bottom: 6px;
-}
-
-.product-location {
-    color: #777;
-    font-size: 12px;
-}
-
-.no-products {
-    padding: 35px 15px;
-    text-align: center;
-    color: #777;
-    border: 1px dashed #ccc;
-    border-radius: 12px;
-}
-
-.sell-button {
-    display: inline-block;
-    margin-top: 15px;
-    padding: 12px 18px;
-    background: #222;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: bold;
-}
-
-
-/* =====================================================
-   MESSAGERIE
-===================================================== */
-
-.message-card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-}
-
-.message-card p {
-    color: #777;
-    font-size: 14px;
-    margin-top: 5px;
-}
-
-.message-button {
-    flex-shrink: 0;
-    padding: 12px 18px;
-    border-radius: 8px;
-    background: #222;
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-
-/* =====================================================
-   CHARGEMENT
-===================================================== */
-
-.loading {
-    text-align: center;
-    padding: 50px;
-    color: #777;
-}
-
-
-/* =====================================================
-   FOOTER
-===================================================== */
-
-footer {
-    margin-top: 50px;
-    padding: 30px;
-    text-align: center;
-    background: #222;
-    color: white;
-}
-
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
 @media (max-width: 800px) {
-
-    header {
-        padding: 18px 5%;
-    }
-
-    .logo {
-        font-size: 25px;
-    }
-
-    nav a:not(.message-nav):not(.nav-dropdown-toggle) {
-        display: none;
-    }
-
-    nav {
-        gap: 10px;
-    }
-
-    .container {
-        margin-top: 25px;
-        padding: 0 12px;
-    }
-
-    .page-title h1 {
-        font-size: 30px;
-    }
-
-    .account-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .my-products {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .product-image {
-        height: 170px;
-    }
-
+    .footer-grid { grid-template-columns: 1fr; gap: 25px; }
 }
-
-@media (max-width: 500px) {
-
-    .card {
-        padding: 20px;
-    }
-
-    .stats {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    .stat {
-        padding: 14px 5px;
-    }
-
-    .stat-number {
-        font-size: 21px;
-    }
-
-    .my-products {
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-    }
-
-    .product-image {
-        height: 145px;
-    }
-
-    .message-card {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .message-button {
-        text-align: center;
-    }
-
-}
-
 </style>
-
 </head>
-
-
 <body>
 
-
-<!-- =====================================================
-     HEADER
-===================================================== -->
-
+<!-- HEADER -->
 <header>
-
-<div class="logo">
-
-<a href="index.html">
-WEARERA
-</a>
-
-</div>
-
-
+<div class="logo"><a href="index.html">WEARERA</a></div>
 <nav>
-
-<a href="index.html">
-Accueil
-</a>
-
-<a href="index.html#articles">
-Acheter
-</a>
-
-<a href="vendre.html">
-Vendre
-</a>
-
+<a href="index.html">Accueil</a>
+<a href="index.html#articles">Acheter</a>
+<a href="vendre.html">Vendre</a>
 <div class="nav-dropdown" id="nav-dropdown">
 <a class="nav-dropdown-toggle" onclick="document.getElementById('nav-dropdown').classList.toggle('open')">Mes articles <span class="caret">▾</span></a>
 <div class="nav-dropdown-menu">
@@ -629,1558 +148,292 @@ Vendre
 <a href="mes-achats.html">🛍️ Mes achats</a>
 </div>
 </div>
-
-<a href="panier.html">🛒 Panier</a>
-
-<a
-href="messagerie.html"
-class="message-nav">
-
-💬 Messagerie
-
-<span
-id="unread-badge"
-class="unread-badge"
-style="display:none;">
-0
-</span>
-
-</a>
-
+<a href="panier.html" class="cart-nav">🛒 Panier</a>
+<a href="messagerie.html" class="message-nav">💬 Messagerie</a>
 <a href="profil.html" class="profile-nav">👤 Mon profil</a>
-
 </nav>
-
 </header>
 
-
-<!-- =====================================================
-     CONTENU
-===================================================== -->
-
+<!-- MAIN -->
 <main class="container">
-
-
-<div
-id="page-loading"
-class="loading">
-
-Chargement de votre compte...
-
-</div>
-
-
-<div
-id="account-content"
-style="display:none;">
-
-
 <div class="page-title">
+<h1>Mon compte</h1>
+<p>Bienvenue sur votre tableau de bord WEARERA.</p>
+</div>
 
-<h1>
-👤 Mon compte
-</h1>
+<div class="error-message" id="error-box"></div>
 
-<p id="welcome-text">
-Bienvenue sur WEARERA.
-</p>
+<div class="dashboard-layout">
+
+<!-- LEFT COLUMN -->
+<div class="left-column">
+
+<!-- PROFILE CARD -->
+<div class="profile-card">
+<div class="profile-avatar">
+<div id="avatar-placeholder" class="profile-avatar-placeholder">👤</div>
+<img id="avatar-image" alt="Avatar" style="display:none;">
+</div>
+<div class="profile-name" id="profile-name">Chargement...</div>
+<div class="profile-email" id="profile-email">—</div>
+
+<ul class="account-menu">
+<li><a href="profil.html"><span class="menu-icon">👤</span> Mes informations</a></li>
+<li><a href="mes-achats.html"><span class="menu-icon">🛍️</span> Mes achats</a></li>
+<li><a href="mes-ventes.html"><span class="menu-icon">💰</span> Mes ventes</a></li>
+<li><a href="mes-articles.html"><span class="menu-icon">📦</span> Mes articles</a></li>
+<li><a href="messagerie.html"><span class="menu-icon">💬</span> Messagerie</a></li>
+<li><a href="vendre.html"><span class="menu-icon">🏷️</span> Vendre un article</a></li>
+</ul>
+
+<button class="logout-btn" id="logout-btn">Se déconnecter</button>
+</div>
+
+<!-- MESSAGERIE CARD -->
+<div class="messagerie-card">
+<h3>💬 Messagerie</h3>
+<div class="msg-preview" id="msg-preview">Vérification des messages...</div>
+<a href="messagerie.html" class="msg-link">Ouvrir la messagerie</a>
+</div>
 
 </div>
 
+<!-- RIGHT COLUMN -->
+<div class="right-column">
 
-<div class="account-grid">
+<!-- STATS GRID -->
+<div class="stats-grid">
+<div class="stat-card">
+<div class="stat-number" id="stat-articles">—</div>
+<div class="stat-label">Articles publiés</div>
+</div>
+<div class="stat-card">
+<div class="stat-number" id="stat-sales">—</div>
+<div class="stat-label">Ventes</div>
+</div>
+<div class="stat-card">
+<div class="stat-number" id="stat-purchases">—</div>
+<div class="stat-label">Achats</div>
+</div>
+</div>
 
-
-<!-- =================================================
-     COLONNE GAUCHE
-================================================== -->
-
+<!-- ARTICLES SECTION -->
 <div>
-
-
-<div class="card profile-card">
-
-<div class="avatar">
-👤
+<div class="section-header">
+<h2>Mes articles</h2>
+<a href="vendre.html">+ Vendre un article</a>
 </div>
-
-<div
-id="profile-name"
-class="profile-name">
-Mon compte
+<div id="loading" class="loading">Chargement de vos articles...</div>
+<div id="articles-grid" class="articles-grid" style="display:none;"></div>
+<div id="empty-articles" class="empty-state" style="display:none;">
+<div class="empty-state-icon">📦</div>
+<h3>Aucun article publié</h3>
+<p>Commencez à vendre dès maintenant !</p>
 </div>
-
-<div
-id="profile-email"
-class="profile-email">
-</div>
-
-
-<div class="account-menu">
-
-<a href="#informations">
-⚙️ Mes informations
-</a>
-
-<a href="mes-achats.html">
-🛍️ Mes achats
-</a>
-
-<a href="mes-ventes.html">
-💰 Mes ventes
-</a>
-
-<a href="#articles">
-👗 Mes articles
-</a>
-
-<a href="messagerie.html">
-💬 Ma messagerie
-</a>
-
-<a href="vendre.html">
-➕ Vendre un article
-</a>
-
-<button
-id="logout-button"
-class="logout-button">
-
-🚪 Se déconnecter
-
-</button>
-
-</div>
-
-</div>
-
-
-<div class="card">
-
-<h2>
-💬 Messagerie
-</h2>
-
-<p
-style="color:#777;line-height:1.5;">
-
-Discutez avec les acheteurs et les vendeurs
-directement sur WEARERA.
-
-</p>
-
-<a
-href="messagerie.html"
-class="message-button"
-style="display:inline-block;margin-top:15px;">
-
-Ouvrir la messagerie
-
-</a>
-
-</div>
-
-</div>
-
-
-<!-- =================================================
-     COLONNE DROITE
-================================================== -->
-
-<div>
-
-
-<!-- INFORMATIONS -->
-
-<div
-class="card"
-id="informations">
-
-<h2>
-⚙️ Mes informations
-</h2>
-
-
-<form id="profile-form">
-
-
-<div class="form-group">
-
-<label for="first-name">
-Prénom
-</label>
-
-<input
-type="text"
-id="first-name"
-placeholder="Votre prénom"
-required
->
-
-</div>
-
-
-<div class="form-group">
-
-<label for="email">
-Adresse e-mail
-</label>
-
-<input
-type="email"
-id="email"
-disabled
->
-
-</div>
-
-
-<div class="form-group">
-
-<label for="province">
-Province / territoire
-</label>
-
-<select id="province">
-
-<option value="">
-Choisir une province
-</option>
-
-<option value="AB">
-Alberta
-</option>
-
-<option value="BC">
-Colombie-Britannique
-</option>
-
-<option value="PE">
-Île-du-Prince-Édouard
-</option>
-
-<option value="MB">
-Manitoba
-</option>
-
-<option value="NB">
-Nouveau-Brunswick
-</option>
-
-<option value="NS">
-Nouvelle-Écosse
-</option>
-
-<option value="ON">
-Ontario
-</option>
-
-<option value="QC">
-Québec
-</option>
-
-<option value="SK">
-Saskatchewan
-</option>
-
-<option value="NL">
-Terre-Neuve-et-Labrador
-</option>
-
-<option value="NT">
-Territoires du Nord-Ouest
-</option>
-
-<option value="NU">
-Nunavut
-</option>
-
-<option value="YT">
-Yukon
-</option>
-
-</select>
-
-</div>
-
-
-<div class="form-group">
-
-<label for="city">
-Ville
-</label>
-
-<select id="city">
-
-<option value="">
-Choisir une ville
-</option>
-
-</select>
-
-</div>
-
-
-<button
-type="submit"
-id="save-button"
-class="save-button">
-
-Enregistrer mes modifications
-
-</button>
-
-
-<div
-id="status-message"
-class="status-message">
-</div>
-
-
-</form>
-
-</div>
-
-
-<!-- STATISTIQUES -->
-
-<div class="card">
-
-<h2>
-📊 Mon activité
-</h2>
-
-
-<div class="stats">
-
-<div class="stat">
-
-<span
-id="article-count"
-class="stat-number">
-0
-</span>
-
-<span class="stat-label">
-Articles
-</span>
-
-</div>
-
-
-<div class="stat">
-
-<span
-id="conversation-count"
-class="stat-number">
-0
-</span>
-
-<span class="stat-label">
-Conversations
-</span>
-
-</div>
-
-
-<div class="stat">
-
-<span
-id="unread-count"
-class="stat-number">
-0
-</span>
-
-<span class="stat-label">
-Messages non lus
-</span>
-
 </div>
 
 </div>
 
 </div>
-
-
-<!-- ARTICLES -->
-
-<div
-class="card"
-id="articles">
-
-<h2>
-👗 Mes articles
-</h2>
-
-
-<div
-id="my-products"
-class="my-products">
-
-<div class="loading">
-Chargement...
-</div>
-
-</div>
-
-</div>
-
-
-</div>
-
-</div>
-
-</div>
-
 </main>
 
-
+<!-- FOOTER -->
 <footer>
-
-WEARERA ©️ 2026
-
-<br>
-
-La mode de seconde main au Canada.
-
+<div class="footer-grid">
+<div class="footer-col">
+<h4>WEARERA</h4>
+<a href="a-propos.html">À propos de WEARERA</a>
+<a href="comment-ca-fonctionne.html">Comment ça fonctionne</a>
+<a href="faq.html">FAQ</a>
+<a href="nous-contacter.html">Nous contacter</a>
+</div>
+<div class="footer-col">
+<h4>Informations</h4>
+<a href="cgu.html">Conditions générales d'utilisation</a>
+<a href="confidentialite.html">Politique de confidentialité</a>
+<a href="protection-acheteur.html">Protection acheteur</a>
+<a href="protection-vendeur.html">Protection vendeur</a>
+<a href="frais.html">Frais WEARERA</a>
+<a href="livraison.html">Livraison</a>
+<a href="regles-communaute.html">Règles de la communauté</a>
+</div>
+<div class="footer-col">
+<h4>Compte</h4>
+<a href="profil.html">Mon profil</a>
+<a href="mes-articles.html">Mes articles</a>
+<a href="mes-achats.html">Mes achats</a>
+<a href="mes-ventes.html">Mes ventes</a>
+<a href="panier.html">Panier</a>
+<a href="messagerie.html">Messagerie</a>
+</div>
+</div>
+<div class="footer-bottom">© 2026 WEARERA — Tous droits réservés</div>
 </footer>
 
-
 <script>
-
-/* =====================================================
-   SUPABASE
-===================================================== */
-
-const SUPABASE_URL =
-"https://wcamvnvhcguxwujcwyyj.supabase.co";
-
-const SUPABASE_PUBLISHABLE_KEY =
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndjYW12bnZoY2d1eHd1amN3eXlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMjcwNDYsImV4cCI6MjEwMzgwMzA0Nn0.qnkYuFIcbRP8aBzPyIfxamOfVvBrU3nNhMa__NiyYPA";
-
-const supabaseClient =
-supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-);
-
-
-/* =====================================================
-   VARIABLES
-===================================================== */
+/* SUPABASE */
+const SUPABASE_URL = "https://wcamvnvhcguxwujcwyyj.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndjYW12bnZoY2d1eHd1amN3eXlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMjcwNDYsImV4cCI6MjEwMzgwMzA0Nn0.qnkYuFIcbRP8aBzPyIfxamOfVvBrU3nNhMa__NiyYPA";
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
 let currentUser = null;
 
+/* ELEMENTS */
+const errorBox = document.getElementById("error-box");
+const loading = document.getElementById("loading");
+const articlesGrid = document.getElementById("articles-grid");
+const emptyArticles = document.getElementById("empty-articles");
+const logoutBtn = document.getElementById("logout-btn");
 
-/* =====================================================
-   VILLES
-===================================================== */
+/* MESSAGES */
+function showError(msg) { errorBox.textContent = msg; errorBox.style.display = "block"; }
 
-const cities = {
-
-    AB: [
-        "Calgary",
-        "Edmonton",
-        "Red Deer",
-        "Lethbridge",
-        "Fort McMurray"
-    ],
-
-    BC: [
-        "Vancouver",
-        "Victoria",
-        "Surrey",
-        "Burnaby",
-        "Kelowna",
-        "Richmond"
-    ],
-
-    PE: [
-        "Charlottetown",
-        "Summerside",
-        "Stratford"
-    ],
-
-    MB: [
-        "Winnipeg",
-        "Brandon",
-        "Steinbach"
-    ],
-
-    NB: [
-        "Campbellton",
-        "Bathurst",
-        "Moncton",
-        "Dieppe",
-        "Fredericton",
-        "Saint John",
-        "Edmundston",
-        "Miramichi"
-    ],
-
-    NS: [
-        "Halifax",
-        "Sydney",
-        "Dartmouth",
-        "Truro",
-        "New Glasgow"
-    ],
-
-    ON: [
-        "Toronto",
-        "Ottawa",
-        "Mississauga",
-        "Brampton",
-        "Hamilton",
-        "London",
-        "Windsor",
-        "Kitchener",
-        "Waterloo",
-        "Kingston"
-    ],
-
-    QC: [
-        "Montréal",
-        "Québec",
-        "Laval",
-        "Gatineau",
-        "Longueuil",
-        "Sherbrooke",
-        "Trois-Rivières",
-        "Saguenay",
-        "Drummondville"
-    ],
-
-    SK: [
-        "Saskatoon",
-        "Regina",
-        "Prince Albert",
-        "Moose Jaw"
-    ],
-
-    NL: [
-        "St. John's",
-        "Mount Pearl",
-        "Corner Brook",
-        "Conception Bay South"
-    ],
-
-    NT: [
-        "Yellowknife",
-        "Hay River",
-        "Inuvik"
-    ],
-
-    NU: [
-        "Iqaluit",
-        "Rankin Inlet",
-        "Arviat"
-    ],
-
-    YT: [
-        "Whitehorse",
-        "Dawson City",
-        "Watson Lake"
-    ]
-
-};
-
-
-/* =====================================================
-   ELEMENTS
-===================================================== */
-
-const pageLoading =
-document.getElementById(
-    "page-loading"
-);
-
-const accountContent =
-document.getElementById(
-    "account-content"
-);
-
-const profileName =
-document.getElementById(
-    "profile-name"
-);
-
-const profileEmail =
-document.getElementById(
-    "profile-email"
-);
-
-const welcomeText =
-document.getElementById(
-    "welcome-text"
-);
-
-const firstNameInput =
-document.getElementById(
-    "first-name"
-);
-
-const emailInput =
-document.getElementById(
-    "email"
-);
-
-const provinceInput =
-document.getElementById(
-    "province"
-);
-
-const cityInput =
-document.getElementById(
-    "city"
-);
-
-const profileForm =
-document.getElementById(
-    "profile-form"
-);
-
-const saveButton =
-document.getElementById(
-    "save-button"
-);
-
-const statusMessage =
-document.getElementById(
-    "status-message"
-);
-
-const myProducts =
-document.getElementById(
-    "my-products"
-);
-
-const unreadBadge =
-document.getElementById(
-    "unread-badge"
-);
-
-
-/* =====================================================
-   AUTHENTIFICATION
-===================================================== */
-
-async function getCurrentUser() {
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .auth
-            .getUser();
-
-
-    if (error) {
-
-        console.error(
-            "Erreur utilisateur :",
-            error
-        );
-
-        return null;
-    }
-
-
-    return data.user;
-
+/* ESCAPE HTML */
+function escapeHtml(value) {
+    return String(value || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
 
+/* FORMAT MONEY */
+function formatMoney(val) { return Number(val || 0).toFixed(2) + " $"; }
 
-/* =====================================================
-   AFFICHER VILLES
-===================================================== */
+/* GET FIRST PHOTO */
+function getFirstPhoto(article) {
+    if (Array.isArray(article.photo_urls) && article.photo_urls.length > 0) return article.photo_urls[0];
+    return "";
+}
 
-function populateCities(
-    selectedProvince,
-    selectedCity
-) {
+/* RENDER ARTICLES */
+function renderArticles(articles) {
+    loading.style.display = "none";
 
-    cityInput.innerHTML =
-        "<option value=''>" +
-        "Choisir une ville" +
-        "</option>";
-
-
-    if (
-        !selectedProvince ||
-        !cities[selectedProvince]
-    ) {
-
+    if (!articles || articles.length === 0) {
+        emptyArticles.style.display = "block";
         return;
-
     }
 
+    articlesGrid.style.display = "grid";
+    articlesGrid.innerHTML = "";
 
-    cities[selectedProvince]
-        .forEach(
-            function(city) {
+    articles.forEach(function(article) {
+        const photoUrl = getFirstPhoto(article);
+        const card = document.createElement("div");
+        card.className = "article-card";
 
-                const option =
-                    document.createElement(
-                        "option"
-                    );
-
-                option.value =
-                    city;
-
-                option.textContent =
-                    city;
-
-                if (
-                    city ===
-                    selectedCity
-                ) {
-
-                    option.selected =
-                        true;
-
-                }
-
-                cityInput.appendChild(
-                    option
-                );
-
-            }
-        );
-
-}
-
-
-/* =====================================================
-   CHANGEMENT PROVINCE
-===================================================== */
-
-provinceInput.addEventListener(
-    "change",
-    function() {
-
-        populateCities(
-            provinceInput.value,
-            ""
-        );
-
-    }
-);
-
-
-/* =====================================================
-   CHARGER PROFIL
-===================================================== */
-
-async function loadProfile() {
-
-    const metadata =
-        currentUser.user_metadata ||
-        {};
-
-
-    const firstName =
-        metadata.first_name ||
-        "";
-
-
-    firstNameInput.value =
-        firstName;
-
-
-    emailInput.value =
-        currentUser.email ||
-        "";
-
-
-    profileName.textContent =
-        firstName ||
-        "Mon compte";
-
-
-    profileEmail.textContent =
-        currentUser.email ||
-        "";
-
-
-    welcomeText.textContent =
-        firstName
-            ? "Bienvenue " +
-              firstName +
-              " 👋"
-            : "Bienvenue sur WEARERA 👋";
-
-
-    /*
-     * La province et la ville
-     * sont stockées dans les metadata
-     * du compte.
-     */
-
-    const province =
-        metadata.province ||
-        "";
-
-
-    const city =
-        metadata.city ||
-        "";
-
-
-    provinceInput.value =
-        province;
-
-
-    populateCities(
-        province,
-        city
-    );
-
-}
-
-
-/* =====================================================
-   ENREGISTRER PROFIL
-===================================================== */
-
-profileForm.addEventListener(
-    "submit",
-    async function(event) {
-
-        event.preventDefault();
-
-
-        const firstName =
-            firstNameInput.value.trim();
-
-
-        const province =
-            provinceInput.value;
-
-
-        const city =
-            cityInput.value;
-
-
-        if (!firstName) {
-
-            showStatus(
-                "Veuillez entrer votre prénom.",
-                "error"
-            );
-
-            return;
-
+        let html = "";
+        if (photoUrl) {
+            html += '<img src="' + escapeHtml(photoUrl) + '" alt="' + escapeHtml(article.name) + '" class="article-photo">';
+        } else {
+            html += '<div class="article-no-photo">📷</div>';
         }
 
+        html += '<div class="article-info">';
+        html += '<div class="article-name">' + escapeHtml(article.name) + '</div>';
+        if (article.brand) html += '<div class="article-brand">' + escapeHtml(article.brand) + '</div>';
+        html += '<div class="article-price">' + formatMoney(article.price) + '</div>';
+        if (article.is_sold) html += '<span class="article-sold">Vendu</span>';
+        html += '</div>';
 
-        saveButton.disabled =
-            true;
-
-
-        saveButton.textContent =
-            "Enregistrement...";
-
-
-        try {
-
-            const {
-                data,
-                error
-            } =
-                await supabaseClient
-                    .auth
-                    .updateUser({
-
-                        data: {
-
-                            first_name:
-                                firstName,
-
-                            province:
-                                province ||
-                                null,
-
-                            city:
-                                city ||
-                                null
-
-                        }
-
-                    });
-
-
-            if (error) {
-
-                throw error;
-
-            }
-
-
-            currentUser =
-                data.user;
-
-
-            const profileData = {
-                id: currentUser.id,
-                first_name: firstName,
-                province: province || null,
-                city: city || null,
-                updated_at: new Date().toISOString()
-            };
-
-            await supabaseClient
-                .from("profiles")
-                .upsert(profileData);
-
-            await supabaseClient
-                .from("public_profiles")
-                .upsert({
-                    id: currentUser.id,
-                    first_name: firstName,
-                    province: province || null,
-                    city: city || null,
-                    updated_at: new Date().toISOString()
-                });
-
-
-            await loadProfile();
-
-
-            showStatus(
-                "Vos informations ont été enregistrées avec succès. ✓",
-                "success"
-            );
-
-
-        } catch(error) {
-
-            console.error(
-                "Erreur profil :",
-                error
-            );
-
-
-            showStatus(
-                "Impossible d'enregistrer : " +
-                error.message,
-                "error"
-            );
-
-        } finally {
-
-            saveButton.disabled =
-                false;
-
-            saveButton.textContent =
-                "Enregistrer mes modifications";
-
-        }
-
-    }
-);
-
-
-/* =====================================================
-   MESSAGE STATUT
-===================================================== */
-
-function showStatus(
-    message,
-    type
-) {
-
-    statusMessage.textContent =
-        message;
-
-
-    statusMessage.className =
-        "status-message " +
-        (
-            type === "success"
-                ? "status-success"
-                : "status-error"
-        );
-
-
-    setTimeout(
-        function() {
-
-            statusMessage.className =
-                "status-message";
-
-        },
-        5000
-    );
-
+        card.innerHTML = html;
+        articlesGrid.appendChild(card);
+    });
 }
 
+/* LOAD DASHBOARD */
+async function loadDashboard() {
+    try {
+        /* PROFILE */
+        const { data: profile, error: profileError } = await supabaseClient
+            .from("profiles")
+            .select("*")
+            .eq("id", currentUser.id)
+            .maybeSingle();
 
-/* =====================================================
-   CHARGER ARTICLES UTILISATEUR
-===================================================== */
+        if (profileError) throw profileError;
 
-async function loadMyArticles() {
+        const displayName = (profile && profile.first_name) ? profile.first_name : "Utilisateur";
+        document.getElementById("profile-name").textContent = displayName;
+        document.getElementById("profile-email").textContent = currentUser.email || "—";
 
-    myProducts.innerHTML =
-        "<div class='loading'>" +
-        "Chargement de vos articles..." +
-        "</div>";
+        if (profile && profile.avatar_url) {
+            const img = document.getElementById("avatar-image");
+            img.src = profile.avatar_url;
+            img.style.display = "block";
+            document.getElementById("avatar-placeholder").style.display = "none";
+        }
 
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
+        /* ARTICLES */
+        const { data: articles, error: articlesError } = await supabaseClient
             .from("Articles")
             .select("*")
-            .eq(
-                "seller_id",
-                currentUser.id
-            )
-            .order(
-                "created_at",
-                {
-                    ascending: false
-                }
-            );
+            .eq("seller_id", currentUser.id)
+            .order("created_at", { ascending: false });
 
+        if (articlesError) throw articlesError;
 
-    if (error) {
+        const articleList = articles || [];
+        document.getElementById("stat-articles").textContent = articleList.length;
 
-        console.error(
-            "Erreur articles :",
-            error
-        );
+        renderArticles(articleList);
 
+        /* SALES COUNT */
+        const { count: salesCount, error: salesError } = await supabaseClient
+            .from("orders")
+            .select("*", { count: "exact", head: true })
+            .eq("seller_id", currentUser.id);
 
-        myProducts.innerHTML =
-            "<div class='no-products'>" +
+        if (salesError) throw salesError;
+        document.getElementById("stat-sales").textContent = salesCount || 0;
 
-            "Impossible de charger vos articles." +
+        /* PURCHASES COUNT */
+        const { count: purchasesCount, error: purchasesError } = await supabaseClient
+            .from("orders")
+            .select("*", { count: "exact", head: true })
+            .eq("buyer_id", currentUser.id);
 
-            "<br><br>" +
+        if (purchasesError) throw purchasesError;
+        document.getElementById("stat-purchases").textContent = purchasesCount || 0;
 
-            "<small>" +
-            error.message +
-            "</small>" +
-
-            "</div>";
-
-        return;
-
-    }
-
-
-    document.getElementById(
-        "article-count"
-    ).textContent =
-        data?.length || 0;
-
-
-    if (!data?.length) {
-
-        myProducts.innerHTML =
-            "<div class='no-products' " +
-            "style='grid-column:1/-1;'>" +
-
-            "<div style='font-size:40px;margin-bottom:10px'>" +
-            "👗" +
-            "</div>" +
-
-            "<strong>Vous n'avez encore aucun article.</strong>" +
-
-            "<br>" +
-
-            "<span>" +
-            "Commencez à vendre sur WEARERA." +
-            "</span>" +
-
-            "<br>" +
-
-            "<a href='vendre.html' class='sell-button'>" +
-            "Vendre un article" +
-            "</a>" +
-
-            "</div>";
-
-        return;
-
-    }
-
-
-    myProducts.innerHTML =
-        "";
-
-
-    data.forEach(
-        function(article) {
-
-            const card =
-                document.createElement(
-                    "div"
-                );
-
-
-            card.className =
-                "product-card";
-
-
-            let photoUrl = "";
-
-
-            if (
-                Array.isArray(
-                    article.photo_urls
-                ) &&
-                article.photo_urls.length
-            ) {
-
-                photoUrl =
-                    article.photo_urls[0];
-
-            } else if (
-                typeof article.photo_urls ===
-                "string"
-            ) {
-
-                try {
-
-                    const parsed =
-                        JSON.parse(
-                            article.photo_urls
-                        );
-
-
-                    if (
-                        Array.isArray(parsed) &&
-                        parsed.length
-                    ) {
-
-                        photoUrl =
-                            parsed[0];
-
-                    } else {
-
-                        photoUrl =
-                            article.photo_urls;
-
-                    }
-
-                } catch(error) {
-
-                    photoUrl =
-                        article.photo_urls;
-
-                }
-
-            }
-
-
-            const image =
-                document.createElement(
-                    "div"
-                );
-
-
-            image.className =
-                "product-image";
-
-
-            if (photoUrl) {
-
-                const img =
-                    document.createElement(
-                        "img"
-                    );
-
-
-                img.src =
-                    photoUrl;
-
-
-                img.alt =
-                    article.name ||
-                    "Article";
-
-
-                img.onerror =
-                    function() {
-
-                        image.innerHTML =
-                            "Photo indisponible";
-
-                    };
-
-
-                image.appendChild(
-                    img
-                );
-
-            } else {
-
-                image.textContent =
-                    "Photo";
-
-            }
-
-
-            const info =
-                document.createElement(
-                    "div"
-                );
-
-
-            info.className =
-                "product-info";
-
-
-            const name =
-                document.createElement(
-                    "div"
-                );
-
-
-            name.className =
-                "product-name";
-
-
-            name.textContent =
-                article.name ||
-                "Article";
-
-
-            const price =
-                document.createElement(
-                    "div"
-                );
-
-
-            price.className =
-                "product-price";
-
-
-            price.textContent =
-                Number(
-                    article.price || 0
-                )
-                .toFixed(2)
-                .replace(
-                    ".00",
-                    ""
-                ) +
-                " $";
-
-
-            const location =
-                document.createElement(
-                    "div"
-                );
-
-
-            location.className =
-                "product-location";
-
-
-            location.textContent =
-                "📍 " +
-                (
-                    article.city ||
-                    "Canada"
-                );
-
-
-            info.append(
-                name,
-                price,
-                location
-            );
-
-
-            card.append(
-                image,
-                info
-            );
-
-
-            card.addEventListener(
-                "click",
-                function() {
-
-                    /*
-                     * Retour à l'accueil
-                     * avec l'article.
-                     *
-                     * Pour l'instant on utilise
-                     * l'index général.
-                     */
-
-                    window.location.href =
-                        "index.html";
-
-                }
-            );
-
-
-            myProducts.appendChild(
-                card
-            );
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   CHARGER STATISTIQUES MESSAGERIE
-===================================================== */
-
-async function loadMessagingStats() {
-
-    const {
-        data: conversations,
-        error: conversationError
-    } =
-        await supabaseClient
-            .from("conversations")
-            .select("id")
-            .or(
-                "buyer_id.eq." +
-                currentUser.id +
-                ",seller_id.eq." +
-                currentUser.id
-            );
-
-
-    if (conversationError) {
-
-        console.warn(
-            "Erreur conversations :",
-            conversationError.message
-        );
-
-        return;
-
-    }
-
-
-    const count =
-        conversations?.length || 0;
-
-
-    document.getElementById(
-        "conversation-count"
-    ).textContent =
-        count;
-
-
-    if (!count) {
-
-        document.getElementById(
-            "unread-count"
-        ).textContent =
-            "0";
-
-        unreadBadge.style.display =
-            "none";
-
-        return;
-
-    }
-
-
-    const ids =
-        conversations.map(
-            function(conversation) {
-
-                return conversation.id;
-
-            }
-        );
-
-
-    const {
-        data: unreadMessages,
-        error: unreadError
-    } =
-        await supabaseClient
+        /* UNREAD MESSAGES COUNT */
+        const { count: unreadCount, error: unreadError } = await supabaseClient
             .from("messages")
-            .select("id")
-            .in(
-                "conversation_id",
-                ids
-            )
-            .neq(
-                "sender_id",
-                currentUser.id
-            )
-            .eq(
-                "is_read",
-                false
-            );
+            .select("*", { count: "exact", head: true })
+            .eq("is_read", false)
+            .neq("sender_id", currentUser.id);
 
-
-    if (unreadError) {
-
-        console.warn(
-            "Erreur messages non lus :",
-            unreadError.message
-        );
-
-        return;
-
-    }
-
-
-    const unreadCount =
-        unreadMessages?.length || 0;
-
-
-    document.getElementById(
-        "unread-count"
-    ).textContent =
-        unreadCount;
-
-
-    if (unreadCount > 0) {
-
-        unreadBadge.textContent =
-            unreadCount > 99
-                ? "99+"
-                : unreadCount;
-
-        unreadBadge.style.display =
-            "inline-flex";
-
-    } else {
-
-        unreadBadge.style.display =
-            "none";
-
-    }
-
-}
-
-
-/* =====================================================
-   DECONNEXION
-===================================================== */
-
-document
-    .getElementById(
-        "logout-button"
-    )
-    .addEventListener(
-        "click",
-        async function() {
-
-            const confirmed =
-                confirm(
-                    "Voulez-vous vraiment vous déconnecter ?"
-                );
-
-
-            if (!confirmed) {
-
-                return;
-
+        if (!unreadError) {
+            const count = unreadCount || 0;
+            const preview = document.getElementById("msg-preview");
+            if (count > 0) {
+                preview.innerHTML = 'Vous avez <strong>' + count + '</strong> message(s) non lu(s).';
+                preview.insertAdjacentHTML("beforeend", '<span class="unread-pill">' + count + '</span>');
+            } else {
+                preview.textContent = "Aucun nouveau message.";
             }
-
-
-            const {
-                error
-            } =
-                await supabaseClient
-                    .auth
-                    .signOut();
-
-
-            if (error) {
-
-                alert(
-                    "Impossible de se déconnecter : " +
-                    error.message
-                );
-
-                return;
-
-            }
-
-
-            window.location.href =
-                "auth.html";
-
-        }
-    );
-
-
-/* =====================================================
-   INITIALISATION
-===================================================== */
-
-async function init() {
-
-    currentUser =
-        await getCurrentUser();
-
-
-    if (!currentUser) {
-
-        window.location.href =
-            "auth.html";
-
-        return;
-
-    }
-
-
-    await loadProfile();
-
-    await loadMyArticles();
-
-    await loadMessagingStats();
-
-
-    pageLoading.style.display =
-        "none";
-
-
-    accountContent.style.display =
-        "block";
-
-}
-
-
-init();
-
-
-/* =====================================================
-   SESSION EN TEMPS RÉEL
-===================================================== */
-
-supabaseClient.auth.onAuthStateChange(
-    function(
-        event,
-        session
-    ) {
-
-        if (
-            event === "SIGNED_OUT"
-        ) {
-
-            window.location.href =
-                "auth.html";
-
         }
 
+    } catch (err) {
+        console.error(err);
+        loading.style.display = "none";
+        showError("Impossible de charger le tableau de bord : " + err.message);
     }
-);
+}
 
+/* LOGOUT */
+logoutBtn.addEventListener("click", async function() {
+    await supabaseClient.auth.signOut();
+    window.location.href = "index.html";
+});
+
+/* INIT */
+(async function() {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) {
+        window.location.href = "auth.html";
+        return;
+    }
+    currentUser = user;
+    loadDashboard();
+})();
 </script>
-
 </body>
-
 </html>

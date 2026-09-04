@@ -1,45 +1,16 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Messagerie — WEARERA</title>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #f7f5f2; color: #222; }
+button, input, select, textarea { font-family: inherit; }
 
-/* =====================================================
-   BASE
-===================================================== */
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background: #f7f5f2;
-    color: #222;
-}
-
-button,
-input {
-    font-family: inherit;
-}
-
-
-/* =====================================================
-   HEADER
-===================================================== */
-
+/* HEADER */
 header {
     background: white;
     padding: 22px 7%;
@@ -47,582 +18,113 @@ header {
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
+.logo { font-size: 30px; font-weight: bold; letter-spacing: 2px; }
+.logo a { text-decoration: none; color: #222; }
+nav { display: flex; align-items: center; gap: 22px; }
+nav a { text-decoration: none; color: #222; font-size: 15px; }
+nav a:hover { text-decoration: underline; }
+.nav-dropdown { position: relative; }
+.nav-dropdown-toggle { text-decoration: none; color: #222; font-size: 15px; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 4px 0; }
+.nav-dropdown-toggle:hover { text-decoration: underline; }
+.nav-dropdown-toggle .caret { font-size: 11px; opacity: 0.6; }
+.nav-dropdown-menu { display: none; position: absolute; top: 100%; right: 0; background: white; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); min-width: 170px; padding: 6px 0; z-index: 1100; }
+.nav-dropdown.open .nav-dropdown-menu { display: block; }
+.nav-dropdown-menu a { display: block; padding: 10px 18px; color: #333; font-size: 14px; text-decoration: none; }
+.nav-dropdown-menu a:hover { background: #f7f5f2; text-decoration: none; }
 
-.logo {
-    font-size: 30px;
-    font-weight: bold;
-    letter-spacing: 2px;
+/* MESSAGING LAYOUT */
+.messaging-container { max-width: 1100px; margin: 0 auto; padding: 20px 7%; }
+.messaging-layout { display: flex; gap: 0; background: white; border: 1px solid #ddd; border-radius: 12px; overflow: hidden; height: calc(100vh - 200px); min-height: 500px; }
+
+/* CONVERSATION LIST */
+.conversation-list { width: 35%; border-right: 1px solid #eee; overflow-y: auto; }
+.conversation-list-header { padding: 18px 20px; border-bottom: 1px solid #eee; font-size: 18px; font-weight: bold; }
+.conversation-item { padding: 15px 20px; border-bottom: 1px solid #f0f0f0; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; gap: 12px; }
+.conversation-item:hover { background: #f7f5f2; }
+.conversation-item.active { background: #e8f0fe; }
+.conversation-item-photo { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: #eee; flex-shrink: 0; }
+.conversation-item-no-photo { width: 50px; height: 50px; border-radius: 8px; background: #eee; display: flex; align-items: center; justify-content: center; color: #aaa; font-size: 20px; flex-shrink: 0; }
+.conversation-item-info { flex: 1; min-width: 0; }
+.conversation-item-name { font-size: 15px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
+.conversation-item-preview { font-size: 13px; color: #999; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.unread-badge { background: #222; color: white; border-radius: 50%; min-width: 20px; height: 20px; font-size: 11px; display: flex; align-items: center; justify-content: center; padding: 0 5px; flex-shrink: 0; }
+
+/* CHAT AREA */
+.chat-area { width: 65%; display: flex; flex-direction: column; }
+.chat-header { padding: 15px 20px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 12px; }
+.chat-header-photo { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; background: #eee; flex-shrink: 0; }
+.chat-header-no-photo { width: 45px; height: 45px; border-radius: 8px; background: #eee; display: flex; align-items: center; justify-content: center; color: #aaa; font-size: 18px; flex-shrink: 0; }
+.chat-header-info { flex: 1; }
+.chat-header-title { font-size: 16px; font-weight: bold; }
+.chat-header-subtitle { font-size: 13px; color: #999; }
+
+/* MESSAGES */
+.messages-area { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+.message-bubble { max-width: 70%; padding: 10px 15px; border-radius: 12px; font-size: 14px; line-height: 1.4; word-wrap: break-word; }
+.message-sent { background: #222; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+.message-received { background: #f0f0f0; color: #222; align-self: flex-start; border-bottom-left-radius: 4px; }
+.message-time { font-size: 11px; color: #999; margin-top: 4px; }
+.message-sent .message-time { color: #ccc; }
+
+/* MESSAGE INPUT */
+.message-input-area { padding: 15px 20px; border-top: 1px solid #eee; display: flex; gap: 10px; }
+.message-input-area input { flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; outline: none; }
+.message-input-area input:focus { border-color: #222; }
+.send-button { padding: 12px 24px; background: #222; color: white; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: bold; }
+.send-button:hover { background: #333; }
+.send-button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* EMPTY STATES */
+.chat-empty { flex: 1; display: flex; align-items: center; justify-content: center; flex-direction: column; color: #999; padding: 40px; text-align: center; }
+.chat-empty-icon { font-size: 50px; margin-bottom: 15px; opacity: 0.4; }
+.chat-empty h3 { font-size: 18px; margin-bottom: 8px; color: #555; }
+.chat-empty p { font-size: 14px; }
+.no-conversations { padding: 40px 20px; text-align: center; color: #999; }
+
+/* BACK BUTTON (mobile) */
+.back-to-list { display: none; background: none; border: none; font-size: 18px; cursor: pointer; color: #222; padding: 5px 10px; }
+
+/* MESSAGES */
+.error-message { background: #fde8e8; color: #c62828; border: 1px solid #f5c6c6; border-radius: 8px; padding: 12px 16px; font-size: 14px; margin: 10px 20px; display: none; }
+
+/* FOOTER */
+footer { margin-top: 50px; padding: 40px 7% 25px; background: #222; color: white; }
+.footer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; max-width: 1000px; margin: 0 auto 30px; }
+.footer-col h4 { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; color: #999; }
+.footer-col a { display: block; color: #ccc; text-decoration: none; font-size: 14px; margin-bottom: 10px; transition: color 0.2s; }
+.footer-col a:hover { color: white; }
+.footer-bottom { text-align: center; font-size: 13px; color: #999; border-top: 1px solid #444; padding-top: 20px; }
+
+/* MOBILE */
+@media (max-width: 700px) {
+    header { padding: 18px 5%; }
+    nav { display: none; }
+    .messaging-container { padding: 15px 3%; }
+    .messaging-layout { flex-direction: column; height: calc(100vh - 160px); }
+    .conversation-list { width: 100%; border-right: none; border-bottom: 1px solid #eee; }
+    .chat-area { width: 100%; display: none; }
+    .messaging-layout.show-chat .conversation-list { display: none; }
+    .messaging-layout.show-chat .chat-area { display: flex; }
+    .back-to-list { display: block; }
 }
-
-.logo a {
-    color: #222;
-    text-decoration: none;
+@media (max-width: 800px) {
+    .footer-grid { grid-template-columns: 1fr; gap: 25px; }
 }
-
-nav {
-    display: flex;
-    align-items: center;
-    gap: 25px;
-}
-
-nav a {
-    text-decoration: none;
-    color: #222;
-    font-size: 15px;
-}
-
-.nav-dropdown {
-    position: relative;
-}
-
-.nav-dropdown-toggle {
-    text-decoration: none;
-    color: #222;
-    font-size: 15px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.nav-dropdown-toggle:hover {
-    text-decoration: underline;
-}
-
-.nav-dropdown-toggle .caret {
-    font-size: 11px;
-    opacity: 0.6;
-}
-
-.nav-dropdown-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-    min-width: 170px;
-    padding: 6px 0;
-    z-index: 1100;
-}
-
-.nav-dropdown.open .nav-dropdown-menu {
-    display: block;
-}
-
-.nav-dropdown-menu a {
-    display: block;
-    padding: 10px 18px;
-    color: #333;
-    font-size: 14px;
-    text-decoration: none;
-}
-
-.nav-dropdown-menu a:hover {
-    background: #f7f5f2;
-    text-decoration: none;
-}
-
-.message-link {
-    font-weight: bold;
-}
-
-
-/* =====================================================
-   PAGE
-===================================================== */
-
-.container {
-    max-width: 1200px;
-    margin: 40px auto;
-    padding: 0 20px;
-}
-
-.page-title {
-    margin-bottom: 25px;
-}
-
-.page-title h1 {
-    font-size: 38px;
-    margin-bottom: 8px;
-}
-
-.page-title p {
-    color: #777;
-}
-
-
-/* =====================================================
-   MESSAGERIE
-===================================================== */
-
-.messaging-box {
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 18px;
-    overflow: hidden;
-    display: grid;
-    grid-template-columns: 360px 1fr;
-    min-height: 680px;
-}
-
-
-/* =====================================================
-   LISTE CONVERSATIONS
-===================================================== */
-
-.conversations {
-    border-right: 1px solid #ddd;
-    background: #fff;
-}
-
-.conversations-header {
-    padding: 22px;
-    border-bottom: 1px solid #eee;
-}
-
-.conversations-header h2 {
-    font-size: 21px;
-}
-
-.conversation-list {
-    overflow-y: auto;
-    max-height: 610px;
-}
-
-.conversation-item {
-    padding: 15px;
-    border-bottom: 1px solid #eee;
-    cursor: pointer;
-    transition: 0.2s;
-    display: flex;
-    gap: 12px;
-    align-items: center;
-}
-
-.conversation-item:hover {
-    background: #f7f5f2;
-}
-
-.conversation-item.active {
-    background: #f1efeb;
-}
-
-
-/* PHOTO ARTICLE LISTE */
-
-.conversation-photo {
-    width: 65px;
-    height: 65px;
-    border-radius: 10px;
-    object-fit: cover;
-    background: #eee;
-    flex-shrink: 0;
-}
-
-.conversation-photo-placeholder {
-    width: 65px;
-    height: 65px;
-    border-radius: 10px;
-    background: #eee;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #999;
-    font-size: 11px;
-    flex-shrink: 0;
-}
-
-
-/* INFOS CONVERSATION */
-
-.conversation-content {
-    min-width: 0;
-    flex: 1;
-}
-
-.conversation-title {
-    font-weight: bold;
-    font-size: 16px;
-    margin-bottom: 5px;
-}
-
-.conversation-info {
-    font-size: 12px;
-    color: #777;
-    margin-bottom: 5px;
-}
-
-.conversation-preview {
-    font-size: 13px;
-    color: #555;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.conversation-date {
-    font-size: 10px;
-    color: #999;
-    margin-top: 5px;
-}
-
-.unread-count {
-    min-width: 21px;
-    height: 21px;
-    padding: 0 6px;
-    border-radius: 50%;
-    background: #222;
-    color: white;
-    font-size: 11px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    flex-shrink: 0;
-}
-
-
-/* =====================================================
-   CHAT
-===================================================== */
-
-.chat {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    min-height: 680px;
-}
-
-
-/* =====================================================
-   EN-TETE CHAT
-===================================================== */
-
-.chat-header {
-    padding: 16px 20px;
-    border-bottom: 1px solid #ddd;
-    background: white;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-.chat-article-photo {
-    width: 58px;
-    height: 58px;
-    border-radius: 10px;
-    object-fit: cover;
-    background: #eee;
-    flex-shrink: 0;
-}
-
-.chat-article-placeholder {
-    width: 58px;
-    height: 58px;
-    border-radius: 10px;
-    background: #eee;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #999;
-    font-size: 10px;
-    flex-shrink: 0;
-}
-
-.chat-header-info {
-    min-width: 0;
-}
-
-.chat-title {
-    font-size: 19px;
-    font-weight: bold;
-    margin-bottom: 4px;
-}
-
-.chat-subtitle {
-    color: #777;
-    font-size: 13px;
-}
-
-
-/* =====================================================
-   MESSAGES
-===================================================== */
-
-.messages {
-    flex: 1;
-    padding: 25px;
-    overflow-y: auto;
-    background: #faf9f7;
-    min-height: 500px;
-}
-
-.message {
-    display: flex;
-    margin-bottom: 15px;
-}
-
-.message.mine {
-    justify-content: flex-end;
-}
-
-.message-bubble {
-    max-width: 70%;
-    padding: 12px 15px;
-    border-radius: 16px;
-    font-size: 15px;
-    line-height: 1.4;
-}
-
-.message:not(.mine) .message-bubble {
-    background: white;
-    border: 1px solid #ddd;
-}
-
-.message.mine .message-bubble {
-    background: #222;
-    color: white;
-}
-
-.message-time {
-    font-size: 10px;
-    margin-top: 5px;
-    opacity: 0.65;
-}
-
-
-/* =====================================================
-   FORMULAIRE
-===================================================== */
-
-.message-form {
-    display: flex;
-    gap: 10px;
-    padding: 16px;
-    border-top: 1px solid #ddd;
-    background: white;
-}
-
-.message-input {
-    flex: 1;
-    padding: 14px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    font-size: 15px;
-    outline: none;
-}
-
-.message-input:focus {
-    border-color: #222;
-}
-
-.send-button {
-    border: none;
-    border-radius: 10px;
-    padding: 0 24px;
-    background: #222;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.send-button:hover {
-    opacity: 0.85;
-}
-
-.send-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-
-/* =====================================================
-   ETAT VIDE
-===================================================== */
-
-.empty-state {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    min-height: 500px;
-    text-align: center;
-    color: #888;
-    padding: 30px;
-}
-
-.empty-state-icon {
-    font-size: 45px;
-    margin-bottom: 15px;
-}
-
-.empty-state h3 {
-    color: #444;
-    margin-bottom: 8px;
-}
-
-.loading {
-    text-align: center;
-    padding: 30px;
-    color: #888;
-}
-
-
-/* =====================================================
-   FOOTER
-===================================================== */
-
-footer {
-    margin-top: 50px;
-    padding: 30px;
-    text-align: center;
-    background: #222;
-    color: white;
-}
-
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media (max-width: 750px) {
-
-    header {
-        padding: 18px 5%;
-    }
-
-    .logo {
-        font-size: 25px;
-    }
-
-    nav a:not(.message-link):not(.nav-dropdown-toggle) {
-        display: none;
-    }
-
-    .container {
-        margin-top: 25px;
-        padding: 0 10px;
-    }
-
-    .page-title {
-        padding: 0 5px;
-    }
-
-    .page-title h1 {
-        font-size: 30px;
-    }
-
-    .messaging-box {
-        grid-template-columns: 1fr;
-        min-height: auto;
-    }
-
-    .conversations {
-        border-right: none;
-        border-bottom: 1px solid #ddd;
-    }
-
-    .conversation-list {
-        max-height: 240px;
-    }
-
-    .chat {
-        min-height: 600px;
-    }
-
-    .messages {
-        min-height: 400px;
-    }
-
-    .message-bubble {
-        max-width: 85%;
-    }
-
-}
-
-
-/* =====================================================
-   PETIT MOBILE
-===================================================== */
-
-@media (max-width: 430px) {
-
-    .chat-header {
-        padding: 12px;
-    }
-
-    .chat-article-photo,
-    .chat-article-placeholder {
-        width: 50px;
-        height: 50px;
-    }
-
-    .chat-title {
-        font-size: 16px;
-    }
-
-    .chat-subtitle {
-        font-size: 12px;
-    }
-
-    .message-form {
-        padding: 10px;
-        gap: 6px;
-    }
-
-    .message-input {
-        min-width: 0;
-        font-size: 14px;
-    }
-
-    .send-button {
-        padding: 0 14px;
-        font-size: 13px;
-    }
-
-}
-
 </style>
-
 </head>
-
-
 <body>
 
-
-<!-- =====================================================
-     HEADER
-===================================================== -->
-
+<!-- HEADER -->
 <header>
-
-<div class="logo">
-
-<a href="index.html">
-WEARERA
-</a>
-
-</div>
-
-
+<div class="logo"><a href="index.html">WEARERA</a></div>
 <nav>
-
-<a href="index.html">
-Accueil
-</a>
-
-<a href="index.html#articles">
-Acheter
-</a>
-
-<a href="vendre.html">
-Vendre
-</a>
-
+<a href="index.html">Accueil</a>
+<a href="index.html#articles">Acheter</a>
+<a href="vendre.html">Vendre</a>
 <div class="nav-dropdown" id="nav-dropdown">
 <a class="nav-dropdown-toggle" onclick="document.getElementById('nav-dropdown').classList.toggle('open')">Mes articles <span class="caret">▾</span></a>
 <div class="nav-dropdown-menu">
@@ -630,1739 +132,421 @@ Vendre
 <a href="mes-achats.html">🛍️ Mes achats</a>
 </div>
 </div>
-
-<a href="panier.html">🛒 Panier</a>
-
-<a
-href="messagerie.html"
-class="message-link">
-
-💬 Messagerie
-
-</a>
-
+<a href="panier.html" class="cart-nav">🛒 Panier</a>
+<a href="messagerie.html" class="message-nav">💬 Messagerie</a>
 <a href="profil.html" class="profile-nav">👤 Mon profil</a>
-
 </nav>
-
 </header>
 
+<!-- MAIN -->
+<main class="messaging-container">
+<div class="messaging-layout" id="messaging-layout">
 
-<!-- =====================================================
-     PAGE
-===================================================== -->
-
-<main class="container">
-
-<div class="page-title">
-
-<h1>
-💬 Messagerie
-</h1>
-
-<p>
-Toutes vos conversations avec les acheteurs et les vendeurs.
-</p>
-
+<!-- CONVERSATION LIST -->
+<div class="conversation-list">
+<div class="conversation-list-header">💬 Messagerie</div>
+<div id="conversation-list-items">
+<div class="no-conversations">Chargement...</div>
+</div>
 </div>
 
-
-<div class="messaging-box">
-
-
-<!-- ===================================================
-     CONVERSATIONS
-=================================================== -->
-
-<section class="conversations">
-
-<div class="conversations-header">
-
-<h2>
-Mes conversations
-</h2>
-
+<!-- CHAT AREA -->
+<div class="chat-area" id="chat-area">
+<div class="chat-empty" id="chat-empty">
+<div class="chat-empty-icon">💬</div>
+<h3>Sélectionnez une conversation</h3>
+<p>Choisissez une conversation dans la liste pour voir les messages.</p>
 </div>
 
-
-<div
-id="conversation-list"
-class="conversation-list">
-
-<div class="loading">
-Chargement...
-</div>
-
-</div>
-
-</section>
-
-
-<!-- ===================================================
-     CHAT
-=================================================== -->
-
-<section class="chat">
-
-
-<div
-id="empty-chat"
-class="empty-state">
-
-<div>
-
-<div class="empty-state-icon">
-💬
-</div>
-
-<h3>
-Sélectionnez une conversation
-</h3>
-
-<p>
-Vos messages apparaîtront ici.
-</p>
-
-</div>
-
-</div>
-
-
-<div
-id="active-chat"
-style="display:none; flex-direction:column; flex:1; min-height:0;">
-
-
-<!-- HEADER CHAT -->
-
-<div
-class="chat-header">
-
-
-<div id="chat-photo-container">
-
-<div class="chat-article-placeholder">
-Article
-</div>
-
-</div>
-
-
+<div id="chat-content" style="display:none; flex:1; flex-direction:column; overflow:hidden;">
+<div class="chat-header" id="chat-header">
+<button class="back-to-list" onclick="document.getElementById('messaging-layout').classList.remove('show-chat')">←</button>
+<div id="chat-header-photo-container"></div>
 <div class="chat-header-info">
-
-<div
-id="chat-title"
-class="chat-title">
+<div class="chat-header-title" id="chat-header-title"></div>
+<div class="chat-header-subtitle" id="chat-header-subtitle"></div>
+</div>
+</div>
+<div class="error-message" id="error-box"></div>
+<div class="messages-area" id="messages-area"></div>
+<div class="message-input-area">
+<input type="text" id="message-input" placeholder="Écrivez un message...">
+<button class="send-button" id="send-button">Envoyer</button>
+</div>
+</div>
 </div>
 
-<div
-id="chat-subtitle"
-class="chat-subtitle">
 </div>
-
-</div>
-
-</div>
-
-
-<!-- MESSAGES -->
-
-<div
-id="messages"
-class="messages">
-</div>
-
-
-<!-- FORMULAIRE -->
-
-<form
-id="message-form"
-class="message-form">
-
-<input
-type="text"
-id="message-input"
-class="message-input"
-placeholder="Écrivez votre message..."
-autocomplete="off"
-required
->
-
-<button
-type="submit"
-id="send-button"
-class="send-button">
-
-Envoyer
-
-</button>
-
-</form>
-
-
-</div>
-
-</section>
-
-</div>
-
 </main>
 
-
+<!-- FOOTER -->
 <footer>
-
-WEARERA ©️ 2026
-
-<br>
-
-La mode de seconde main au Canada.
-
+<div class="footer-grid">
+<div class="footer-col">
+<h4>WEARERA</h4>
+<a href="a-propos.html">À propos de WEARERA</a>
+<a href="comment-ca-fonctionne.html">Comment ça fonctionne</a>
+<a href="faq.html">FAQ</a>
+<a href="nous-contacter.html">Nous contacter</a>
+</div>
+<div class="footer-col">
+<h4>Informations</h4>
+<a href="cgu.html">Conditions générales d'utilisation</a>
+<a href="confidentialite.html">Politique de confidentialité</a>
+<a href="protection-acheteur.html">Protection acheteur</a>
+<a href="protection-vendeur.html">Protection vendeur</a>
+<a href="frais.html">Frais WEARERA</a>
+<a href="livraison.html">Livraison</a>
+<a href="regles-communaute.html">Règles de la communauté</a>
+</div>
+<div class="footer-col">
+<h4>Compte</h4>
+<a href="profil.html">Mon profil</a>
+<a href="mes-articles.html">Mes articles</a>
+<a href="mes-achats.html">Mes achats</a>
+<a href="mes-ventes.html">Mes ventes</a>
+<a href="panier.html">Panier</a>
+<a href="messagerie.html">Messagerie</a>
+</div>
+</div>
+<div class="footer-bottom">© 2026 WEARERA — Tous droits réservés</div>
 </footer>
 
-
 <script>
-
-/* =====================================================
-   SUPABASE
-===================================================== */
-
-const SUPABASE_URL =
-"https://wcamvnvhcguxwujcwyyj.supabase.co";
-
-const SUPABASE_PUBLISHABLE_KEY =
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndjYW12bnZoY2d1eHd1amN3eXlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMjcwNDYsImV4cCI6MjEwMzgwMzA0Nn0.qnkYuFIcbRP8aBzPyIfxamOfVvBrU3nNhMa__NiyYPA";
-
-const supabaseClient =
-supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-);
-
-
-/* =====================================================
-   VARIABLES
-===================================================== */
+/* SUPABASE */
+const SUPABASE_URL = "https://wcamvnvhcguxwujcwyyj.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndjYW12bnZoY2d1eHd1amN3eXlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMjcwNDYsImV4cCI6MjEwMzgwMzA0Nn0.qnkYuFIcbRP8aBzPyIfxamOfVvBrU3nNhMa__NiyYPA";
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
 let currentUser = null;
-
 let conversations = [];
+let currentConversationId = null;
+let currentArticle = null;
+let messagesSubscription = null;
 
-let selectedConversation = null;
+/* ELEMENTS */
+const conversationListItems = document.getElementById("conversation-list-items");
+const chatEmpty = document.getElementById("chat-empty");
+const chatContent = document.getElementById("chat-content");
+const messagesArea = document.getElementById("messages-area");
+const messageInput = document.getElementById("message-input");
+const sendButton = document.getElementById("send-button");
+const errorBox = document.getElementById("error-box");
 
-let realtimeChannel = null;
-
-
-/* =====================================================
-   ELEMENTS
-===================================================== */
-
-const conversationList =
-document.getElementById(
-    "conversation-list"
-);
-
-const emptyChat =
-document.getElementById(
-    "empty-chat"
-);
-
-const activeChat =
-document.getElementById(
-    "active-chat"
-);
-
-const chatTitle =
-document.getElementById(
-    "chat-title"
-);
-
-const chatSubtitle =
-document.getElementById(
-    "chat-subtitle"
-);
-
-const chatPhotoContainer =
-document.getElementById(
-    "chat-photo-container"
-);
-
-const messagesContainer =
-document.getElementById(
-    "messages"
-);
-
-const messageForm =
-document.getElementById(
-    "message-form"
-);
-
-const messageInput =
-document.getElementById(
-    "message-input"
-);
-
-const sendButton =
-document.getElementById(
-    "send-button"
-);
-
-
-/* =====================================================
-   UTILITAIRES
-===================================================== */
-
-function escapeHtml(text) {
-
-    if (text === null || text === undefined) {
-        return "";
-    }
-
-    return String(text)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-
+/* ESCAPE HTML */
+function escapeHtml(value) {
+    return String(value || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
 
-
-function formatDate(dateString) {
-
-    if (!dateString) {
-        return "";
-    }
-
-    const date =
-        new Date(dateString);
-
-    if (isNaN(date.getTime())) {
-        return "";
-    }
-
-    return date.toLocaleString(
-        "fr-CA",
-        {
-            day: "2-digit",
-            month: "2-digit",
-            hour: "2-digit",
-            minute: "2-digit"
-        }
-    );
-
+/* FORMAT TIME */
+function formatTime(dateStr) {
+    if (!dateStr) return "";
+    const d = new Date(dateStr);
+    return d.toLocaleTimeString("fr-CA", { hour: "2-digit", minute: "2-digit" });
 }
 
-
-/* =====================================================
-   PHOTOS
-===================================================== */
-
-function getPhotoUrls(article) {
-
-    if (!article) {
-        return [];
-    }
-
-    const photos =
-        article.photo_urls;
-
-    if (!photos) {
-        return [];
-    }
-
-
-    if (Array.isArray(photos)) {
-
-        return photos
-            .map(function(url) {
-
-                return String(url || "").trim();
-
-            })
-            .filter(Boolean);
-
-    }
-
-
-    if (
-        typeof photos === "object" &&
-        photos !== null
-    ) {
-
-        if (
-            Array.isArray(
-                photos.urls
-            )
-        ) {
-
-            return photos.urls
-                .map(function(url) {
-
-                    return String(url || "").trim();
-
-                })
-                .filter(Boolean);
-
-        }
-
-    }
-
-
-    if (
-        typeof photos === "string"
-    ) {
-
-        const clean =
-            photos.trim();
-
-        if (!clean) {
-            return [];
-        }
-
-
-        try {
-
-            const parsed =
-                JSON.parse(clean);
-
-
-            if (Array.isArray(parsed)) {
-
-                return parsed
-                    .map(function(url) {
-
-                        return String(url || "").trim();
-
-                    })
-                    .filter(Boolean);
-
-            }
-
-
-            if (
-                typeof parsed === "string"
-            ) {
-
-                return [
-                    parsed.trim()
-                ];
-
-            }
-
-        } catch(error) {
-
-            /* photo_urls est peut-être
-               une simple URL */
-
-        }
-
-
-        if (clean.includes(",")) {
-
-            return clean
-                .split(",")
-                .map(function(url) {
-
-                    return url.trim();
-
-                })
-                .filter(Boolean);
-
-        }
-
-
-        return [clean];
-
-    }
-
-
-    return [];
-
+function formatDate(dateStr) {
+    if (!dateStr) return "";
+    const d = new Date(dateStr);
+    return d.toLocaleDateString("fr-CA", { day: "numeric", month: "short" });
 }
 
-
+/* GET FIRST PHOTO */
 function getFirstPhoto(article) {
-
-    const photos =
-        getPhotoUrls(article);
-
-    return photos.length
-        ? photos[0]
-        : null;
-
+    if (article && Array.isArray(article.photo_urls) && article.photo_urls.length > 0) return article.photo_urls[0];
+    return "";
 }
 
+/* SHOW ERROR */
+function showError(msg) { errorBox.textContent = msg; errorBox.style.display = "block"; }
+function hideError() { errorBox.style.display = "none"; }
 
-/* =====================================================
-   AUTHENTIFICATION
-===================================================== */
-
-async function checkUser() {
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .auth
-            .getUser();
-
+/* LOAD CONVERSATIONS */
+async function loadConversations() {
+    const { data, error } = await supabaseClient
+        .from("conversations")
+        .select("*")
+        .or("buyer_id.eq." + currentUser.id + ",seller_id.eq." + currentUser.id)
+        .order("updated_at", { ascending: false });
 
     if (error) {
-
-        console.error(
-            "Erreur utilisateur :",
-            error
-        );
-
-        return null;
-    }
-
-
-    return data.user;
-
-}
-
-
-/* =====================================================
-   CHARGER ARTICLES DES CONVERSATIONS
-===================================================== */
-
-async function loadArticlesForConversations() {
-
-    if (!conversations.length) {
+        conversationListItems.innerHTML = '<div class="no-conversations">Erreur de chargement.</div>';
         return;
     }
 
+    conversations = data || [];
 
-    const articleIds =
-        conversations
-            .map(function(conversation) {
-
-                return conversation.article_id;
-
-            })
-            .filter(Boolean);
-
-
-    if (!articleIds.length) {
+    if (conversations.length === 0) {
+        conversationListItems.innerHTML = '<div class="no-conversations">Aucune conversation.<br><br>Contacter un vendeur depuis une page article pour démarrer une conversation.</div>';
         return;
     }
 
+    /* GET ARTICLES */
+    const articleIds = conversations.map(function(c) { return c.article_id; });
+    const { data: articles } = await supabaseClient
+        .from("Articles")
+        .select("*")
+        .in("id", articleIds);
 
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("Articles")
-            .select(
-                "id,name,price,photo_urls,seller_id"
-            )
-            .in(
-                "id",
-                articleIds
-            );
+    /* ATTACH ARTICLES */
+    conversations.forEach(function(conv) {
+        conv.article = articles ? articles.find(function(a) { return a.id === conv.article_id; }) : null;
+    });
 
-
-    if (error) {
-
-        console.warn(
-            "Erreur articles conversations :",
-            error.message
-        );
-
-        return;
-
-    }
-
-
-    conversations =
-        conversations.map(
-            function(conversation) {
-
-                conversation.article =
-                    (data || []).find(
-                        function(article) {
-
-                            return (
-                                String(article.id) ===
-                                String(
-                                    conversation.article_id
-                                )
-                            );
-
-                        }
-                    ) || null;
-
-                return conversation;
-
-            }
-        );
-
-}
-
-
-/* =====================================================
-   CHARGER DERNIER MESSAGE
-===================================================== */
-
-async function getLastMessage(
-    conversationId
-) {
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
+    /* GET LAST MESSAGE + UNREAD COUNT FOR EACH CONVERSATION */
+    for (let i = 0; i < conversations.length; i++) {
+        const conv = conversations[i];
+        const { data: msgs } = await supabaseClient
             .from("messages")
-            .select(
-                "message,created_at"
-            )
-            .eq(
-                "conversation_id",
-                conversationId
-            )
-            .order(
-                "created_at",
-                {
-                    ascending: false
-                }
-            )
-            .limit(1)
-            .maybeSingle();
-
-
-    if (error) {
-
-        console.warn(
-            "Erreur dernier message :",
-            error.message
-        );
-
-        return null;
-
-    }
-
-
-    return data || null;
-
-}
-
-
-/* =====================================================
-   COMPTER NON LUS
-===================================================== */
-
-async function getUnreadCount(
-    conversationId
-) {
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("messages")
-            .select(
-                "id"
-            )
-            .eq(
-                "conversation_id",
-                conversationId
-            )
-            .neq(
-                "sender_id",
-                currentUser.id
-            )
-            .eq(
-                "is_read",
-                false
-            );
-
-
-    if (error) {
-
-        return 0;
-
-    }
-
-
-    return data?.length || 0;
-
-}
-
-
-/* =====================================================
-   CHARGER CONVERSATIONS
-===================================================== */
-
-async function loadConversations(
-    preserveSelection = true
-) {
-
-    if (!currentUser) {
-        return;
-    }
-
-
-    const previousId =
-        preserveSelection &&
-        selectedConversation
-            ? selectedConversation.id
-            : null;
-
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("conversations")
             .select("*")
-            .or(
-                "buyer_id.eq." +
-                currentUser.id +
-                ",seller_id.eq." +
-                currentUser.id
-            )
-            .order(
-                "updated_at",
-                {
-                    ascending: false
-                }
-            );
+            .eq("conversation_id", conv.id)
+            .order("created_at", { ascending: false })
+            .limit(1);
 
+        conv.lastMessage = (msgs && msgs.length > 0) ? msgs[0] : null;
 
-    if (error) {
+        const { count } = await supabaseClient
+            .from("messages")
+            .select("*", { count: "exact", head: true })
+            .eq("conversation_id", conv.id)
+            .eq("is_read", false)
+            .neq("sender_id", currentUser.id);
 
-        console.warn(
-            "Tri updated_at impossible, nouvelle tentative..."
-        );
-
-
-        const retry =
-            await supabaseClient
-                .from("conversations")
-                .select("*")
-                .or(
-                    "buyer_id.eq." +
-                    currentUser.id +
-                    ",seller_id.eq." +
-                    currentUser.id
-                )
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
-                    }
-                );
-
-
-        if (retry.error) {
-
-            console.error(
-                "Erreur conversations :",
-                retry.error
-            );
-
-
-            conversationList.innerHTML =
-                `<div class="loading">
-                    Impossible de charger les conversations.
-                    <br><br>
-                    <small>
-                    ${escapeHtml(
-                        retry.error.message
-                    )}
-                    </small>
-                </div>`;
-
-            return;
-
-        }
-
-
-        conversations =
-            retry.data || [];
-
-    } else {
-
-        conversations =
-            data || [];
-
+        conv.unreadCount = count || 0;
     }
 
+    renderConversationList();
 
-    await loadArticlesForConversations();
+    /* CHECK URL PARAMS FOR AUTO-OPEN */
+    const params = new URLSearchParams(window.location.search);
+    const articleIdParam = params.get("article_id");
+    const sellerIdParam = params.get("seller_id");
 
+    if (articleIdParam && sellerIdParam) {
+        /* FIND OR CREATE CONVERSATION */
+        let existing = conversations.find(function(c) {
+            return c.article_id === articleIdParam &&
+                   ((c.buyer_id === currentUser.id && c.seller_id === sellerIdParam) ||
+                    (c.seller_id === currentUser.id && c.buyer_id === sellerIdParam));
+        });
 
-    if (!conversations.length) {
-
-        conversationList.innerHTML =
-            `<div class="empty-state">
-                <div>
-                    <div class="empty-state-icon">
-                        💬
-                    </div>
-
-                    <h3>
-                        Aucune conversation
-                    </h3>
-
-                    <p>
-                        Vos conversations avec les acheteurs
-                        et vendeurs apparaîtront ici.
-                    </p>
-                </div>
-            </div>`;
-
-        return;
-
-    }
-
-
-    await renderConversationList();
-
-
-    /*
-     * Conserver la conversation actuellement ouverte.
-     */
-
-    if (previousId) {
-
-        const found =
-            conversations.find(
-                function(conversation) {
-
-                    return (
-                        conversation.id ===
-                        previousId
-                    );
-
-                }
-            );
-
-
-        if (found) {
-
-            selectedConversation =
-                found;
-
-        }
-
-    }
-
-}
-
-
-/* =====================================================
-   AFFICHER LISTE CONVERSATIONS
-===================================================== */
-
-async function renderConversationList() {
-
-    conversationList.innerHTML = "";
-
-
-    for (
-        const conversation of conversations
-    ) {
-
-        const article =
-            conversation.article;
-
-
-        const articleName =
-            article?.name ||
-            "Article WEARERA";
-
-
-        const articlePrice =
-            article?.price != null
-                ? Number(
-                    article.price
-                )
-                .toFixed(2)
-                .replace(
-                    ".00",
-                    ""
-                ) +
-                " $"
-                : "";
-
-
-        const photo =
-            getFirstPhoto(article);
-
-
-        const isSeller =
-            conversation.seller_id ===
-            currentUser.id;
-
-
-        const role =
-            isSeller
-                ? "Vous êtes le vendeur"
-                : "Vous êtes l'acheteur";
-
-
-        const lastMessage =
-            await getLastMessage(
-                conversation.id
-            );
-
-
-        const unreadCount =
-            await getUnreadCount(
-                conversation.id
-            );
-
-
-        const item =
-            document.createElement(
-                "div"
-            );
-
-
-        item.className =
-            "conversation-item";
-
-
-        if (
-            selectedConversation &&
-            selectedConversation.id ===
-            conversation.id
-        ) {
-
-            item.classList.add(
-                "active"
-            );
-
-        }
-
-
-        let photoHtml;
-
-
-        if (photo) {
-
-            photoHtml =
-                `<img
-                    class="conversation-photo"
-                    src="${escapeHtml(photo)}"
-                    alt="${escapeHtml(articleName)}"
-                >`;
-
+        if (existing) {
+            openConversation(existing.id);
         } else {
+            /* CREATE NEW CONVERSATION */
+            const { data: newConv, error: createError } = await supabaseClient
+                .from("conversations")
+                .insert({
+                    article_id: articleIdParam,
+                    buyer_id: currentUser.id,
+                    seller_id: sellerIdParam
+                })
+                .select()
+                .single();
 
-            photoHtml =
-                `<div class="conversation-photo-placeholder">
-                    Photo
-                </div>`;
-
-        }
-
-
-        const preview =
-            lastMessage?.message ||
-            "Aucun message";
-
-
-        const date =
-            lastMessage?.created_at
-                ? formatDate(
-                    lastMessage.created_at
-                )
-                : "";
-
-
-        const unreadHtml =
-            unreadCount > 0
-
-                ? `<div class="unread-count">
-                    ${unreadCount > 99
-                        ? "99+"
-                        : unreadCount}
-                  </div>`
-
-                : "";
-
-
-        item.innerHTML = `
-
-            ${photoHtml}
-
-            <div class="conversation-content">
-
-                <div class="conversation-title">
-                    ${escapeHtml(articleName)}
-                    ${articlePrice
-                        ? " · " + articlePrice
-                        : ""}
-                </div>
-
-                <div class="conversation-info">
-                    ${role}
-                </div>
-
-                <div class="conversation-preview">
-                    ${escapeHtml(preview)}
-                </div>
-
-                <div class="conversation-date">
-                    ${date}
-                </div>
-
-            </div>
-
-            ${unreadHtml}
-
-        `;
-
-
-        item.addEventListener(
-            "click",
-            function() {
-
-                openConversation(
-                    conversation
-                );
-
+            if (!createError && newConv) {
+                newConv.article = articles ? articles.find(function(a) { return a.id === articleIdParam; }) : null;
+                newConv.lastMessage = null;
+                newConv.unreadCount = 0;
+                conversations.unshift(newConv);
+                renderConversationList();
+                openConversation(newConv.id);
             }
-        );
-
-
-        conversationList.appendChild(
-            item
-        );
-
+        }
     }
-
 }
 
+/* RENDER CONVERSATION LIST */
+function renderConversationList() {
+    conversationListItems.innerHTML = "";
 
-/* =====================================================
-   AFFICHER PHOTO DU CHAT
-===================================================== */
+    conversations.forEach(function(conv) {
+        const item = document.createElement("div");
+        item.className = "conversation-item";
+        if (conv.id === currentConversationId) item.classList.add("active");
+        item.dataset.conversationId = conv.id;
 
-function displayChatPhoto(
-    article
-) {
+        const photoUrl = conv.article ? getFirstPhoto(conv.article) : "";
+        let html = "";
 
-    const photo =
-        getFirstPhoto(article);
+        if (photoUrl) {
+            html += '<img src="' + escapeHtml(photoUrl) + '" alt="" class="conversation-item-photo">';
+        } else {
+            html += '<div class="conversation-item-no-photo">📷</div>';
+        }
 
+        html += '<div class="conversation-item-info">';
+        html += '<div class="conversation-item-name">' + escapeHtml(conv.article ? conv.article.name : "Article") + '</div>';
+        html += '<div class="conversation-item-preview">' + escapeHtml(conv.lastMessage ? (conv.lastMessage.message || "").substring(0, 40) : "Aucun message") + '</div>';
+        html += '</div>';
 
-    if (photo) {
+        if (conv.unreadCount > 0) {
+            html += '<div class="unread-badge">' + conv.unreadCount + '</div>';
+        }
 
-        chatPhotoContainer.innerHTML =
-            `<img
-                class="chat-article-photo"
-                src="${escapeHtml(photo)}"
-                alt="Article"
-            >`;
+        item.innerHTML = html;
+        item.addEventListener("click", function() {
+            openConversation(conv.id);
+        });
 
+        conversationListItems.appendChild(item);
+    });
+}
+
+/* OPEN CONVERSATION */
+async function openConversation(conversationId) {
+    currentConversationId = conversationId;
+    const conv = conversations.find(function(c) { return c.id === conversationId; });
+    if (!conv) return;
+
+    currentArticle = conv.article;
+
+    /* UPDATE UI */
+    chatEmpty.style.display = "none";
+    chatContent.style.display = "flex";
+    document.getElementById("messaging-layout").classList.add("show-chat");
+
+    /* UPDATE HEADER */
+    const photoUrl = conv.article ? getFirstPhoto(conv.article) : "";
+    const photoContainer = document.getElementById("chat-header-photo-container");
+    if (photoUrl) {
+        photoContainer.innerHTML = '<img src="' + escapeHtml(photoUrl) + '" alt="" class="chat-header-photo">';
     } else {
-
-        chatPhotoContainer.innerHTML =
-            `<div class="chat-article-placeholder">
-                Photo
-            </div>`;
-
+        photoContainer.innerHTML = '<div class="chat-header-no-photo">📷</div>';
     }
 
-}
-
-
-/* =====================================================
-   OUVRIR CONVERSATION
-===================================================== */
-
-async function openConversation(
-    conversation
-) {
-
-    selectedConversation =
-        conversation;
-
-
-    /*
-     * Afficher le chat.
-     */
-
-    emptyChat.style.display =
-        "none";
-
-
-    activeChat.style.display =
-        "flex";
-
-
-    const article =
-        conversation.article;
-
-
-    const articleName =
-        article?.name ||
-        "Article WEARERA";
-
-
-    const articlePrice =
-        article?.price != null
-            ? Number(
-                article.price
-            )
-            .toFixed(2)
-            .replace(
-                ".00",
-                ""
-            ) +
-            " $"
-            : "";
-
-
-    chatTitle.textContent =
-        articleName +
-        (
-            articlePrice
-                ? " · " +
-                  articlePrice
-                : ""
-        );
-
-
-    const isSeller =
-        conversation.seller_id ===
-        currentUser.id;
-
-
-    chatSubtitle.textContent =
-        isSeller
-            ? "Vous êtes le vendeur"
-            : "Vous êtes l'acheteur";
-
-
-    displayChatPhoto(
-        article
-    );
-
-
-    /*
-     * Charger les messages.
-     */
-
-    await loadMessages();
-
-
-    /*
-     * Rafraîchir seulement la liste
-     * pour enlever le compteur non lu.
-     */
-
-    await renderConversationList();
-
-
-    /*
-     * Modifier l'URL sans recharger la page.
-     */
-
-    const newUrl =
-        "messagerie.html?conversation=" +
-        encodeURIComponent(
-            conversation.id
-        );
-
-
-    window.history.replaceState(
-        {},
-        "",
-        newUrl
-    );
-
-
-    messageInput.focus();
-
-}
-
-
-/* =====================================================
-   CHARGER MESSAGES
-===================================================== */
-
-async function loadMessages() {
-
-    if (!selectedConversation) {
-        return;
-    }
-
-
-    messagesContainer.innerHTML =
-        `<div class="loading">
-            Chargement...
-        </div>`;
-
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("messages")
-            .select(
-                "id,conversation_id,sender_id,message,created_at,is_read"
-            )
-            .eq(
-                "conversation_id",
-                selectedConversation.id
-            )
-            .order(
-                "created_at",
-                {
-                    ascending: true
-                }
-            );
-
-
-    if (error) {
-
-        console.error(
-            "Erreur messages :",
-            error
-        );
-
-
-        messagesContainer.innerHTML =
-            `<div class="loading">
-                Impossible de charger les messages.
-                <br><br>
-                <small>
-                    ${escapeHtml(
-                        error.message
-                    )}
-                </small>
-            </div>`;
-
-        return;
-
-    }
-
-
-    messagesContainer.innerHTML =
-        "";
-
-
-    if (!data || !data.length) {
-
-        messagesContainer.innerHTML =
-            `<div class="empty-state">
-                <div>
-                    <div class="empty-state-icon">
-                        👋
-                    </div>
-
-                    <h3>
-                        Commencez la conversation
-                    </h3>
-
-                    <p>
-                        Envoyez votre premier message.
-                    </p>
-                </div>
-            </div>`;
-
-
-        await markMessagesAsRead();
-
-        return;
-
-    }
-
-
-    data.forEach(
-        function(message) {
-
-            const mine =
-                message.sender_id ===
-                currentUser.id;
-
-
-            const wrapper =
-                document.createElement(
-                    "div"
-                );
-
-
-            wrapper.className =
-                "message" +
-                (
-                    mine
-                        ? " mine"
-                        : ""
-                );
-
-
-            const bubble =
-                document.createElement(
-                    "div"
-                );
-
-
-            bubble.className =
-                "message-bubble";
-
-
-            bubble.innerHTML = `
-
-                <div>
-                    ${escapeHtml(
-                        message.message
-                    )}
-                </div>
-
-                <div class="message-time">
-                    ${formatDate(
-                        message.created_at
-                    )}
-                </div>
-
-            `;
-
-
-            wrapper.appendChild(
-                bubble
-            );
-
-
-            messagesContainer.appendChild(
-                wrapper
-            );
-
-        }
-    );
-
-
-    messagesContainer.scrollTop =
-        messagesContainer.scrollHeight;
-
-
-    await markMessagesAsRead();
-
-}
-
-
-/* =====================================================
-   MARQUER MESSAGES LUS
-===================================================== */
-
-async function markMessagesAsRead() {
-
-    if (!selectedConversation) {
-        return;
-    }
-
-
-    const {
-        error
-    } =
-        await supabaseClient
-            .from("messages")
-            .update({
-                is_read: true
-            })
-            .eq(
-                "conversation_id",
-                selectedConversation.id
-            )
-            .neq(
-                "sender_id",
-                currentUser.id
-            )
-            .eq(
-                "is_read",
-                false
-            );
-
-
-    if (error) {
-
-        console.warn(
-            "Erreur lecture messages :",
-            error.message
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   ENVOYER MESSAGE
-===================================================== */
-
-messageForm.addEventListener(
-    "submit",
-    async function(event) {
-
-        event.preventDefault();
-
-
-        if (
-            !currentUser ||
-            !selectedConversation
-        ) {
-
-            return;
-
-        }
-
-
-        const text =
-            messageInput.value.trim();
-
-
-        if (!text) {
-            return;
-        }
-
-
-        sendButton.disabled =
-            true;
-
-        messageInput.disabled =
-            true;
-
-
-        try {
-
-            const {
-                error
-            } =
-                await supabaseClient
+    document.getElementById("chat-header-title").textContent = conv.article ? conv.article.name : "Conversation";
+
+    const otherRole = conv.buyer_id === currentUser.id ? "Vendeur" : "Acheteur";
+    document.getElementById("chat-header-subtitle").textContent = otherRole;
+
+    /* UPDATE ACTIVE STATE */
+    renderConversationList();
+
+    /* MARK MESSAGES AS READ */
+    await supabaseClient
+        .from("messages")
+        .update({ is_read: true })
+        .eq("conversation_id", conversationId)
+        .neq("sender_id", currentUser.id)
+        .eq("is_read", false);
+
+    /* UPDATE UNREAD COUNT */
+    conv.unreadCount = 0;
+    renderConversationList();
+
+    /* LOAD MESSAGES */
+    await loadMessages(conversationId);
+
+    /* SUBSCRIBE TO REALTIME */
+    if (messagesSubscription) messagesSubscription.unsubscribe();
+
+    messagesSubscription = supabaseClient
+        .channel("messages:" + conversationId)
+        .on("postgres_changes", {
+            event: "INSERT",
+            schema: "public",
+            table: "messages",
+            filter: "conversation_id=eq." + conversationId
+        }, function(payload) {
+            appendMessage(payload.new);
+            if (payload.new.sender_id !== currentUser.id) {
+                supabaseClient
                     .from("messages")
-                    .insert([
-
-                        {
-
-                            conversation_id:
-                                selectedConversation.id,
-
-                            sender_id:
-                                currentUser.id,
-
-                            message:
-                                text,
-
-                            is_read:
-                                false
-
-                        }
-
-                    ]);
-
-
-            if (error) {
-
-                throw error;
-
+                    .update({ is_read: true })
+                    .eq("id", payload.new.id)
+                    .then(function() {});
             }
-
-
-            messageInput.value =
-                "";
-
-
-            /*
-             * Mise à jour updated_at.
-             */
-
-            const {
-                error:
-                updateError
-            } =
-                await supabaseClient
-                    .from("conversations")
-                    .update({
-
-                        updated_at:
-                            new Date().toISOString()
-
-                    })
-                    .eq(
-                        "id",
-                        selectedConversation.id
-                    );
-
-
-            if (updateError) {
-
-                console.warn(
-                    "updated_at non mis à jour :",
-                    updateError.message
-                );
-
-            }
-
-
-            await loadMessages();
-
-
-            await loadConversations(
-                true
-            );
-
-
-        } catch(error) {
-
-            console.error(
-                "Erreur envoi :",
-                error
-            );
-
-
-            alert(
-                "Impossible d'envoyer le message : " +
-                error.message
-            );
-
-        } finally {
-
-            sendButton.disabled =
-                false;
-
-            messageInput.disabled =
-                false;
-
-            messageInput.focus();
-
-        }
-
-    }
-);
-
-
-/* =====================================================
-   REALTIME
-===================================================== */
-
-function setupRealtime() {
-
-    if (!currentUser) {
-        return;
-    }
-
-
-    if (realtimeChannel) {
-
-        supabaseClient
-            .removeChannel(
-                realtimeChannel
-            );
-
-    }
-
-
-    realtimeChannel =
-        supabaseClient
-            .channel(
-                "wearera-user-messages-" +
-                currentUser.id
-            )
-            .on(
-                "postgres_changes",
-                {
-                    event: "INSERT",
-                    schema: "public",
-                    table: "messages"
-                },
-                async function(payload) {
-
-                    console.log(
-                        "Nouveau message :",
-                        payload.new
-                    );
-
-
-                    /*
-                     * Si c'est la conversation ouverte,
-                     * on actualise uniquement les messages.
-                     */
-
-                    if (
-                        selectedConversation &&
-                        String(
-                            payload.new.conversation_id
-                        ) ===
-                        String(
-                            selectedConversation.id
-                        )
-                    ) {
-
-                        await loadMessages();
-
-                    }
-
-
-                    /*
-                     * Actualiser la liste.
-                     */
-
-                    await loadConversations(
-                        true
-                    );
-
-                }
-            )
-            .subscribe(
-                function(status) {
-
-                    console.log(
-                        "Realtime :",
-                        status
-                    );
-
-                }
-            );
-
+        })
+        .subscribe();
 }
 
+/* LOAD MESSAGES */
+async function loadMessages(conversationId) {
+    const { data: messages, error } = await supabaseClient
+        .from("messages")
+        .select("*")
+        .eq("conversation_id", conversationId)
+        .order("created_at", { ascending: true });
 
-/* =====================================================
-   OUVRIR AUTOMATIQUEMENT UNE CONVERSATION
-   VENANT DE INDEX.HTML
-===================================================== */
-
-async function openConversationFromUrl() {
-
-    const params =
-        new URLSearchParams(
-            window.location.search
-        );
-
-
-    const conversationId =
-        params.get(
-            "conversation"
-        );
-
-
-    if (!conversationId) {
+    if (error) {
+        showError("Erreur lors du chargement des messages.");
         return;
     }
 
+    hideError();
+    messagesArea.innerHTML = "";
 
-    const conversation =
-        conversations.find(
-            function(item) {
-
-                return String(item.id) ===
-                    String(conversationId);
-
-            }
-        );
-
-
-    if (!conversation) {
-
-        console.warn(
-            "Conversation demandée introuvable :",
-            conversationId
-        );
-
+    if (!messages || messages.length === 0) {
+        messagesArea.innerHTML = '<div style="text-align:center;color:#999;padding:30px;font-size:14px;">Aucun message. Démarrez la conversation !</div>';
         return;
-
     }
 
+    messages.forEach(function(msg) {
+        appendMessage(msg);
+    });
 
-    await openConversation(
-        conversation
-    );
-
+    /* SCROLL TO BOTTOM */
+    messagesArea.scrollTop = messagesArea.scrollHeight;
 }
 
-
-/* =====================================================
-   INITIALISATION
-===================================================== */
-
-async function init() {
-
-    currentUser =
-        await checkUser();
-
-
-    if (!currentUser) {
-
-        window.location.href =
-            "auth.html?redirect=" +
-            encodeURIComponent(
-                "messagerie.html"
-            );
-
-        return;
-
+/* APPEND MESSAGE */
+function appendMessage(msg) {
+    /* CLEAR EMPTY STATE */
+    if (messagesArea.querySelector('div[style*="text-align:center"]')) {
+        messagesArea.innerHTML = "";
     }
 
-
-    await loadConversations(
-        false
-    );
-
-
-    await openConversationFromUrl();
-
-
-    setupRealtime();
-
+    const bubble = document.createElement("div");
+    bubble.className = "message-bubble " + (msg.sender_id === currentUser.id ? "message-sent" : "message-received");
+    bubble.innerHTML = escapeHtml(msg.message) + '<div class="message-time">' + formatDate(msg.created_at) + " " + formatTime(msg.created_at) + '</div>';
+    messagesArea.appendChild(bubble);
+    messagesArea.scrollTop = messagesArea.scrollHeight;
 }
 
+/* SEND MESSAGE */
+async function sendMessage() {
+    const content = messageInput.value.trim();
+    if (!content || !currentConversationId) return;
 
-init();
+    sendButton.disabled = true;
+    messageInput.value = "";
 
+    const { error } = await supabaseClient
+        .from("messages")
+        .insert({
+            conversation_id: currentConversationId,
+            sender_id: currentUser.id,
+            message: content,
+            is_read: false
+        });
 
-/* =====================================================
-   SESSION
-===================================================== */
+    sendButton.disabled = false;
 
-supabaseClient.auth.onAuthStateChange(
-    function(
-        event,
-        session
-    ) {
-
-        (async function() {
-
-            if (
-                event === "SIGNED_OUT"
-            ) {
-
-                currentUser =
-                    null;
-
-
-                if (realtimeChannel) {
-
-                    await supabaseClient
-                        .removeChannel(
-                            realtimeChannel
-                        );
-
-                }
-
-
-                window.location.href =
-                    "auth.html";
-
-            }
-
-        })();
-
+    if (error) {
+        showError("Erreur : " + error.message);
+        messageInput.value = content;
+        return;
     }
-);
 
+    hideError();
+}
+
+sendButton.addEventListener("click", sendMessage);
+messageInput.addEventListener("keypress", function(e) {
+    if (e.key === "Enter") sendMessage();
+});
+
+/* INIT */
+(async function() {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) {
+        window.location.href = "auth.html?redirect=messagerie.html";
+        return;
+    }
+    currentUser = user;
+    loadConversations();
+})();
 </script>
-
 </body>
-
 </html>

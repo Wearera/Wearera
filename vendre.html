@@ -1,31 +1,16 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vendre un article — WEARERA</title>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #f7f5f2; color: #222; }
+button, input, select, textarea { font-family: inherit; }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background: #f7f5f2;
-    color: #222;
-}
-
+/* HEADER */
 header {
     background: white;
     padding: 22px 7%;
@@ -33,291 +18,89 @@ header {
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
+.logo { font-size: 30px; font-weight: bold; letter-spacing: 2px; }
+.logo a { text-decoration: none; color: #222; }
+nav { display: flex; align-items: center; gap: 22px; }
+nav a { text-decoration: none; color: #222; font-size: 15px; }
+nav a:hover { text-decoration: underline; }
+.nav-dropdown { position: relative; }
+.nav-dropdown-toggle { text-decoration: none; color: #222; font-size: 15px; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 4px 0; }
+.nav-dropdown-toggle:hover { text-decoration: underline; }
+.nav-dropdown-toggle .caret { font-size: 11px; opacity: 0.6; }
+.nav-dropdown-menu { display: none; position: absolute; top: 100%; right: 0; background: white; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); min-width: 170px; padding: 6px 0; z-index: 1100; }
+.nav-dropdown.open .nav-dropdown-menu { display: block; }
+.nav-dropdown-menu a { display: block; padding: 10px 18px; color: #333; font-size: 14px; text-decoration: none; }
+.nav-dropdown-menu a:hover { background: #f7f5f2; text-decoration: none; }
 
-.logo {
-    font-size: 30px;
-    font-weight: bold;
-    letter-spacing: 2px;
-}
+/* CONTAINER */
+.container { max-width: 700px; margin: 0 auto; padding: 40px 7%; }
+.page-title h1 { font-size: 32px; margin-bottom: 10px; }
+.page-title p { color: #777; font-size: 16px; margin-bottom: 30px; }
 
-.logo a {
-    color: #222;
-    text-decoration: none;
-}
+/* FORM CARD */
+.form-card { background: white; border: 1px solid #ddd; border-radius: 12px; padding: 35px; }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; font-size: 14px; margin-bottom: 6px; font-weight: bold; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 15px; outline: none; background: white; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #222; }
+.form-group textarea { resize: vertical; min-height: 100px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
-nav a {
-    text-decoration: none;
-    color: #222;
-    margin-left: 25px;
-}
+/* PHOTO UPLOAD */
+.photo-upload-area { border: 2px dashed #ccc; border-radius: 10px; padding: 30px; text-align: center; cursor: pointer; transition: 0.2s; }
+.photo-upload-area:hover { border-color: #222; background: #fafafa; }
+.photo-upload-area p { color: #777; font-size: 14px; margin-top: 8px; }
+.photo-upload-icon { font-size: 40px; color: #aaa; }
+#photo-input { display: none; }
+.photo-preview { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 15px; }
+.photo-preview-item { position: relative; width: 100px; height: 100px; border-radius: 10px; overflow: hidden; border: 1px solid #ddd; }
+.photo-preview-item img { width: 100%; height: 100%; object-fit: cover; }
+.photo-preview-item .remove-photo { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-.nav-dropdown {
-    position: relative;
-    margin-left: 25px;
-}
+/* BUTTON */
+.submit-button { width: 100%; padding: 16px; background: #222; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; transition: 0.2s; font-weight: bold; }
+.submit-button:hover { background: #333; }
+.submit-button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-.nav-dropdown-toggle {
-    text-decoration: none;
-    color: #222;
-    font-size: 15px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
+/* MESSAGES */
+.error-message { background: #fde8e8; color: #c62828; border: 1px solid #f5c6c6; border-radius: 8px; padding: 12px 16px; font-size: 14px; margin-bottom: 20px; display: none; }
+.success-message { background: #e8f5e8; color: #2e7d32; border: 1px solid #c6e6c6; border-radius: 8px; padding: 12px 16px; font-size: 14px; margin-bottom: 20px; display: none; }
 
-.nav-dropdown-toggle:hover {
-    text-decoration: underline;
-}
+/* FOOTER */
+footer { margin-top: 50px; padding: 40px 7% 25px; background: #222; color: white; }
+.footer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; max-width: 1000px; margin: 0 auto 30px; }
+.footer-col h4 { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; color: #999; }
+.footer-col a { display: block; color: #ccc; text-decoration: none; font-size: 14px; margin-bottom: 10px; transition: color 0.2s; }
+.footer-col a:hover { color: white; }
+.footer-bottom { text-align: center; font-size: 13px; color: #999; border-top: 1px solid #444; padding-top: 20px; }
 
-.nav-dropdown-toggle .caret {
-    font-size: 11px;
-    opacity: 0.6;
-}
-
-.nav-dropdown-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-    min-width: 170px;
-    padding: 6px 0;
-    z-index: 1100;
-}
-
-.nav-dropdown.open .nav-dropdown-menu {
-    display: block;
-}
-
-.nav-dropdown-menu a {
-    display: block;
-    padding: 10px 18px;
-    color: #333;
-    font-size: 14px;
-    text-decoration: none;
-    margin-left: 0;
-}
-
-.nav-dropdown-menu a:hover {
-    background: #f7f5f2;
-    text-decoration: none;
-}
-
-.container {
-    max-width: 900px;
-    margin: 50px auto;
-    padding: 0 20px;
-}
-
-.title {
-    text-align: center;
-    margin-bottom: 35px;
-}
-
-.title h1 {
-    font-size: 38px;
-    margin-bottom: 10px;
-}
-
-.title p {
-    color: #666;
-}
-
-.form-card {
-    background: white;
-    padding: 35px;
-    border-radius: 16px;
-    border: 1px solid #ddd;
-}
-
-.form-group {
-    margin-bottom: 25px;
-}
-
-label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 8px;
-}
-
-.required {
-    color: #b00020;
-}
-
-input,
-select,
-textarea {
-    width: 100%;
-    padding: 14px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 15px;
-    background: white;
-}
-
-textarea {
-    min-height: 130px;
-    resize: vertical;
-}
-
-.photo-upload {
-    border: 2px dashed #bbb;
-    padding: 35px;
-    text-align: center;
-    border-radius: 12px;
-    background: #fafafa;
-}
-
-.photo-upload p {
-    color: #777;
-    margin-bottom: 15px;
-}
-
-.photo-upload input {
-    border: none;
-}
-
-.photo-preview {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
-    margin-top: 15px;
-}
-
-.photo-preview img {
-    width: 100%;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-}
-
-.row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-
-.condition-options {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-}
-
-.condition-option {
-    border: 1px solid #ccc;
-    padding: 15px;
-    border-radius: 10px;
-    cursor: pointer;
-    background: white;
-}
-
-.condition-option:hover {
-    border-color: #222;
-    background: #f5f5f5;
-}
-
-.condition-option input {
-    width: auto;
-    margin-right: 8px;
-}
-
-.publish-button {
-    width: 100%;
-    padding: 17px;
-    border: none;
-    border-radius: 9px;
-    background: #222;
-    color: white;
-    font-size: 17px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.publish-button:hover {
-    opacity: 0.85;
-}
-
-.publish-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-footer {
-    margin-top: 50px;
-    padding: 30px;
-    text-align: center;
-    background: #222;
-    color: white;
-}
-
+/* MOBILE */
 @media (max-width: 700px) {
-
-    header {
-        padding: 18px 5%;
-    }
-
-    nav {
-        display: none;
-    }
-
-    .container {
-        margin-top: 30px;
-    }
-
-    .form-card {
-        padding: 22px;
-    }
-
-    .row {
-        grid-template-columns: 1fr;
-    }
-
-    .condition-options {
-        grid-template-columns: 1fr;
-    }
-
-    .photo-preview {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .title h1 {
-        font-size: 30px;
-    }
-
+    header { padding: 18px 5%; }
+    nav { display: none; }
+    .container { padding: 30px 5%; }
+    .form-card { padding: 22px; }
+    .form-row { grid-template-columns: 1fr; }
+    .page-title h1 { font-size: 26px; }
 }
-
+@media (max-width: 800px) {
+    .footer-grid { grid-template-columns: 1fr; gap: 25px; }
+}
 </style>
-
 </head>
-
 <body>
 
+<!-- HEADER -->
 <header>
-
-<div class="logo">
-<a href="index.html">WEARERA</a>
-</div>
-
+<div class="logo"><a href="index.html">WEARERA</a></div>
 <nav>
-
-<a href="index.html">
-Accueil
-</a>
-
-<a href="index.html">
-Acheter
-</a>
-
-<a href="vendre.html">
-Vendre
-</a>
-
+<a href="index.html">Accueil</a>
+<a href="index.html#articles">Acheter</a>
+<a href="vendre.html">Vendre</a>
 <div class="nav-dropdown" id="nav-dropdown">
 <a class="nav-dropdown-toggle" onclick="document.getElementById('nav-dropdown').classList.toggle('open')">Mes articles <span class="caret">▾</span></a>
 <div class="nav-dropdown-menu">
@@ -325,1361 +108,290 @@ Vendre
 <a href="mes-achats.html">🛍️ Mes achats</a>
 </div>
 </div>
-
-<span id="auth-area">
-<a href="auth.html">
-Connexion
-</a>
-</span>
-
-<a href="panier.html">🛒 Panier</a>
-
-<a href="messagerie.html">💬 Messagerie</a>
-
-<a href="profil.html">👤 Mon profil</a>
-
+<a href="panier.html" class="cart-nav">🛒 Panier</a>
+<a href="messagerie.html" class="message-nav">💬 Messagerie</a>
+<a href="profil.html" class="profile-nav">👤 Mon profil</a>
 </nav>
-
 </header>
 
-
+<!-- MAIN -->
 <main class="container">
-
-<div class="title">
-
-<h1>
-Vendre un article
-</h1>
-
-<p>
-Donnez une deuxième vie à vos vêtements.
-</p>
-
+<div class="page-title">
+<h1>Vendre un article</h1>
+<p>Remplissez les détails ci-dessous pour mettre votre article en vente.</p>
 </div>
 
-
 <div class="form-card">
+<div class="error-message" id="error-box"></div>
+<div class="success-message" id="success-box"></div>
 
 <form id="sell-form">
 
-
-<!-- =====================================================
-     PHOTOS
-===================================================== -->
+<div class="form-group">
+<label for="name">Nom de l'article *</label>
+<input type="text" id="name" placeholder="Ex: Veste en cuir vintage" required>
+</div>
 
 <div class="form-group">
-
-<label>
-
-Photos
-<span class="required">*</span>
-
-</label>
-
-<div class="photo-upload">
-
-<p>
-Ajoutez jusqu'à 5 photos claires de votre article.
-</p>
-
-<input
-type="file"
-id="photos"
-accept="image/jpeg,image/png,image/webp,image/gif"
-multiple
->
-
-<div
-id="photo-preview"
-class="photo-preview">
+<label for="brand">Marque</label>
+<input type="text" id="brand" placeholder="Ex: Zara, Nike, etc.">
 </div>
-
-</div>
-
-</div>
-
-
-<!-- =====================================================
-     NOM
-===================================================== -->
 
 <div class="form-group">
-
-<label for="name">
-
-Nom de l'article
-<span class="required">*</span>
-
-</label>
-
-<input
-type="text"
-id="name"
-placeholder="Ex. Robe noire Zara"
-required
->
-
-</div>
-
-
-<!-- =====================================================
-     CATEGORIE + MARQUE
-===================================================== -->
-
-<div class="row">
-
-<div class="form-group">
-
-<label for="category">
-
-Catégorie
-<span class="required">*</span>
-
-</label>
-
-<select
-id="category"
-required>
-
-<option value="">
-Choisir une catégorie
-</option>
-
-<option value="Vêtements">
-Vêtements
-</option>
-
-<option value="Chaussures">
-Chaussures
-</option>
-
-<option value="Sacs">
-Sacs
-</option>
-
-<option value="Accessoires">
-Accessoires
-</option>
-
+<label for="category">Catégorie *</label>
+<select id="category" required>
+<option value="">Sélectionner une catégorie</option>
+<option value="Vêtements">Vêtements</option>
+<option value="Chaussures">Chaussures</option>
+<option value="Sacs">Sacs</option>
+<option value="Accessoires">Accessoires</option>
 </select>
-
 </div>
-
 
 <div class="form-group">
-
-<label for="brand">
-Marque
-</label>
-
-<input
-type="text"
-id="brand"
-placeholder="Ex. Zara, Nike, H&M..."
->
-
+<label for="price">Prix (CAD) *</label>
+<input type="number" id="price" step="0.01" min="0" placeholder="Ex: 49.99" required>
 </div>
 
-</div>
-
-
-<!-- =====================================================
-     TAILLE + PRIX
-===================================================== -->
-
-<div class="row">
-
-<div
-class="form-group"
-id="clothing-size-group">
-
-<label for="size">
-
-Taille
-<span class="required">*</span>
-
-</label>
-
-<select id="size">
-
-<option value="">
-Choisir une taille
-</option>
-
-<option>XXS</option>
-<option>XS</option>
-<option>S</option>
-<option>M</option>
-<option>L</option>
-<option>XL</option>
-<option>XXL</option>
-<option>Autre</option>
-
+<div class="form-row">
+<div class="form-group">
+<label for="province">Province *</label>
+<select id="province" required>
+<option value="">Sélectionner</option>
+<option value="AB">Alberta</option>
+<option value="BC">Colombie-Britannique</option>
+<option value="PE">Île-du-Prince-Édouard</option>
+<option value="MB">Manitoba</option>
+<option value="NB">Nouveau-Brunswick</option>
+<option value="NS">Nouvelle-Écosse</option>
+<option value="ON">Ontario</option>
+<option value="QC">Québec</option>
+<option value="SK">Saskatchewan</option>
+<option value="NL">Terre-Neuve-et-Labrador</option>
+<option value="NT">Territoires du Nord-Ouest</option>
+<option value="NU">Nunavut</option>
+<option value="YT">Yukon</option>
 </select>
-
 </div>
-
 
 <div class="form-group">
-
-<label for="price">
-
-Prix (CAD)
-<span class="required">*</span>
-
-</label>
-
-<input
-type="number"
-id="price"
-placeholder="Ex. 35"
-min="0"
-step="0.01"
-required
->
-
+<label for="city">Ville *</label>
+<input type="text" id="city" placeholder="Ex: Montréal" required>
 </div>
-
 </div>
-
-
-<!-- =====================================================
-     POINTURE
-===================================================== -->
-
-<div
-class="form-group"
-id="shoe-size-group"
-style="display:none;">
-
-<label for="shoe-size">
-
-Pointure
-<span class="required">*</span>
-
-</label>
-
-<select id="shoe-size">
-
-<option value="">
-Choisir une pointure
-</option>
-
-<option>5</option>
-<option>5.5</option>
-<option>6</option>
-<option>6.5</option>
-<option>7</option>
-<option>7.5</option>
-<option>8</option>
-<option>8.5</option>
-<option>9</option>
-<option>9.5</option>
-<option>10</option>
-<option>10.5</option>
-<option>11</option>
-<option>11.5</option>
-<option>12</option>
-<option>13</option>
-<option>Autre</option>
-
-</select>
-
-</div>
-
-
-<!-- =====================================================
-     ETAT
-===================================================== -->
 
 <div class="form-group">
-
-<label>
-
-État de l'article
-<span class="required">*</span>
-
-</label>
-
-<div class="condition-options">
-
-
-<label class="condition-option">
-
-<input
-type="radio"
-name="condition"
-value="Neuf"
-required
->
-
-🆕 <strong>Neuf</strong>
-
-<br>
-
-<small>
-Jamais porté
-</small>
-
-</label>
-
-
-<label class="condition-option">
-
-<input
-type="radio"
-name="condition"
-value="5"
->
-
-⭐ <strong>5/5</strong>
-
-<br>
-
-<small>
-Comme neuf
-</small>
-
-</label>
-
-
-<label class="condition-option">
-
-<input
-type="radio"
-name="condition"
-value="4"
->
-
-⭐ <strong>4/5</strong>
-
-<br>
-
-<small>
-Très bon état
-</small>
-
-</label>
-
-
-<label class="condition-option">
-
-<input
-type="radio"
-name="condition"
-value="3"
->
-
-⭐ <strong>3/5</strong>
-
-<br>
-
-<small>
-Bon état
-</small>
-
-</label>
-
-
-<label class="condition-option">
-
-<input
-type="radio"
-name="condition"
-value="2"
->
-
-⭐ <strong>2/5</strong>
-
-<br>
-
-<small>
-État correct
-</small>
-
-</label>
-
-
-<label class="condition-option">
-
-<input
-type="radio"
-name="condition"
-value="1"
->
-
-⭐ <strong>1/5</strong>
-
-<br>
-
-<small>
-Usé
-</small>
-
-</label>
-
+<label for="description">Description</label>
+<textarea id="description" placeholder="Décrivez votre article : état, taille, détails..."></textarea>
 </div>
-
-</div>
-
-
-<!-- =====================================================
-     DEFAUTS
-===================================================== -->
 
 <div class="form-group">
-
-<label for="defects">
-Défauts ou imperfections
-</label>
-
-<textarea
-id="defects"
-placeholder="Ex. Petite tache sur la manche, fermeture légèrement usée..."
-></textarea>
-
+<label>Photos</label>
+<div class="photo-upload-area" id="photo-upload-area">
+<div class="photo-upload-icon">📷</div>
+<p>Cliquez pour sélectionner des photos</p>
+</div>
+<input type="file" id="photo-input" accept="image/*" multiple>
+<div class="photo-preview" id="photo-preview"></div>
 </div>
 
-
-<!-- =====================================================
-     DESCRIPTION
-===================================================== -->
-
-<div class="form-group">
-
-<label for="description">
-Description de l'article
-</label>
-
-<textarea
-id="description"
-placeholder="Décrivez votre article : coupe, matière, couleur, occasion..."
-></textarea>
-
-</div>
-
-
-<!-- =====================================================
-     PROVINCE + VILLE
-===================================================== -->
-
-<div class="row">
-
-<div class="form-group">
-
-<label for="province">
-
-Province / territoire
-<span class="required">*</span>
-
-</label>
-
-<select
-id="province"
-required>
-
-<option value="">
-Choisir une province
-</option>
-
-<option value="AB">
-Alberta
-</option>
-
-<option value="BC">
-Colombie-Britannique
-</option>
-
-<option value="PE">
-Île-du-Prince-Édouard
-</option>
-
-<option value="MB">
-Manitoba
-</option>
-
-<option value="NB">
-Nouveau-Brunswick
-</option>
-
-<option value="NS">
-Nouvelle-Écosse
-</option>
-
-<option value="ON">
-Ontario
-</option>
-
-<option value="QC">
-Québec
-</option>
-
-<option value="SK">
-Saskatchewan
-</option>
-
-<option value="NL">
-Terre-Neuve-et-Labrador
-</option>
-
-<option value="NT">
-Territoires du Nord-Ouest
-</option>
-
-<option value="NU">
-Nunavut
-</option>
-
-<option value="YT">
-Yukon
-</option>
-
-</select>
-
-</div>
-
-
-<div class="form-group">
-
-<label for="city">
-
-Ville
-<span class="required">*</span>
-
-</label>
-
-<select
-id="city"
-required>
-
-<option value="">
-Choisir d'abord une province
-</option>
-
-</select>
-
-</div>
-
-</div>
-
-
-<button
-type="submit"
-class="publish-button"
-id="publish-button">
-
-Publier mon article
-
-</button>
-
+<button type="submit" class="submit-button" id="submit-btn">Publier l'article</button>
 </form>
-
 </div>
-
 </main>
 
-
+<!-- FOOTER -->
 <footer>
-
-WEARERA ©️ 2026
-
-<br>
-
-La mode de seconde main au Canada.
-
+<div class="footer-grid">
+<div class="footer-col">
+<h4>WEARERA</h4>
+<a href="a-propos.html">À propos de WEARERA</a>
+<a href="comment-ca-fonctionne.html">Comment ça fonctionne</a>
+<a href="faq.html">FAQ</a>
+<a href="nous-contacter.html">Nous contacter</a>
+</div>
+<div class="footer-col">
+<h4>Informations</h4>
+<a href="cgu.html">Conditions générales d'utilisation</a>
+<a href="confidentialite.html">Politique de confidentialité</a>
+<a href="protection-acheteur.html">Protection acheteur</a>
+<a href="protection-vendeur.html">Protection vendeur</a>
+<a href="frais.html">Frais WEARERA</a>
+<a href="livraison.html">Livraison</a>
+<a href="regles-communaute.html">Règles de la communauté</a>
+</div>
+<div class="footer-col">
+<h4>Compte</h4>
+<a href="profil.html">Mon profil</a>
+<a href="mes-articles.html">Mes articles</a>
+<a href="mes-achats.html">Mes achats</a>
+<a href="mes-ventes.html">Mes ventes</a>
+<a href="panier.html">Panier</a>
+<a href="messagerie.html">Messagerie</a>
+</div>
+</div>
+<div class="footer-bottom">© 2026 WEARERA — Tous droits réservés</div>
 </footer>
 
-
 <script>
+/* SUPABASE */
+const SUPABASE_URL = "https://wcamvnvhcguxwujcwyyj.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndjYW12bnZoY2d1eHd1amN3eXlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMjcwNDYsImV4cCI6MjEwMzgwMzA0Nn0.qnkYuFIcbRP8aBzPyIfxamOfVvBrU3nNhMa__NiyYPA";
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-/* =====================================================
-   SUPABASE
-===================================================== */
+let currentUser = null;
+let selectedFiles = [];
 
-const SUPABASE_URL =
-"https://wcamvnvhcguxwujcwyyj.supabase.co";
-
-const SUPABASE_PUBLISHABLE_KEY =
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndjYW12bnZoY2d1eHd1amN3eXlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMjcwNDYsImV4cCI6MjEwMzgwMzA0Nn0.qnkYuFIcbRP8aBzPyIfxamOfVvBrU3nNhMa__NiyYPA";
-
-const supabaseClient =
-supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-);
-
-
-/* =====================================================
-   AUTHENTIFICATION
-===================================================== */
-
-async function updateAuthArea() {
-
-    const {
-        data: { user }
-    } =
-        await supabaseClient.auth.getUser();
-
-    const authArea =
-        document.getElementById("auth-area");
-
-    if (user) {
-
-        const firstName =
-            user.user_metadata?.first_name ||
-            "Mon compte";
-
-        authArea.innerHTML =
-            "<span style='color:#666;font-size:14px'>" +
-            "Bonjour, " +
-            firstName +
-            "</span>" +
-
-            "<a href='#' id='logout-link' " +
-            "style='margin-left:15px'>" +
-            "Se déconnecter" +
-            "</a>";
-
-        document
-            .getElementById("logout-link")
-            .addEventListener(
-                "click",
-                async function(e) {
-
-                    e.preventDefault();
-
-                    await supabaseClient
-                        .auth
-                        .signOut();
-
-                    window.location.href =
-                        "index.html";
-                }
-            );
-
-    } else {
-
-        authArea.innerHTML =
-            "<a href='auth.html'>" +
-            "Connexion" +
-            "</a>";
+/* AUTH CHECK */
+async function checkAuth() {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) {
+        window.location.href = "auth.html?redirect=vendre.html";
+        return false;
     }
+    currentUser = user;
+    return true;
 }
 
-updateAuthArea();
-
-
-/* =====================================================
-   VILLES DU CANADA
-===================================================== */
-
-const cities = {
-
-    AB: [
-        "Calgary",
-        "Edmonton",
-        "Red Deer",
-        "Lethbridge",
-        "Fort McMurray"
-    ],
-
-    BC: [
-        "Vancouver",
-        "Victoria",
-        "Surrey",
-        "Burnaby",
-        "Kelowna",
-        "Richmond"
-    ],
-
-    PE: [
-        "Charlottetown",
-        "Summerside",
-        "Stratford"
-    ],
-
-    MB: [
-        "Winnipeg",
-        "Brandon",
-        "Steinbach"
-    ],
-
-    NB: [
-        "Campbellton",
-        "Bathurst",
-        "Moncton",
-        "Dieppe",
-        "Fredericton",
-        "Saint John",
-        "Edmundston",
-        "Miramichi"
-    ],
-
-    NS: [
-        "Halifax",
-        "Sydney",
-        "Dartmouth",
-        "Truro",
-        "New Glasgow"
-    ],
-
-    ON: [
-        "Toronto",
-        "Ottawa",
-        "Mississauga",
-        "Brampton",
-        "Hamilton",
-        "London",
-        "Windsor",
-        "Kitchener",
-        "Waterloo",
-        "Kingston"
-    ],
-
-    QC: [
-        "Montréal",
-        "Québec",
-        "Laval",
-        "Gatineau",
-        "Longueuil",
-        "Sherbrooke",
-        "Trois-Rivières",
-        "Saguenay",
-        "Drummondville"
-    ],
-
-    SK: [
-        "Saskatoon",
-        "Regina",
-        "Prince Albert",
-        "Moose Jaw"
-    ],
-
-    NL: [
-        "St. John's",
-        "Mount Pearl",
-        "Corner Brook",
-        "Conception Bay South"
-    ],
-
-    NT: [
-        "Yellowknife",
-        "Hay River",
-        "Inuvik"
-    ],
-
-    NU: [
-        "Iqaluit",
-        "Rankin Inlet",
-        "Arviat"
-    ],
-
-    YT: [
-        "Whitehorse",
-        "Dawson City",
-        "Watson Lake"
-    ]
-
-};
-
-
-/* =====================================================
-   PROVINCE → VILLE
-===================================================== */
-
-const provinceSelect =
-    document.getElementById("province");
-
-const citySelect =
-    document.getElementById("city");
-
-provinceSelect.addEventListener(
-    "change",
-    function() {
-
-        const province =
-            provinceSelect.value;
-
-        citySelect.innerHTML = "";
-
-        if (!province) {
-
-            citySelect.innerHTML =
-                "<option value=''>" +
-                "Choisir d'abord une province" +
-                "</option>";
-
-            return;
-        }
-
-        citySelect.innerHTML =
-            "<option value=''>" +
-            "Choisir une ville" +
-            "</option>";
-
-        cities[province].forEach(
-            function(city) {
-
-                const option =
-                    document.createElement("option");
-
-                option.value = city;
-                option.textContent = city;
-
-                citySelect.appendChild(option);
-            }
-        );
-    }
-);
-
-
-/* =====================================================
-   CATEGORIE
-===================================================== */
-
-const categorySelect =
-    document.getElementById("category");
-
-const clothingSizeGroup =
-    document.getElementById(
-        "clothing-size-group"
-    );
-
-const sizeSelect =
-    document.getElementById("size");
-
-const shoeSizeGroup =
-    document.getElementById(
-        "shoe-size-group"
-    );
-
-const shoeSizeSelect =
-    document.getElementById(
-        "shoe-size"
-    );
-
-
-function updateCategoryFields() {
-
-    const category =
-        categorySelect.value;
-
-    const isClothing =
-        category === "Vêtements";
-
-    const isShoes =
-        category === "Chaussures";
-
-
-    clothingSizeGroup.style.display =
-        isClothing ? "" : "none";
-
-    sizeSelect.required =
-        isClothing;
-
-    if (!isClothing) {
-        sizeSelect.value = "";
-    }
-
-
-    shoeSizeGroup.style.display =
-        isShoes ? "" : "none";
-
-    shoeSizeSelect.required =
-        isShoes;
-
-    if (!isShoes) {
-        shoeSizeSelect.value = "";
-    }
-}
-
-categorySelect.addEventListener(
-    "change",
-    updateCategoryFields
-);
-
-updateCategoryFields();
-
-
-/* =====================================================
-   APERÇU DES PHOTOS
-===================================================== */
-
-const photoInput =
-    document.getElementById("photos");
-
-const photoPreview =
-    document.getElementById(
-        "photo-preview"
-    );
-
-
-photoInput.addEventListener(
-    "change",
-    function() {
-
-        photoPreview.innerHTML = "";
-
-        const files =
-            Array.from(photoInput.files);
-
-        if (files.length > 5) {
-
-            alert(
-                "Vous pouvez sélectionner maximum 5 photos."
-            );
-
-            photoInput.value = "";
-
-            return;
-        }
-
-        files.forEach(function(file) {
-
-            const img =
-                document.createElement("img");
-
-            img.src =
-                URL.createObjectURL(file);
-
-            img.alt =
-                "Aperçu de la photo";
-
-            photoPreview.appendChild(img);
-
-        });
-
-    }
-);
-
-
-/* =====================================================
-   PUBLICATION
-===================================================== */
-
-const form =
-    document.getElementById("sell-form");
-
-const publishButton =
-    document.getElementById(
-        "publish-button"
-    );
-
-
-form.addEventListener(
-    "submit",
-    async function(event) {
-
-        event.preventDefault();
-
-
-        /* ---------------------------------------------
-           VERIFICATION UTILISATEUR
-        --------------------------------------------- */
-
-        const {
-            data: { user },
-            error: authError
-        } =
-            await supabaseClient.auth.getUser();
-
-
-        if (authError || !user) {
-
-            alert(
-                "Vous devez être connecté pour publier un article."
-            );
-
-            window.location.href =
-                "auth.html";
-
-            return;
-        }
-
-
-        /* ---------------------------------------------
-           RECUPERATION DES DONNEES
-        --------------------------------------------- */
-
-        const name =
-            document.getElementById("name")
-                .value
-                .trim();
-
-        const category =
-            categorySelect.value;
-
-        const brand =
-            document.getElementById("brand")
-                .value
-                .trim();
-
-        let size = null;
-
-        if (category === "Vêtements") {
-            size = sizeSelect.value;
-        }
-
-        const shoeSize =
-            category === "Chaussures"
-                ? shoeSizeSelect.value
-                : null;
-
-        const price =
-            parseFloat(
-                document.getElementById("price")
-                    .value
-            );
-
-        const conditionInput =
-            document.querySelector(
-                'input[name="condition"]:checked'
-            );
-
-        const condition =
-            conditionInput
-                ? conditionInput.value
-                : null;
-
-        const defects =
-            document.getElementById("defects")
-                .value
-                .trim();
-
-        const description =
-            document.getElementById("description")
-                .value
-                .trim();
-
-        const province =
-            provinceSelect.value;
-
-        const city =
-            citySelect.value;
-
-
-        /* ---------------------------------------------
-           PHOTOS
-        --------------------------------------------- */
-
-        const files =
-            Array.from(photoInput.files);
-
-
-        if (!files.length) {
-
-            alert(
-                "Veuillez ajouter au moins une photo."
-            );
-
-            return;
-        }
-
-
-        if (files.length > 5) {
-
-            alert(
-                "Vous pouvez ajouter maximum 5 photos."
-            );
-
-            return;
-        }
-
-
-        /* ---------------------------------------------
-           VALIDATION
-        --------------------------------------------- */
-
-        if (
-            !name ||
-            !category ||
-            isNaN(price) ||
-            price < 0 ||
-            !condition ||
-            !province ||
-            !city
-        ) {
-
-            alert(
-                "Veuillez remplir tous les champs obligatoires."
-            );
-
-            return;
-        }
-
-
-        if (
-            category === "Vêtements" &&
-            !size
-        ) {
-
-            alert(
-                "Veuillez sélectionner une taille."
-            );
-
-            return;
-        }
-
-
-        if (
-            category === "Chaussures" &&
-            !shoeSize
-        ) {
-
-            alert(
-                "Veuillez sélectionner une pointure."
-            );
-
-            return;
-        }
-
-
-        /* ---------------------------------------------
-           BOUTON
-        --------------------------------------------- */
-
-        publishButton.disabled = true;
-
-        publishButton.textContent =
-            "Envoi des photos...";
-
-
-        try {
-
-            /* -----------------------------------------
-               UPLOAD DES PHOTOS
-            ----------------------------------------- */
-
-            const photoUrls = [];
-
-
-            for (
-                let i = 0;
-                i < files.length;
-                i++
-            ) {
-
-                const file =
-                    files[i];
-
-
-                /* Vérifier type */
-
-                if (
-                    !file.type.startsWith("image/")
-                ) {
-
-                    throw new Error(
-                        "Tous les fichiers doivent être des images."
-                    );
-                }
-
-
-                /* Limite 10 MB */
-
-                if (
-                    file.size > 10 * 1024 * 1024
-                ) {
-
-                    throw new Error(
-                        "Chaque photo doit faire moins de 10 MB."
-                    );
-                }
-
-
-                const extension =
-                    file.name
-                        .split(".")
-                        .pop()
-                        .toLowerCase();
-
-
-                const fileName =
-                    user.id +
-                    "/" +
-                    Date.now() +
-                    "-" +
-                    Math.random()
-                        .toString(36)
-                        .substring(2) +
-                    "." +
-                    extension;
-
-
-                const {
-                    error: uploadError
-                } =
-                    await supabaseClient
-                        .storage
-                        .from("articles-photos")
-                        .upload(
-                            fileName,
-                            file,
-                            {
-                                cacheControl: "3600",
-                                upsert: false,
-                                contentType: file.type
-                            }
-                        );
-
-
-                if (uploadError) {
-
-                    throw new Error(
-                        "Erreur photo : " +
-                        uploadError.message
-                    );
-                }
-
-
-                const {
-                    data: publicUrlData
-                } =
-                    supabaseClient
-                        .storage
-                        .from("articles-photos")
-                        .getPublicUrl(
-                            fileName
-                        );
-
-
-                photoUrls.push(
-                    publicUrlData.publicUrl
-                );
-
-            }
-
-
-            /* -----------------------------------------
-               PUBLICATION
-            ----------------------------------------- */
-
-            publishButton.textContent =
-                "Publication de l'article...";
-
-
-            const articleData = {
-
-                name: name,
-
-                category: category,
-
-                brand: brand || null,
-
-                size: size,
-
-                price: price,
-
-                condition: condition,
-
-                defects:
-                    defects || null,
-
-                description:
-                    description || null,
-
-                province: province,
-
-                city: city,
-
-                photo_urls: photoUrls,
-
-                seller_id: user.id
-
+/* ELEMENTS */
+const errorBox = document.getElementById("error-box");
+const successBox = document.getElementById("success-box");
+const submitBtn = document.getElementById("submit-btn");
+const photoUploadArea = document.getElementById("photo-upload-area");
+const photoInput = document.getElementById("photo-input");
+const photoPreview = document.getElementById("photo-preview");
+
+/* MESSAGES */
+function showError(msg) { errorBox.textContent = msg; errorBox.style.display = "block"; successBox.style.display = "none"; }
+function showSuccess(msg) { successBox.textContent = msg; successBox.style.display = "block"; errorBox.style.display = "none"; }
+function hideMessages() { errorBox.style.display = "none"; successBox.style.display = "none"; }
+
+/* PHOTO UPLOAD */
+photoUploadArea.addEventListener("click", function() { photoInput.click(); });
+
+photoInput.addEventListener("change", function(e) {
+    const files = Array.from(e.target.files);
+    files.forEach(function(file) {
+        if (file.type.startsWith("image/")) {
+            selectedFiles.push(file);
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                const item = document.createElement("div");
+                item.className = "photo-preview-item";
+                item.innerHTML = '<img src="' + ev.target.result + '" alt="Aperçu"><button type="button" class="remove-photo" data-index="' + (selectedFiles.length - 1) + '">×</button>';
+                photoPreview.appendChild(item);
+                item.querySelector(".remove-photo").addEventListener("click", function() {
+                    const idx = parseInt(this.dataset.index);
+                    selectedFiles.splice(idx, 1);
+                    renderPhotoPreview();
+                });
             };
+            reader.readAsDataURL(file);
+        }
+    });
+    photoInput.value = "";
+});
 
+function renderPhotoPreview() {
+    photoPreview.innerHTML = "";
+    selectedFiles.forEach(function(file, idx) {
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            const item = document.createElement("div");
+            item.className = "photo-preview-item";
+            item.innerHTML = '<img src="' + ev.target.result + '" alt="Aperçu"><button type="button" class="remove-photo" data-index="' + idx + '">×</button>';
+            photoPreview.appendChild(item);
+            item.querySelector(".remove-photo").addEventListener("click", function() {
+                selectedFiles.splice(parseInt(this.dataset.index), 1);
+                renderPhotoPreview();
+            });
+        };
+        reader.readAsDataURL(file);
+    });
+}
 
-            if (
-                category === "Chaussures"
-            ) {
+/* UPLOAD PHOTOS */
+async function uploadPhotos() {
+    const photoUrls = [];
+    for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+        const ext = file.name.split(".").pop();
+        const fileName = currentUser.id + "/" + Date.now() + "_" + i + "." + ext;
+        const { data, error } = await supabaseClient.storage
+            .from("articles")
+            .upload(fileName, file);
+        if (error) throw error;
+        const { data: urlData } = supabaseClient.storage
+            .from("articles")
+            .getPublicUrl(fileName);
+        photoUrls.push(urlData.publicUrl);
+    }
+    return photoUrls;
+}
 
-                articleData.shoe_size =
-                    shoeSize;
+/* SUBMIT */
+document.getElementById("sell-form").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    hideMessages();
 
-            }
+    const name = document.getElementById("name").value.trim();
+    const brand = document.getElementById("brand").value.trim();
+    const category = document.getElementById("category").value;
+    const price = parseFloat(document.getElementById("price").value);
+    const province = document.getElementById("province").value;
+    const city = document.getElementById("city").value.trim();
+    const description = document.getElementById("description").value.trim();
 
+    if (!name) { showError("Veuillez entrer le nom de l'article."); return; }
+    if (!category) { showError("Veuillez sélectionner une catégorie."); return; }
+    if (!price || price <= 0) { showError("Veuillez entrer un prix valide."); return; }
+    if (!province) { showError("Veuillez sélectionner une province."); return; }
+    if (!city) { showError("Veuillez entrer une ville."); return; }
 
-            /* -----------------------------------------
-               INSERTION SUPABASE
-            ----------------------------------------- */
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Publication en cours...";
 
-            const {
-                data,
-                error
-            } =
-                await supabaseClient
-                    .from("Articles")
-                    .insert([articleData])
-                    .select()
-                    .single();
-
-
-            if (error) {
-
-                console.error(
-                    "Erreur Supabase :",
-                    error
-                );
-
-                throw new Error(
-                    error.message
-                );
-            }
-
-
-            /* -----------------------------------------
-               SUCCES
-            ----------------------------------------- */
-
-            console.log(
-                "Article publié :",
-                data
-            );
-
-
-            alert(
-                "Votre article a été publié avec succès ! 🎉"
-            );
-
-
-            form.reset();
-
-            photoPreview.innerHTML = "";
-
-            updateCategoryFields();
-
-            citySelect.innerHTML =
-                "<option value=''>" +
-                "Choisir d'abord une province" +
-                "</option>";
-
-
-        } catch (error) {
-
-            console.error(
-                "Erreur :",
-                error
-            );
-
-            alert(
-                "Erreur lors de la publication : " +
-                error.message
-            );
-
-        } finally {
-
-            publishButton.disabled = false;
-
-            publishButton.textContent =
-                "Publier mon article";
-
+    try {
+        let photoUrls = [];
+        if (selectedFiles.length > 0) {
+            photoUrls = await uploadPhotos();
         }
 
+        const { data, error } = await supabaseClient
+            .from("Articles")
+            .insert({
+                seller_id: currentUser.id,
+                name: name,
+                brand: brand || null,
+                category: category,
+                price: price,
+                province: province,
+                city: city,
+                description: description || null,
+                photo_urls: photoUrls
+            })
+            .select()
+            .single();
+
+        if (error) throw error;
+
+        showSuccess("Article publié avec succès ! Redirection...");
+        setTimeout(function() {
+            window.location.href = "mes-articles.html";
+        }, 1500);
+    } catch (err) {
+        console.error(err);
+        showError("Erreur : " + (err.message || "Impossible de publier l'article."));
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Publier l'article";
     }
-);
+});
 
+/* INIT */
+(async function() {
+    const authed = await checkAuth();
+    if (!authed) return;
+})();
 </script>
-
 </body>
-
 </html>

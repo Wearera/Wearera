@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WEARERA — Frais WEARERA</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #f7f5f2; color: #222; }
+header {
+    background: white; padding: 22px 7%; display: flex;
+    justify-content: space-between; align-items: center;
+    border-bottom: 1px solid #ddd; position: sticky; top: 0; z-index: 1000;
+}
+.logo { font-size: 30px; font-weight: bold; letter-spacing: 2px; }
+.logo a { text-decoration: none; color: #222; }
+nav { display: flex; align-items: center; gap: 22px; }
+nav a { text-decoration: none; color: #222; font-size: 15px; }
+nav a:hover { text-decoration: underline; }
+.info-page { max-width: 800px; margin: 50px auto; padding: 0 7%; }
+.info-page h1 { font-size: 36px; margin-bottom: 15px; }
+.info-page .tagline { font-size: 18px; color: #666; margin-bottom: 30px; }
+.info-page h2 { font-size: 22px; margin: 35px 0 15px; }
+.info-page p { font-size: 16px; line-height: 1.6; margin-bottom: 18px; }
+.fee-table {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 30px 0;
+}
+.fee-card {
+    background: white; border: 1px solid #ddd; border-radius: 12px; padding: 25px;
+}
+.fee-card h3 { font-size: 18px; margin-bottom: 10px; }
+.fee-amount { font-size: 32px; font-weight: bold; margin-bottom: 8px; }
+.fee-card p { font-size: 14px; color: #555; margin: 0; line-height: 1.5; }
+.fee-example {
+    background: #eee8df; border-radius: 8px; padding: 15px; margin-top: 15px;
+    font-size: 14px; color: #444; line-height: 1.5;
+}
+.info-notice {
+    background: white; border: 1px solid #ddd; border-radius: 12px;
+    padding: 30px; margin: 30px 0; text-align: center;
+}
+.info-notice h3 { font-size: 18px; margin-bottom: 10px; }
+.info-notice p { color: #666; font-size: 14px; margin: 0; }
+footer {
+    margin-top: 50px; padding: 30px; text-align: center;
+    background: #222; color: white;
+}
+.footer-links {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 10px 20px; margin-bottom: 15px; font-size: 13px;
+}
+.footer-links a { color: #ccc; text-decoration: none; }
+.footer-links a:hover { text-decoration: underline; }
+.footer-bottom { font-size: 13px; color: #999; }
+@media (max-width: 800px) {
+    header { padding: 18px 5%; }
+    nav { gap: 12px; }
+    nav a:not(.message-nav):not(.profile-nav):not(.cart-nav) { display: none; }
+    .info-page h1 { font-size: 28px; }
+    .fee-table { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo"><a href="index.html">WEARERA</a></div>
+<nav>
+<a href="index.html">Accueil</a>
+<a href="index.html#articles">Acheter</a>
+<a href="vendre.html">Vendre</a>
+<a href="panier.html">🛒 Panier</a>
+<a href="messagerie.html">💬 Messagerie</a>
+<a href="profil.html">👤 Mon profil</a>
+</nav>
+</header>
+
+<main class="info-page">
+<h1>Frais WEARERA</h1>
+<p class="tagline">Une tarification simple et transparente pour acheter et vendre en toute confiance.</p>
+
+<h2>Comment fonctionnent les frais ?</h2>
+<p>
+WEARERA applique une commission sur chaque transaction. Cette commission permet de maintenir la plateforme, d'assurer la sécurité des échanges et de développer de nouvelles fonctionnalités. Il n'y a aucun frais d'inscription ni de frais cachés.
+</p>
+
+<div class="fee-table">
+<div class="fee-card">
+<h3>Frais acheteur</h3>
+<div class="fee-amount">8 %</div>
+<p>Appliqués sur le prix de l'article. Ajoutés au montant total au moment du paiement.</p>
+<div class="fee-example">
+Exemple : un article à 50 $ vous coûte 54 $ (prix + 4 $ de frais).
+</div>
+</div>
+<div class="fee-card">
+<h3>Frais vendeur</h3>
+<div class="fee-amount">2 %</div>
+<p>Appliqués sur le prix de vente de l'article. Déduits de vos gains au moment de la vente.</p>
+<div class="fee-example">
+Exemple : un article vendu 50 $ vous rapporte 49 $ (prix - 1 $ de frais).
+</div>
+</div>
+</div>
+
+<h2>Pourquoi ces frais ?</h2>
+<p>
+Les frais WEARERA servent à couvrir les coûts d'hébergement, de sécurité des données, de développement de la messagerie et des futures fonctionnalités comme le paiement en ligne. En achetant et en vendant sur WEARERA, vous soutenez une plateforme canadienne indépendante dédiée à la mode durable.
+</p>
+
+<div class="info-notice">
+<h3>Cette page sera enrichie prochainement</h3>
+<p>Des informations détaillées sur les frais de paiement en ligne et les options de remboursement seront ajoutées lorsque ces services seront disponibles.</p>
+</div>
+</main>
+
+<footer>
+<div class="footer-links">
+<a href="a-propos.html">À propos</a>
+<a href="comment-ca-fonctionne.html">Comment ça fonctionne</a>
+<a href="faq.html">FAQ</a>
+<a href="nous-contacter.html">Nous contacter</a>
+<a href="cgu.html">CGU</a>
+<a href="confidentialite.html">Confidentialité</a>
+<a href="protection-acheteur.html">Protection acheteur</a>
+<a href="protection-vendeur.html">Protection vendeur</a>
+<a href="frais.html">Frais WEARERA</a>
+<a href="livraison.html">Livraison</a>
+<a href="regles-communaute.html">Règles de la communauté</a>
+</div>
+<div class="footer-bottom">© 2026 WEARERA — Tous droits réservés</div>
+</footer>
+
+</body>
+</html>

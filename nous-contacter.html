@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WEARERA — Nous contacter</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #f7f5f2; color: #222; }
+header {
+    background: white; padding: 22px 7%; display: flex;
+    justify-content: space-between; align-items: center;
+    border-bottom: 1px solid #ddd; position: sticky; top: 0; z-index: 1000;
+}
+.logo { font-size: 30px; font-weight: bold; letter-spacing: 2px; }
+.logo a { text-decoration: none; color: #222; }
+nav { display: flex; align-items: center; gap: 22px; }
+nav a { text-decoration: none; color: #222; font-size: 15px; }
+nav a:hover { text-decoration: underline; }
+.info-page { max-width: 800px; margin: 50px auto; padding: 0 7%; }
+.info-page h1 { font-size: 36px; margin-bottom: 30px; }
+.info-page h2 { font-size: 22px; margin: 35px 0 15px; }
+.info-page p { font-size: 16px; line-height: 1.6; margin-bottom: 18px; }
+.info-page .tagline { font-size: 18px; color: #666; margin-bottom: 30px; }
+.contact-cards {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin: 30px 0;
+}
+.contact-card {
+    background: white; border: 1px solid #ddd; border-radius: 12px; padding: 25px;
+}
+.contact-card h3 { font-size: 17px; margin-bottom: 8px; }
+.contact-card p { font-size: 15px; color: #555; margin: 0; line-height: 1.5; }
+.info-notice {
+    background: white; border: 1px solid #ddd; border-radius: 12px;
+    padding: 30px; margin: 30px 0; text-align: center;
+}
+.info-notice h3 { font-size: 18px; margin-bottom: 10px; }
+.info-notice p { color: #666; font-size: 14px; margin: 0; }
+footer {
+    margin-top: 50px; padding: 30px; text-align: center;
+    background: #222; color: white;
+}
+.footer-links {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 10px 20px; margin-bottom: 15px; font-size: 13px;
+}
+.footer-links a { color: #ccc; text-decoration: none; }
+.footer-links a:hover { text-decoration: underline; }
+.footer-bottom { font-size: 13px; color: #999; }
+@media (max-width: 800px) {
+    header { padding: 18px 5%; }
+    nav { gap: 12px; }
+    nav a:not(.message-nav):not(.profile-nav):not(.cart-nav) { display: none; }
+    .info-page h1 { font-size: 28px; }
+    .contact-cards { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo"><a href="index.html">WEARERA</a></div>
+<nav>
+<a href="index.html">Accueil</a>
+<a href="index.html#articles">Acheter</a>
+<a href="vendre.html">Vendre</a>
+<a href="panier.html">🛒 Panier</a>
+<a href="messagerie.html">💬 Messagerie</a>
+<a href="profil.html">👤 Mon profil</a>
+</nav>
+</header>
+
+<main class="info-page">
+<h1>Nous contacter</h1>
+<p class="tagline">Une question, un problème ou une suggestion ? Nous sommes là pour vous aider.</p>
+
+<div class="contact-cards">
+<div class="contact-card">
+<h3>Support général</h3>
+<p>Pour toute question concernant l'utilisation de WEARERA, la création d'annonces ou le fonctionnement de la plateforme.</p>
+</div>
+<div class="contact-card">
+<h3>Signaler un problème</h3>
+<p>Si vous rencontrez un bug, un utilisateur suspect ou un contenu inapproprié, n'hésitez pas à nous le signaler.</p>
+</div>
+<div class="contact-card">
+<h3>Partenariats</h3>
+<p>Vous souhaitez collaborer avec WEARERA ? Contactez-nous pour discuter des possibilités de partenariat.</p>
+</div>
+<div class="contact-card">
+<h3>Suggestions</h3>
+<p>Vous avez une idée pour améliorer la plateforme ? Vos retours sont les bienvenus.</p>
+</div>
+</div>
+
+<div class="info-notice">
+<h3>Coordonnées de contact à venir</h3>
+<p>Une adresse courriel et un formulaire de contact seront disponibles prochainement. En attendant, consultez la FAQ pour les réponses aux questions les plus courantes.</p>
+</div>
+</main>
+
+<footer>
+<div class="footer-links">
+<a href="a-propos.html">À propos</a>
+<a href="comment-ca-fonctionne.html">Comment ça fonctionne</a>
+<a href="faq.html">FAQ</a>
+<a href="nous-contacter.html">Nous contacter</a>
+<a href="cgu.html">CGU</a>
+<a href="confidentialite.html">Confidentialité</a>
+<a href="protection-acheteur.html">Protection acheteur</a>
+<a href="protection-vendeur.html">Protection vendeur</a>
+<a href="frais.html">Frais WEARERA</a>
+<a href="livraison.html">Livraison</a>
+<a href="regles-communaute.html">Règles de la communauté</a>
+</div>
+<div class="footer-bottom">© 2026 WEARERA — Tous droits réservés</div>
+</footer>
+
+</body>
+</html>

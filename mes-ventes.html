@@ -1,36 +1,16 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>WEARERA — Mes ventes</title>
-
+<title>Mes ventes — WEARERA</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background: #f7f5f2;
-    color: #222;
-}
-
-button, input, select, textarea {
-    font-family: inherit;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #f7f5f2; color: #222; }
+button, input, select, textarea { font-family: inherit; }
 
 /* HEADER */
-
 header {
     background: white;
     padding: 22px 7%;
@@ -42,428 +22,101 @@ header {
     top: 0;
     z-index: 1000;
 }
+.logo { font-size: 30px; font-weight: bold; letter-spacing: 2px; }
+.logo a { text-decoration: none; color: #222; }
+nav { display: flex; align-items: center; gap: 22px; }
+nav a { text-decoration: none; color: #222; font-size: 15px; }
+nav a:hover { text-decoration: underline; }
+.nav-dropdown { position: relative; }
+.nav-dropdown-toggle { text-decoration: none; color: #222; font-size: 15px; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 4px 0; }
+.nav-dropdown-toggle:hover { text-decoration: underline; }
+.nav-dropdown-toggle .caret { font-size: 11px; opacity: 0.6; }
+.nav-dropdown-menu { display: none; position: absolute; top: 100%; right: 0; background: white; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); min-width: 170px; padding: 6px 0; z-index: 1100; }
+.nav-dropdown.open .nav-dropdown-menu { display: block; }
+.nav-dropdown-menu a { display: block; padding: 10px 18px; color: #333; font-size: 14px; text-decoration: none; }
+.nav-dropdown-menu a:hover { background: #f7f5f2; text-decoration: none; }
 
-.logo {
-    font-size: 30px;
-    font-weight: bold;
-    letter-spacing: 2px;
-}
+/* CONTAINER */
+.container { max-width: 900px; margin: 0 auto; padding: 40px 7%; }
+.page-title h1 { font-size: 32px; margin-bottom: 10px; }
+.page-title p { color: #777; font-size: 16px; margin-bottom: 30px; }
 
-.logo a {
-    text-decoration: none;
-    color: #222;
-}
-
-nav {
-    display: flex;
-    align-items: center;
-    gap: 22px;
-}
-
-nav a {
-    text-decoration: none;
-    color: #222;
-    font-size: 15px;
-}
-
-nav a:hover {
-    text-decoration: underline;
-}
-
-/* DROPDOWN */
-.nav-dropdown {
-    position: relative;
-}
-
-.nav-dropdown-toggle {
-    text-decoration: none;
-    color: #222;
-    font-size: 15px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 4px 0;
-}
-
-.nav-dropdown-toggle:hover {
-    text-decoration: underline;
-}
-
-.nav-dropdown-toggle .caret {
-    font-size: 11px;
-    opacity: 0.6;
-}
-
-.nav-dropdown-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-    min-width: 170px;
-    padding: 6px 0;
-    z-index: 1100;
-}
-
-.nav-dropdown.open .nav-dropdown-menu {
-    display: block;
-}
-
-.nav-dropdown-menu a {
-    display: block;
-    padding: 10px 18px;
-    color: #333;
-    font-size: 14px;
-    text-decoration: none;
-}
-
-.nav-dropdown-menu a:hover {
-    background: #f7f5f2;
-    text-decoration: none;
-}
-
-/* CONTENU */
-
-.container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 40px 7%;
-}
-
-.page-title h1 {
-    font-size: 32px;
-    margin-bottom: 10px;
-}
-
-.page-title p {
-    color: #777;
-    font-size: 16px;
-    margin-bottom: 30px;
-}
-
-/* ORDER CARDS */
-
-.order-list {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-}
-
-.order-card {
-    background: white;
-    border-radius: 14px;
-    border: 1px solid #ddd;
-    padding: 22px;
-    transition: 0.2s;
-}
-
-.order-card:hover {
-    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-}
-
-.order-header {
-    display: flex;
-    gap: 16px;
-    align-items: center;
-    margin-bottom: 16px;
-}
-
-.order-photo {
-    width: 80px;
-    height: 80px;
-    border-radius: 10px;
-    object-fit: cover;
-    background: #eee;
-    flex-shrink: 0;
-}
-
-.order-no-photo {
-    width: 80px;
-    height: 80px;
-    border-radius: 10px;
-    background: #eee;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #aaa;
-    font-size: 28px;
-}
-
-.order-info {
-    flex: 1;
-    min-width: 0;
-}
-
-.order-info h3 {
-    font-size: 17px;
-    margin-bottom: 4px;
-}
-
-.order-buyer {
-    font-size: 14px;
-    color: #777;
-    margin-bottom: 4px;
-}
-
-.order-date {
-    font-size: 12px;
-    color: #999;
-}
-
-/* STATUS BADGE */
-
-.status-badge {
-    display: inline-block;
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.status-paid {
-    background: #fff3cd;
-    color: #856404;
-}
-
-.status-shipped {
-    background: #d1ecf1;
-    color: #0c5460;
-}
-
-.status-delivered {
-    background: #d4edda;
-    color: #155724;
-}
-
-.status-completed {
-    background: #c3e6cb;
-    color: #1b5e20;
-}
-
-.status-disputed {
-    background: #f8d7da;
-    color: #721c24;
-}
+/* ORDER CARD */
+.order-card { background: white; border: 1px solid #ddd; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+.order-header { display: flex; gap: 18px; align-items: flex-start; margin-bottom: 15px; }
+.order-photo { width: 100px; height: 100px; border-radius: 10px; object-fit: cover; background: #eee; flex-shrink: 0; }
+.order-no-photo { width: 100px; height: 100px; border-radius: 10px; background: #eee; display: flex; align-items: center; justify-content: center; color: #aaa; font-size: 30px; flex-shrink: 0; }
+.order-info { flex: 1; min-width: 0; }
+.order-info h3 { font-size: 18px; margin-bottom: 5px; }
+.order-brand { color: #777; font-size: 14px; margin-bottom: 5px; }
+.order-date { color: #999; font-size: 13px; margin-bottom: 8px; }
+.status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
+.status-paid { background: #e3f2fd; color: #1565c0; }
+.status-shipped { background: #fff3e0; color: #e65100; }
+.status-delivered { background: #e8f5e8; color: #2e7d32; }
+.status-completed { background: #e8f5e8; color: #1b5e20; }
+.status-disputed { background: #fde8e8; color: #c62828; }
+.status-pending { background: #f5f5f5; color: #666; }
 
 /* ORDER DETAILS */
+.order-details { border-top: 1px solid #eee; padding-top: 15px; margin-top: 10px; }
+.detail-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; color: #555; }
+.detail-row.total { font-weight: bold; color: #222; border-top: 1px solid #eee; padding-top: 8px; margin-top: 5px; }
+.detail-label { color: #777; }
+.detail-value { font-weight: 500; }
 
-.order-details {
-    border-top: 1px solid #eee;
-    padding-top: 15px;
-    margin-top: 5px;
-}
+/* TRACKING */
+.tracking-section { margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee; }
+.tracking-input-group { display: flex; gap: 10px; }
+.tracking-input-group input { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; outline: none; }
+.tracking-input-group input:focus { border-color: #222; }
+.ship-button { padding: 10px 20px; background: #222; color: white; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: bold; white-space: nowrap; }
+.ship-button:hover { background: #333; }
+.ship-button:disabled { opacity: 0.5; cursor: not-allowed; }
+.tracking-display { margin-top: 10px; font-size: 14px; color: #555; }
+.tracking-display strong { color: #222; }
 
-.detail-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 14px;
-    margin-bottom: 8px;
-    color: #555;
-}
+/* DEADLINE */
+.deadline-timer { margin-top: 12px; padding: 12px 16px; background: #fff8e1; border: 1px solid #ffe082; border-radius: 8px; font-size: 14px; color: #e65100; }
+.deadline-timer strong { color: #e65100; }
 
-.detail-row strong {
-    color: #222;
-}
-
-.payout-badge {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 12px;
-    font-weight: bold;
-}
-
-.payout-pending {
-    background: #fff3cd;
-    color: #856404;
-}
-
-.payout-released {
-    background: #d4edda;
-    color: #155724;
-}
-
-.payout-held {
-    background: #f8d7da;
-    color: #721c24;
-}
-
-/* SELLER NOTICE */
-
-.seller-notice {
-    background: #e8f5e9;
-    border: 1px solid #a5d6a7;
-    border-radius: 10px;
-    padding: 15px 18px;
-    margin-bottom: 20px;
-    font-size: 14px;
-    color: #2e7d32;
-}
-
-.seller-notice strong {
-    color: #1b5e20;
-}
-
-/* SHIP FORM */
-
-.ship-form {
-    margin-top: 15px;
-    padding: 15px;
-    background: #f7f5f2;
-    border-radius: 8px;
-}
-
-.ship-form label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 7px;
-    font-size: 14px;
-}
-
-.ship-form input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 14px;
-    margin-bottom: 10px;
-}
-
-.ship-form button {
-    padding: 10px 18px;
-    border: none;
-    border-radius: 8px;
-    background: #222;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.ship-form button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.ship-form button:hover:not(:disabled) {
-    background: #444;
-}
-
-/* TRACKING DISPLAY */
-
-.tracking-info {
-    background: #f7f5f2;
-    border-radius: 8px;
-    padding: 12px 15px;
-    margin-top: 12px;
-    font-size: 14px;
-}
-
-.tracking-info strong {
-    color: #222;
-}
-
-/* EMPTY / LOADING */
-
-.empty-state {
-    text-align: center;
-    padding: 60px 20px;
-    color: #777;
-}
-
-.empty-state .icon {
-    font-size: 50px;
-    margin-bottom: 15px;
-}
-
-.empty-state h3 {
-    font-size: 20px;
-    margin-bottom: 10px;
-    color: #222;
-}
-
-.empty-state p {
-    margin-bottom: 20px;
-}
-
-.empty-state a {
-    display: inline-block;
-    padding: 14px 30px;
-    background: #222;
-    color: white;
-    text-decoration: none;
-    border-radius: 10px;
-    font-weight: bold;
-    font-size: 15px;
-}
-
-.empty-state a:hover {
-    background: #444;
-}
-
-.loading {
-    text-align: center;
-    padding: 50px;
-    color: #777;
-}
+/* MESSAGES */
+.loading { text-align: center; padding: 50px; color: #666; font-size: 16px; }
+.empty-state { text-align: center; padding: 60px 20px; color: #666; }
+.empty-state-icon { font-size: 50px; margin-bottom: 15px; opacity: 0.4; }
+.empty-state h3 { font-size: 20px; margin-bottom: 10px; }
+.empty-state p { font-size: 15px; color: #999; }
+.error-message { background: #fde8e8; color: #c62828; border: 1px solid #f5c6c6; border-radius: 8px; padding: 12px 16px; font-size: 14px; margin-bottom: 20px; display: none; }
+.success-message { background: #e8f5e8; color: #2e7d32; border: 1px solid #c6e6c6; border-radius: 8px; padding: 12px 16px; font-size: 14px; margin-bottom: 20px; display: none; }
 
 /* FOOTER */
-
-footer {
-    margin-top: 50px;
-    padding: 30px;
-    text-align: center;
-    background: #222;
-    color: white;
-}
+footer { margin-top: 50px; padding: 40px 7% 25px; background: #222; color: white; }
+.footer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; max-width: 1000px; margin: 0 auto 30px; }
+.footer-col h4 { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; color: #999; }
+.footer-col a { display: block; color: #ccc; text-decoration: none; font-size: 14px; margin-bottom: 10px; transition: color 0.2s; }
+.footer-col a:hover { color: white; }
+.footer-bottom { text-align: center; font-size: 13px; color: #999; border-top: 1px solid #444; padding-top: 20px; }
 
 /* MOBILE */
-
-@media (max-width: 800px) {
-
-    header {
-        padding: 18px 5%;
-    }
-
-    nav {
-        gap: 12px;
-    }
-
-    nav a:not(.message-nav):not(.profile-nav):not(.cart-nav):not(.nav-dropdown-toggle) {
-        display: none;
-    }
-
-    .container {
-        padding: 30px 5%;
-    }
-
-    .order-header {
-        flex-wrap: wrap;
-    }
-
+@media (max-width: 700px) {
+    header { padding: 18px 5%; }
+    nav { display: none; }
+    .container { padding: 30px 5%; }
+    .page-title h1 { font-size: 26px; }
+    .order-header { flex-direction: column; }
+    .order-photo, .order-no-photo { width: 100%; height: 200px; }
+    .tracking-input-group { flex-direction: column; }
 }
-
+@media (max-width: 800px) {
+    .footer-grid { grid-template-columns: 1fr; gap: 25px; }
+}
 </style>
-
 </head>
-
 <body>
 
 <!-- HEADER -->
-
 <header>
-
-<div class="logo">
-<a href="index.html">WEARERA</a>
-</div>
-
+<div class="logo"><a href="index.html">WEARERA</a></div>
 <nav>
 <a href="index.html">Accueil</a>
 <a href="index.html#articles">Acheter</a>
@@ -479,382 +132,283 @@ footer {
 <a href="messagerie.html" class="message-nav">💬 Messagerie</a>
 <a href="profil.html" class="profile-nav">👤 Mon profil</a>
 </nav>
-
 </header>
 
-<!-- CONTENU -->
-
+<!-- MAIN -->
 <main class="container">
-
 <div class="page-title">
-<h1>💰 Mes ventes</h1>
-<p>Suivez les commandes reçues : statut, suivi et versement.</p>
+<h1>Mes ventes</h1>
+<p>Suivez et gérez les articles que vous avez vendus.</p>
 </div>
 
-<div id="loading" class="loading">
-Chargement de vos ventes...
-</div>
+<div class="error-message" id="error-box"></div>
+<div class="success-message" id="success-box"></div>
 
-<div id="orders-content" style="display:none;">
-
-<div id="seller-notice-area"></div>
-
-<div id="orders-list" class="order-list"></div>
-
-<div id="empty-orders" class="empty-state" style="display:none;">
-<div class="icon">💰</div>
+<div id="loading" class="loading">Chargement de vos ventes...</div>
+<div id="orders-list"></div>
+<div id="empty-state" class="empty-state" style="display:none;">
+<div class="empty-state-icon">📦</div>
 <h3>Aucune vente pour le moment</h3>
-<p>Lorsqu'un acheteur commandera un de vos articles, la commande apparaîtra ici.</p>
-<a href="vendre.html">Vendre un article</a>
+<p>Lorsqu'un acheteur achètera un de vos articles, il apparaîtra ici.</p>
 </div>
-
-</div>
-
 </main>
 
+<!-- FOOTER -->
 <footer>
-WEARERA ©️ 2026
-<br>
-La mode de seconde main au Canada.
+<div class="footer-grid">
+<div class="footer-col">
+<h4>WEARERA</h4>
+<a href="a-propos.html">À propos de WEARERA</a>
+<a href="comment-ca-fonctionne.html">Comment ça fonctionne</a>
+<a href="faq.html">FAQ</a>
+<a href="nous-contacter.html">Nous contacter</a>
+</div>
+<div class="footer-col">
+<h4>Informations</h4>
+<a href="cgu.html">Conditions générales d'utilisation</a>
+<a href="confidentialite.html">Politique de confidentialité</a>
+<a href="protection-acheteur.html">Protection acheteur</a>
+<a href="protection-vendeur.html">Protection vendeur</a>
+<a href="frais.html">Frais WEARERA</a>
+<a href="livraison.html">Livraison</a>
+<a href="regles-communaute.html">Règles de la communauté</a>
+</div>
+<div class="footer-col">
+<h4>Compte</h4>
+<a href="profil.html">Mon profil</a>
+<a href="mes-articles.html">Mes articles</a>
+<a href="mes-achats.html">Mes achats</a>
+<a href="mes-ventes.html">Mes ventes</a>
+<a href="panier.html">Panier</a>
+<a href="messagerie.html">Messagerie</a>
+</div>
+</div>
+<div class="footer-bottom">© 2026 WEARERA — Tous droits réservés</div>
 </footer>
 
 <script>
-
-/* =====================================================
-   SUPABASE
-===================================================== */
-
-const SUPABASE_URL =
-    "https://wcamvnvhcguxwujcwyyj.supabase.co";
-
-const SUPABASE_PUBLISHABLE_KEY =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndjYW12bnZoY2d1eHd1amN3eXlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMjcwNDYsImV4cCI6MjEwMzgwMzA0Nn0.qnkYuFIcbRP8aBzPyIfxamOfVvBrU3nNhMa__NiyYPA";
-
-const supabaseClient =
-    supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-    );
-
-/* =====================================================
-   ELEMENTS
-===================================================== */
-
-const loading = document.getElementById("loading");
-const ordersContent = document.getElementById("orders-content");
-const ordersList = document.getElementById("orders-list");
-const emptyOrders = document.getElementById("empty-orders");
-const noticeArea = document.getElementById("seller-notice-area");
+/* SUPABASE */
+const SUPABASE_URL = "https://wcamvnvhcguxwujcwyyj.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndjYW12bnZoY2d1eHd1amN3eXlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMjcwNDYsImV4cCI6MjEwMzgwMzA0Nn0.qnkYuFIcbRP8aBzPyIfxamOfVvBrU3nNhMa__NiyYPA";
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
 let currentUser = null;
 
-/* =====================================================
-   FORMAT
-===================================================== */
+/* ELEMENTS */
+const loading = document.getElementById("loading");
+const ordersList = document.getElementById("orders-list");
+const emptyState = document.getElementById("empty-state");
+const errorBox = document.getElementById("error-box");
+const successBox = document.getElementById("success-box");
 
-function formatPrice(price) {
-    return Number(price || 0).toFixed(2).replace(".00", "") + " $";
+/* MESSAGES */
+function showError(msg) { errorBox.textContent = msg; errorBox.style.display = "block"; }
+function showSuccess(msg) { successBox.textContent = msg; successBox.style.display = "block"; errorBox.style.display = "none"; setTimeout(function() { successBox.style.display = "none"; }, 3000); }
+
+/* STATUS LABELS */
+function statusLabel(status) {
+    const labels = {
+        "pending": "En attente",
+        "paid": "Payé",
+        "shipped": "Expédié",
+        "delivered": "Livré",
+        "completed": "Terminé",
+        "disputed": "Contesté",
+        "cancelled": "Annulé"
+    };
+    return labels[status] || status;
 }
 
+function statusClass(status) {
+    const classes = {
+        "pending": "status-pending",
+        "paid": "status-paid",
+        "shipped": "status-shipped",
+        "delivered": "status-delivered",
+        "completed": "status-completed",
+        "disputed": "status-disputed",
+        "cancelled": "status-pending"
+    };
+    return classes[status] || "status-pending";
+}
+
+/* FORMAT DATE */
 function formatDate(dateStr) {
     if (!dateStr) return "—";
     const d = new Date(dateStr);
-    return d.toLocaleDateString("fr-CA", {
-        year: "numeric",
-        month: "short",
-        day: "numeric"
-    });
+    return d.toLocaleDateString("fr-CA", { year: "numeric", month: "long", day: "numeric" });
 }
 
+/* FORMAT MONEY */
+function formatMoney(val) {
+    return Number(val || 0).toFixed(2) + " $";
+}
+
+/* GET FIRST PHOTO */
 function getFirstPhoto(article) {
-    if (Array.isArray(article.photo_urls) && article.photo_urls.length) {
-        return article.photo_urls[0];
-    }
-    if (typeof article.photo_urls === "string") {
-        try {
-            const parsed = JSON.parse(article.photo_urls);
-            if (Array.isArray(parsed) && parsed.length) return parsed[0];
-            return article.photo_urls;
-        } catch (e) {
-            return article.photo_urls;
-        }
-    }
+    if (Array.isArray(article.photo_urls) && article.photo_urls.length > 0) return article.photo_urls[0];
     return "";
 }
 
-function statusLabel(status) {
-    const labels = {
-        paid: "Paiement reçu",
-        shipped: "Expédiée",
-        delivered: "Livrée",
-        completed: "Terminée",
-        disputed: "Litige en cours"
-    };
-    return labels[status] || status;
+/* ESCAPE HTML */
+function escapeHtml(value) {
+    return String(value || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
 
-function payoutLabel(status) {
-    const labels = {
-        pending: "En attente",
-        released: "Versé",
-        held: "Bloqué"
-    };
-    return labels[status] || status;
-}
-
-/* =====================================================
-   CHARGER LES VENTES
-===================================================== */
-
-async function loadOrders() {
-
-    const { data: { user }, error: authError } =
-        await supabaseClient.auth.getUser();
-
-    if (authError || !user) {
-        window.location.href = "auth.html?redirect=mes-ventes.html";
-        return;
-    }
-
-    currentUser = user;
-
-    const { data: orders, error: ordersError } = await supabaseClient
-        .from("orders")
-        .select(`
-            id,
-            article_id,
-            buyer_id,
-            seller_price,
-            wearera_fee,
-            seller_fee,
-            item_total,
-            shipping_cost,
-            grand_total,
-            status,
-            tracking_number,
-            shipped_at,
-            delivered_at,
-            verification_deadline,
-            completed_at,
-            payout_status,
-            fee_waived,
-            created_at
-        `)
-        .eq("seller_id", user.id)
-        .order("created_at", { ascending: false });
-
+/* RENDER ORDERS */
+function renderOrders(orders, articles) {
     loading.style.display = "none";
-    ordersContent.style.display = "block";
-
-    if (ordersError) {
-        console.error("Erreur ventes :", ordersError);
-        ordersList.innerHTML =
-            "<p style='color:#c62828;text-align:center;padding:30px'>" +
-            "Impossible de charger vos ventes. " + ordersError.message +
-            "</p>";
-        return;
-    }
 
     if (!orders || orders.length === 0) {
-        emptyOrders.style.display = "block";
+        emptyState.style.display = "block";
         return;
     }
-
-    /* Show notice if there are paid orders needing action */
-    const paidOrders = orders.filter(function(o) { return o.status === "paid"; });
-    if (paidOrders.length > 0) {
-        noticeArea.innerHTML =
-            "<div class='seller-notice'>" +
-            "<strong>Vous avez " + paidOrders.length + " commande(s) à préparer.</strong><br>" +
-            "Indiquez le numéro de suivi dès que l'article est expédié." +
-            "</div>";
-    }
-
-    const articleIds = orders.map(function(o) { return o.article_id; });
-
-    const { data: articles } = await supabaseClient
-        .from("Articles")
-        .select("id, name, brand, photo_urls")
-        .in("id", articleIds);
-
-    const articleMap = {};
-    (articles || []).forEach(function(a) { articleMap[a.id] = a; });
-
-    /* Get buyer names */
-    const buyerIds = orders.map(function(o) { return o.buyer_id; });
-    const { data: buyerProfiles } = await supabaseClient
-        .from("public_profiles")
-        .select("id, first_name")
-        .in("id", buyerIds);
-
-    const buyerMap = {};
-    (buyerProfiles || []).forEach(function(p) { buyerMap[p.id] = p; });
 
     ordersList.innerHTML = "";
 
     orders.forEach(function(order) {
-
-        const article = articleMap[order.article_id] || {};
-        const photoUrl = getFirstPhoto(article);
-        const buyer = buyerMap[order.buyer_id] || {};
+        const article = articles.find(function(a) { return a.id === order.article_id; });
+        const photoUrl = article ? getFirstPhoto(article) : "";
 
         const card = document.createElement("div");
         card.className = "order-card";
 
-        let photoHtml;
+        let html = '<div class="order-header">';
+
         if (photoUrl) {
-            photoHtml = "<img class='order-photo' src='" + photoUrl +
-                "' alt='" + (article.name || "Article") + "'>";
+            html += '<img src="' + escapeHtml(photoUrl) + '" alt="' + escapeHtml(article.name) + '" class="order-photo">';
         } else {
-            photoHtml = "<div class='order-no-photo'>📷</div>";
+            html += '<div class="order-no-photo">📷</div>';
         }
 
-        let statusBadge = "<span class='status-badge status-" + order.status + "'>" +
-            statusLabel(order.status) + "</span>";
+        html += '<div class="order-info">';
+        html += '<h3>' + escapeHtml(article ? article.name : "Article") + '</h3>';
+        if (article && article.brand) html += '<div class="order-brand">' + escapeHtml(article.brand) + '</div>';
+        html += '<div class="order-date">Commande du ' + formatDate(order.created_at) + '</div>';
+        html += '<span class="status-badge ' + statusClass(order.status) + '">' + statusLabel(order.status) + '</span>';
+        html += '</div>';
+        html += '</div>';
 
-        /* Seller sees what they receive (seller_price) */
-        let detailsHtml =
-            "<div class='order-details'>" +
-                "<div class='detail-row'><span>Montant à recevoir</span><span><strong>" +
-                    formatPrice(order.seller_price) + "</strong></span></div>";
+        /* DETAILS */
+        html += '<div class="order-details">';
+        html += '<div class="detail-row"><span class="detail-label">Prix de vente</span><span class="detail-value">' + formatMoney(order.seller_price) + '</span></div>';
+        html += '<div class="detail-row"><span class="detail-label">Frais WEARERA</span><span class="detail-value">' + formatMoney(order.wearera_fee) + '</span></div>';
+        html += '<div class="detail-row"><span class="detail-label">Frais vendeur</span><span class="detail-value">' + formatMoney(order.seller_fee) + '</span></div>';
+        html += '<div class="detail-row"><span class="detail-label">Frais de livraison</span><span class="detail-value">' + formatMoney(order.shipping_cost) + '</span></div>';
+        html += '<div class="detail-row total"><span class="detail-label">Total</span><span class="detail-value">' + formatMoney(order.grand_total) + '</span></div>';
+        html += '</div>';
 
-        if (order.fee_waived) {
-            detailsHtml +=
-                "<div class='detail-row'><span>Frais WEARERA vendeur</span>" +
-                "<span style='color:#2e7d32'>Offerts (lancement)</span></div>";
-        } else {
-            detailsHtml +=
-                "<div class='detail-row'><span>Frais WEARERA vendeur (2%)</span><span>" +
-                    formatPrice(order.seller_fee) + "</span></div>";
-        }
-
-        detailsHtml +=
-            "<div class='detail-row'><span>Prix payé par l'acheteur</span><span>" +
-                formatPrice(order.grand_total) + "</span></div>";
-
-        /* Payout status */
-        let payoutClass = "payout-pending";
-        if (order.payout_status === "released") payoutClass = "payout-released";
-        if (order.payout_status === "held") payoutClass = "payout-held";
-
-        detailsHtml +=
-            "<div class='detail-row'><span>Statut du versement</span>" +
-                "<span class='" + payoutClass + "'>" +
-                payoutLabel(order.payout_status) + "</span></div>" +
-            "</div>";
-
-        /* Tracking info or ship form */
-        let trackingHtml = "";
+        /* TRACKING NUMBER DISPLAY */
         if (order.tracking_number) {
-            trackingHtml =
-                "<div class='tracking-info'><strong>Numéro de suivi :</strong> " +
-                order.tracking_number + "</div>";
+            html += '<div class="tracking-display">📦 <strong>Numéro de suivi :</strong> ' + escapeHtml(order.tracking_number) + '</div>';
         }
 
-        let shipFormHtml = "";
+        /* SHIP ACTION */
         if (order.status === "paid") {
-            shipFormHtml =
-                "<div class='ship-form' id='ship-form-" + order.id + "'>" +
-                    "<label for='tracking-" + order.id + "'>Numéro de suivi</label>" +
-                    "<input type='text' id='tracking-" + order.id + "' placeholder='Ex: 1Z999AA10123456784'>" +
-                    "<button data-order-id='" + order.id + "' class='ship-btn'>Marquer comme expédiée</button>" +
-                "</div>";
+            html += '<div class="tracking-section">';
+            html += '<p style="font-size:14px;margin-bottom:8px;font-weight:bold;">Expédier l\'article</p>';
+            html += '<div class="tracking-input-group">';
+            html += '<input type="text" id="tracking-' + order.id + '" placeholder="Numéro de suivi">';
+            html += '<button class="ship-button" onclick="markAsShipped(\'' + order.id + '\')">Marquer comme expédié</button>';
+            html += '</div>';
+            html += '</div>';
         }
 
-        let shippedInfo = "";
-        if (order.shipped_at) {
-            shippedInfo = "<div class='detail-row'><span>Expédiée le</span><span>" +
-                formatDate(order.shipped_at) + "</span></div>";
+        /* DELIVERY DEADLINE */
+        if (order.status === "delivered" && order.verification_deadline) {
+            const deadline = new Date(order.verification_deadline);
+            const now = new Date();
+            const diff = deadline - now;
+            if (diff > 0) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                html += '<div class="deadline-timer">⏳ <strong>Vérification de l\'acheteur :</strong> ' + days + ' jour(s) et ' + hours + ' heure(s) restants</div>';
+            } else {
+                html += '<div class="deadline-timer">⏳ <strong>Délai de vérification écoulé</strong> — En attente de finalisation.</div>';
+            }
         }
 
-        let deliveredInfo = "";
-        if (order.delivered_at) {
-            deliveredInfo = "<div class='detail-row'><span>Livrée le</span><span>" +
-                formatDate(order.delivered_at) + "</span></div>";
-        }
-
-        let completedInfo = "";
-        if (order.completed_at) {
-            completedInfo = "<div class='detail-row'><span>Terminée le</span><span>" +
-                formatDate(order.completed_at) + "</span></div>";
-        }
-
-        let disputeInfo = "";
-        if (order.status === "disputed") {
-            disputeInfo =
-                "<div class='tracking-info' style='background:#fce4e4;border:1px solid #c62828'>" +
-                "<strong style='color:#c62828'>Litige signalé par l'acheteur :</strong><br>" +
-                (order.dispute_reason || "Aucune raison fournie") +
-                "</div>";
-        }
-
-        card.innerHTML =
-            "<div class='order-header'>" +
-                photoHtml +
-                "<div class='order-info'>" +
-                    "<h3>" + (article.name || "Article") + "</h3>" +
-                    "<div class='order-buyer'>Acheteur : " +
-                        (buyer.first_name || "Utilisateur WEARERA") + "</div>" +
-                    "<div class='order-date'>Vendue le " + formatDate(order.created_at) + "</div>" +
-                "</div>" +
-                statusBadge +
-            "</div>" +
-            detailsHtml +
-            shippedInfo +
-            deliveredInfo +
-            completedInfo +
-            trackingHtml +
-            disputeInfo +
-            shipFormHtml;
-
+        card.innerHTML = html;
         ordersList.appendChild(card);
-    });
-
-    /* Bind ship buttons */
-    document.querySelectorAll(".ship-btn").forEach(function(btn) {
-        btn.addEventListener("click", async function() {
-            const orderId = this.getAttribute("data-order-id");
-            const trackingInput = document.getElementById("tracking-" + orderId);
-            const trackingNumber = trackingInput.value.trim();
-
-            if (!trackingNumber) {
-                alert("Veuillez entrer un numéro de suivi.");
-                return;
-            }
-
-            this.disabled = true;
-            this.textContent = "Enregistrement...";
-
-            const { error } = await supabaseClient
-                .from("orders")
-                .update({
-                    status: "shipped",
-                    tracking_number: trackingNumber,
-                    shipped_at: new Date().toISOString()
-                })
-                .eq("id", orderId);
-
-            if (error) {
-                console.error(error);
-                this.disabled = false;
-                this.textContent = "Marquer comme expédiée";
-                alert("Erreur : " + error.message);
-                return;
-            }
-
-            loadOrders();
-        });
     });
 }
 
-/* =====================================================
-   DEMARRAGE
-===================================================== */
+/* MARK AS SHIPPED */
+window.markAsShipped = async function(orderId) {
+    const input = document.getElementById("tracking-" + orderId);
+    const trackingNumber = input.value.trim();
 
-loadOrders();
+    if (!trackingNumber) {
+        showError("Veuillez entrer un numéro de suivi.");
+        return;
+    }
 
+    const { error } = await supabaseClient
+        .from("orders")
+        .update({
+            status: "shipped",
+            tracking_number: trackingNumber,
+            shipped_at: new Date().toISOString()
+        })
+        .eq("id", orderId);
+
+    if (error) {
+        showError("Erreur : " + error.message);
+        return;
+    }
+
+    showSuccess("Article marqué comme expédié !");
+    loadOrders();
+};
+
+/* LOAD ORDERS */
+async function loadOrders() {
+    loading.style.display = "block";
+    ordersList.innerHTML = "";
+    emptyState.style.display = "none";
+
+    try {
+        const { data: orders, error } = await supabaseClient
+            .from("orders")
+            .select("*")
+            .eq("seller_id", currentUser.id)
+            .order("created_at", { ascending: false });
+
+        if (error) throw error;
+
+        if (!orders || orders.length === 0) {
+            loading.style.display = "none";
+            emptyState.style.display = "block";
+            return;
+        }
+
+        /* GET ARTICLES */
+        const articleIds = orders.map(function(o) { return o.article_id; });
+        const { data: articles, error: articleError } = await supabaseClient
+            .from("Articles")
+            .select("*")
+            .in("id", articleIds);
+
+        if (articleError) throw articleError;
+
+        renderOrders(orders, articles || []);
+    } catch (err) {
+        console.error(err);
+        loading.style.display = "none";
+        showError("Impossible de charger vos ventes : " + err.message);
+    }
+}
+
+/* INIT */
+(async function() {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) {
+        window.location.href = "auth.html?redirect=mes-ventes.html";
+        return;
+    }
+    currentUser = user;
+    loadOrders();
+})();
 </script>
-
 </body>
-
 </html>
